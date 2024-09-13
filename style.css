@@ -1,39 +1,64 @@
+/* General page styling */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
-  background-color: #f0f0f0;
+  background: linear-gradient(135deg, #f0f0f0 40%, #8bc6ec 100%);
 }
 
+/* Spinner box styling */
 .wheel {
   display: flex;
   flex-wrap: wrap;
   width: 400px;
   height: 400px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .slot {
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  background-color: white;
-  display: none;
   font-size: 72px;
-  transition: opacity 1s ease-in-out; /* Fading effect */
+  display: none;
+  color: black;
+  transition: opacity 1s ease-in-out;
 }
 
+/* Vowel styling */
 .vowel {
   color: red;
 }
 
+/* Button styling */
 button {
   margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 24px;
+  color: white;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+input[type="text"] {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 18px;
+  border: 2px solid #4CAF50;
+  border-radius: 5px;
 }
 
 /* Responsive design for smaller screens */
@@ -44,5 +69,10 @@ button {
   }
   .slot {
     font-size: 48px;
+  }
+
+  button {
+    font-size: 20px;
+    padding: 8px 16px;
   }
 }
