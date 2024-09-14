@@ -10,7 +10,7 @@ body {
   background: linear-gradient(135deg, #f0f0f0 40%, #8bc6ec 100%);
 }
 
-/* Spinner box styling */
+/* Spinner box styling with subtle shadow and animation */
 .wheel {
   display: flex;
   flex-wrap: wrap;
@@ -20,7 +20,30 @@ body {
   align-items: center;
   background-color: white;
   border-radius: 15px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.wheel.active {
+  transform: scale(1.05); /* Slightly enlarges when the word is changing */
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Pulsing border for highlight effect */
+.wheel.pulse {
+  animation: pulseBorder 1.5s infinite;
+}
+
+@keyframes pulseBorder {
+  0% {
+    border: 3px solid rgba(0, 255, 0, 0.2);
+  }
+  50% {
+    border: 3px solid rgba(0, 255, 0, 0.6);
+  }
+  100% {
+    border: 3px solid rgba(0, 255, 0, 0.2);
+  }
 }
 
 .slot {
@@ -46,11 +69,12 @@ button {
   border-radius: 8px;
   cursor: pointer;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #45a049;
+  transform: scale(1.05); /* Enlarges the button slightly on hover */
 }
 
 input[type="text"] {
