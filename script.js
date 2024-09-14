@@ -12,6 +12,8 @@ let cvcWords = [
     'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
 ];
 
+let wordsRevealed = 0; // Track how many words have been revealed
+
 // Function to render slots with word and preserve vowel coloring
 function renderSlots() {
     wheel.innerHTML = ''; // Clear previous slots
@@ -44,8 +46,31 @@ async function revealLetters(slot) {
     }
 }
 
+// Function to show positive feedback after the word is revealed
+const feedbackMessages = ['Great Job!', 'Well Done!', 'Keep Going!', 'You Did It!'];
+
+async function showFeedback() {
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    feedback.textContent = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
+    wheel.appendChild(feedback);
+
+    setTimeout(() => feedback.remove(), 2000); // Display feedback for 2 seconds
+}
+
+// Function to update progress bar
+function updateProgressBar() {
+    wordsRevealed++;
+    const progress = (wordsRevealed / cvcWords.length) * 100;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+}
+
 // Event listener for spin button
 document.getElementById('spinButton').addEventListener('click', async () => {
+    // Add the spin effect
+    wheel.classList.add('spin-effect');
+    setTimeout(() => wheel.classList.remove('spin-effect'), 300); // Remove effect after 300ms
+
     const slots = document.querySelectorAll('.slot'); // Get all slots
     const previousSlot = document.querySelector('.slot:not([style*="display: none"])'); // Find visible slot
     if (previousSlot) previousSlot.style.display = 'none'; // Hide previous slot
@@ -55,6 +80,8 @@ document.getElementById('spinButton').addEventListener('click', async () => {
     selectedSlot.style.display = 'block'; // Show selected slot
 
     await revealLetters(selectedSlot); // Reveal letters one by one
+    showFeedback(); // Show positive feedback
+    updateProgressBar(); // Update the progress bar
 });
 
 renderSlots(); // Call renderSlots to setup initial slots
