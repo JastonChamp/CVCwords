@@ -108,7 +108,7 @@ document.getElementById('addWordButton').addEventListener('click', () => {
     const customWord = document.getElementById('customWordInput').value.trim().toLowerCase();
     if (customWord.length === 3 && /^[a-z]+$/.test(customWord)) {
         cvcWords.push(customWord);
-        renderSlots();
+        renderSlots();  // Re-render the slots to include the new word
     } else {
         alert('Please enter a valid 3-letter word.');
     }
