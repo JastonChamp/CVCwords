@@ -1,18 +1,35 @@
 const wheel = document.querySelector('.wheel');
 let cvcWords = [
-    // List of words
     'hop', 'nut', 'bed', 'cat', 'dog', 'pen', 'run', 'bug', 'fox', 'hat',
     'jam', 'net', 'map', 'pig', 'tub', 'cup', 'van', 'wax', 'win', 'box',
-    // Add more words as required
+    'bat', 'bet', 'bit', 'bot', 'but', 'cut', 'dot', 'fit', 'gut', 'hit',
+    'hot', 'jet', 'kit', 'lot', 'met', 'not', 'pat', 'pot', 'rat', 'sat',
+    'set', 'sit', 'tan', 'tap', 'tin', 'top', 'wet', 'wit', 'yet', 'zoo',
+    'dim', 'dip', 'lip', 'lit', 'mix', 'mop', 'nip', 'pan', 'pin', 'pit',
+    'pod', 'pop', 'rim', 'rip', 'rot', 'sob', 'sum', 'sun', 'tap', 'ten',
+    'tip', 'tug', 'vet', 'wed', 'wig', 'win', 'yam', 'yen', 'yip',
+    'bud', 'bun', 'bus', 'cob', 'cod', 'cog', 'con', 'cop', 'cub', 'dud',
+    'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
 ];
 
-// Function to render slots with word
+// Function to render slots with word and preserve vowel coloring
 function renderSlots() {
     wheel.innerHTML = ''; // Clear previous slots
     cvcWords.forEach(word => {
         const slot = document.createElement('div');
         slot.className = 'slot';
-        slot.textContent = word; // Set text content to word
+        
+        // Render each letter as a span, with red for vowels
+        let coloredWord = '';
+        for (let letter of word) {
+            if ('aeiou'.includes(letter)) {
+                coloredWord += `<span class="vowel letter" style="color: red; opacity: 0;">${letter}</span>`;
+            } else {
+                coloredWord += `<span class="letter" style="opacity: 0;">${letter}</span>`;
+            }
+        }
+        
+        slot.innerHTML = coloredWord; // Set inner HTML with colored letters
         slot.style.display = 'none'; // Initially hide slot
         wheel.appendChild(slot); // Add slot to wheel
     });
@@ -20,15 +37,10 @@ function renderSlots() {
 
 // Asynchronous function to reveal letters one by one
 async function revealLetters(slot) {
-    const letters = slot.textContent.split(''); // Split word into letters
-    slot.innerHTML = ''; // Clear slot text
+    const letters = slot.querySelectorAll('.letter'); // Get all letter spans
     for (let letter of letters) {
-        const span = document.createElement('span'); // Create span for each letter
-        span.textContent = letter; // Set text content to letter
-        span.style.opacity = '0'; // Initially hide letter
-        slot.appendChild(span); // Add letter span to slot
         await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
-        span.style.opacity = '1'; // Reveal letter
+        letter.style.opacity = '1'; // Reveal letter one by one
     }
 }
 
