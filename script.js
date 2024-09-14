@@ -45,6 +45,7 @@ renderSlots();
 const slots = document.querySelectorAll('.slot');
 let currentSlot = 0;
 slots[currentSlot].style.display = 'flex';
+revealLetters(slots[currentSlot]);  // Reveal letters for the first word
 
 // Spin button event listener
 document.getElementById('spinButton').addEventListener('click', () => {
@@ -54,7 +55,7 @@ document.getElementById('spinButton').addEventListener('click', () => {
     wheel.classList.add('active');  // Add subtle scaling/rotation effect
 
     const shuffleEffect = setInterval(() => {
-        // Hide previous word
+        // Hide previous word completely before showing the next
         slots[lastRandom].style.display = 'none';
         
         // Pick a random slot and show the new word
@@ -69,6 +70,7 @@ document.getElementById('spinButton').addEventListener('click', () => {
             clearInterval(shuffleEffect);
             slots[lastRandom].style.display = 'none';
             slots[currentSlot].style.display = 'flex';  // Show final word
+            revealLetters(slots[currentSlot]);  // Apply reveal effect
         }
     }, 100);
 
@@ -89,6 +91,9 @@ document.getElementById('spinButton').addEventListener('click', () => {
         pulseWheel();
         
         wheel.classList.remove('active');  // Reset the scaling effect after spin
+        
+        // Reveal letters one by one
+        revealLetters(slots[currentSlot]);
     }, 2500);
 });
 
