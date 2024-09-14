@@ -22,6 +22,7 @@ body {
   border-radius: 15px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
   transition: transform 0.5s ease, box-shadow 0.5s ease;
+  overflow: hidden; /* Ensure no text is cut off */
 }
 
 .wheel.active {
@@ -51,6 +52,7 @@ body {
   display: none;
   color: black;
   transition: opacity 1s ease-in-out;
+  text-align: center; /* Ensure text is centered */
 }
 
 /* Vowel styling */
@@ -91,12 +93,16 @@ input[type="text"] {
     width: 300px;
     height: 300px;
   }
+  
   .slot {
-    font-size: 48px;
+    font-size: 64px; /* Larger font size for better visibility */
+    text-align: center; /* Ensure text is centered */
+    padding: 0; /* Remove any padding */
+    line-height: normal; /* Adjust line height for better spacing */
   }
 
   button {
     font-size: 20px;
     padding: 8px 16px;
   }
-}
+  }
