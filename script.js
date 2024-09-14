@@ -54,25 +54,35 @@ document.getElementById('spinButton').addEventListener('click', () => {
     wheel.classList.add('active');  // Add subtle scaling/rotation effect
 
     const shuffleEffect = setInterval(() => {
+        // Hide previous word
         slots[lastRandom].style.display = 'none';
+        
+        // Pick a random slot and show the new word
         const randomSlot = Math.floor(Math.random() * cvcWords.length);
         slots[randomSlot].style.display = 'flex';
+        
         lastRandom = randomSlot;
         shuffleCount++;
+
+        // Stop shuffling after 20 iterations
         if (shuffleCount > 20) {
             clearInterval(shuffleEffect);
             slots[lastRandom].style.display = 'none';
-            slots[currentSlot].style.display = 'flex';
+            slots[currentSlot].style.display = 'flex';  // Show final word
         }
     }, 100);
 
     setTimeout(() => {
         const randomSlot = Math.floor(Math.random() * cvcWords.length);
+        
+        // Hide the current slot
         slots[currentSlot].style.display = 'none';
+        
+        // Show the final random slot
         slots[randomSlot].style.display = 'flex';
         currentSlot = randomSlot;
 
-        // Play audio for current word (optional)
+        // Play audio for the current word (optional)
         playAudioForWord(cvcWords[currentSlot]);
 
         // Trigger pulse effect when letters are being revealed
