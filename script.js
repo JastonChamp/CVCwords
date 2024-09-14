@@ -1,9 +1,15 @@
 const wheel = document.querySelector('.wheel');
 let cvcWords = [
-    'hop', 'nut', 'bed', 'cat', 'dog', 'pen', 'run', 'bug', 'fox', 'hat', 
-    'jam', 'net', 'map', 'pig', 'tub', 'cup', 'van', 'wax', 'win', 'box', 
-    'fan', 'jug', 'kid', 'lid', 'mat', 'pig', 'rat', 'sun', 'tap', 'vet', 
-    'web', 'yak', 'zip', 'fog', 'leg', 'mop', 'sad', 'bed'
+    'hop', 'nut', 'bed', 'cat', 'dog', 'pen', 'run', 'bug', 'fox', 'hat',
+    'jam', 'net', 'map', 'pig', 'tub', 'cup', 'van', 'wax', 'win', 'box',
+    'bat', 'bet', 'bit', 'bot', 'but', 'cut', 'dot', 'fit', 'gut', 'hit',
+    'hot', 'jet', 'kit', 'lot', 'met', 'not', 'pat', 'pot', 'rat', 'sat',
+    'set', 'sit', 'tan', 'tap', 'tin', 'top', 'wet', 'wit', 'yet', 'zoo',
+    'dim', 'dip', 'lip', 'lit', 'mix', 'mop', 'nip', 'pan', 'pin', 'pit',
+    'pod', 'pop', 'rim', 'rip', 'rot', 'sob', 'sum', 'sun', 'tap', 'ten',
+    'tip', 'tug', 'vet', 'wed', 'wig', 'win', 'yam', 'yen', 'yip',
+    'bud', 'bun', 'bus', 'cob', 'cod', 'cog', 'con', 'cop', 'cub', 'dud',
+    'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
 ];
 
 // Load audio dynamically based on word (for future audio integration)
@@ -45,6 +51,8 @@ document.getElementById('spinButton').addEventListener('click', () => {
     let shuffleCount = 0;
     let lastRandom = 0;
 
+    wheel.classList.add('active');  // Add subtle scaling/rotation effect
+
     const shuffleEffect = setInterval(() => {
         slots[lastRandom].style.display = 'none';
         const randomSlot = Math.floor(Math.random() * cvcWords.length);
@@ -67,8 +75,10 @@ document.getElementById('spinButton').addEventListener('click', () => {
         // Play audio for current word (optional)
         playAudioForWord(cvcWords[currentSlot]);
 
-        // Letter by letter reveal
-        revealLetters(slots[currentSlot]);
+        // Trigger pulse effect when letters are being revealed
+        pulseWheel();
+        
+        wheel.classList.remove('active');  // Reset the scaling effect after spin
     }, 2500);
 });
 
