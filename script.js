@@ -1,4 +1,5 @@
 const wheel = document.querySelector('.wheel');
+const wordCountDisplay = document.getElementById('wordCount');
 let cvcWords = [
     'hop', 'nut', 'bed', 'cat', 'dog', 'pen', 'run', 'bug', 'fox', 'hat',
     'jam', 'net', 'map', 'pig', 'tub', 'cup', 'van', 'wax', 'win', 'box',
@@ -13,6 +14,7 @@ let cvcWords = [
 ];
 
 let wordsRevealed = 0; // Track how many words have been revealed
+const totalWords = cvcWords.length;
 
 // Function to render slots with word and preserve vowel coloring
 function renderSlots() {
@@ -58,11 +60,19 @@ async function showFeedback() {
     setTimeout(() => feedback.remove(), 2000); // Display feedback for 2 seconds
 }
 
-// Function to update progress bar
+// Function to update progress bar and word count
 function updateProgressBar() {
     wordsRevealed++;
-    const progress = (wordsRevealed / cvcWords.length) * 100;
+    const progress = (wordsRevealed / totalWords) * 100;
     document.getElementById('progressFill').style.width = `${progress}%`;
+
+    // Update the word count display
+    wordCountDisplay.textContent = `${wordsRevealed} / ${totalWords} Words Revealed`;
+
+    // If all words are revealed, show a congratulatory message
+    if (wordsRevealed === totalWords) {
+        wordCountDisplay.textContent = `Congratulations! You've revealed all ${totalWords} words!`;
+    }
 }
 
 // Event listener for spin button
@@ -81,7 +91,7 @@ document.getElementById('spinButton').addEventListener('click', async () => {
 
     await revealLetters(selectedSlot); // Reveal letters one by one
     showFeedback(); // Show positive feedback
-    updateProgressBar(); // Update the progress bar
+    updateProgressBar(); // Update the progress bar and word count
 });
 
 renderSlots(); // Call renderSlots to setup initial slots
