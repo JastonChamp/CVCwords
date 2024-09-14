@@ -12,102 +12,59 @@ let cvcWords = [
     'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
 ];
 
-// Load audio dynamically based on word (optional future feature)
 function playAudioForWord(word) {
+    // This is a placeholder function for potential future audio integration
     console.log(`Audio for ${word} would play here.`);
 }
 
-// Render the CVC words with colored vowels
 function renderSlots() {
-    wheel.innerHTML = ''; // Clear existing words
-    cvcWords.forEach((word) => {
+    wheel.innerHTML = '';
+    cvcWords.forEach(word => {
         const slot = document.createElement('div');
         slot.className = 'slot';
-        
-        // Change color of vowel letters
-        let coloredWord = '';
-        for (let letter of word) {
-            if ('aeiou'.includes(letter)) {
-                coloredWord += `<span class="vowel letter">${letter}</span>`;
-            } else {
-                coloredWord += `<span class="letter">${letter}</span>`;
-            }
-        }
-        
-        slot.innerHTML = coloredWord;  // Use innerHTML to insert HTML content
-        slot.style.display = 'none';  // Ensure all slots are hidden initially
+        slot.textContent = word;
+        slot.style.display = 'none';
         wheel.appendChild(slot);
     });
 }
 
-renderSlots();  // Render the words
-
-const slots = document.querySelectorAll('.slot');
-let currentSlot = 0;
-slots[currentSlot].style.display = 'flex';  // Show the first word
-revealLetters(slots[currentSlot]);  // Apply reveal effect to the first word
-
-// Spin button event listener
-document.getElementById('spinButton').addEventListener('click', () => {
-    let shuffleCount = 0;
-    let lastRandom = 0;
-
-    wheel.classList.add('active');  // Add subtle scaling/rotation effect
-
-    const shuffleEffect = setInterval(() => {
-        // Hide previous word completely before showing the next
-        slots[lastRandom].style.display = 'none';
-        
-        // Pick a random slot and show the new word
-        const randomSlot = Math.floor(Math.random() * cvcWords.length);
-        slots[randomSlot].style.display = 'flex';
-        lastRandom = randomSlot;
-        shuffleCount++;
-
-        // Stop shuffling after 20 iterations
-        if (shuffleCount > 20) {
-            clearInterval(shuffleEffect);
-            slots[lastRandom].style.display = 'none';
-            slots[currentSlot].style.display = 'flex';  // Show final word
-            revealLetters(slots[currentSlot]);  // Apply reveal effect to final word
-        }
-    }, 100);
-
-    setTimeout(() => {
-        const randomSlot = Math.floor(Math.random() * cvcWords.length);
-        
-        // Hide the current slot
-        slots[currentSlot].style.display = 'none';
-        
-        // Show the final random slot
-        slots[randomSlot].style.display = 'flex';
-        currentSlot = randomSlot;
-
-        // Play audio for the current word (optional)
-        playAudioForWord(cvcWords[currentSlot]);
-
-        // Trigger pulse effect when letters are being revealed
-        pulseWheel();
-        
-        wheel.classList.remove('active');  // Reset the scaling effect after spin
-        
-        // Reveal letters one by one for the final word
-        revealLetters(slots[currentSlot]);
-    }, 2500);
-});
-
-// Function to reveal letters one by one
 function revealLetters(slot) {
-    const letters = slot.querySelectorAll('.letter');
+    const letters = slot.textContent.split('');
+    slot.innerHTML = ''; // Clear the slot
     letters.forEach((letter, index) => {
-        letter.style.opacity = 0; // Hide letters initially
+        const span = document.createElement('span');
+        span.textContent = letter;
+        span.style.opacity = 0;
+        slot.appendChild(span);
         setTimeout(() => {
-            letter.style.opacity = 1; // Reveal one by one
-        }, index * 500); // Adjust delay between letters
+            span.style.opacity = 1;
+        }, index * 500); // Adjust timing for revealing letters
     });
 }
 
-// Custom word input functionality
+renderSlots();
+
+const slots = document.querySelectorAll('.slot');
+let currentSlot = 0;
+slots[currentSlot].style.display = 'flex';
+revealLetters(slots[currentSlot]);
+
+document.getElementById('spinButton').addEventListener('click', () => {
+    const currentWord = slots[currentSlot];
+    currentWord.style.display = 'none';
+
+    let nextSlot = Math.floor(Math.random() * cvcWords.length);
+    while (nextSlot === currentSlot) {
+        nextSlot = Math.floor(Math.random() * cvcWords.length); // Ensure the next word is different
+    }
+    const nextWord = slots[nextSlot];
+    nextWord.style.display = 'flex';
+    revealLetters(nextWord);
+    currentSlot = nextSlot;
+
+    playAudioForWord(cvcWords[currentSlot]);
+});
+
 document.getElementById('addWordButton').addEventListener('click', () => {
     const customWord = document.getElementById('customWordInput').value.trim().toLowerCase();
     if (customWord.length === 3 && /^[a-z]+$/.test(customWord)) {
