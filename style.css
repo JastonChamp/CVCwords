@@ -1,6 +1,6 @@
 /* General page styling */
 body {
-  font-family: 'Comic Sans MS', sans-serif; /* Child-friendly font */
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif; /* Ensure Comic Sans with fallback */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,7 +10,7 @@ body {
   background: linear-gradient(135deg, #f0f0f0 40%, #8bc6ec 100%);
 }
 
-/* Spinner box styling with subtle shadow and animation */
+/* Spinner box styling */
 .wheel {
   display: flex;
   flex-wrap: wrap;
@@ -26,37 +26,16 @@ body {
   overflow: hidden; /* Ensure no text is cut off */
 }
 
-.wheel.active {
-  transform: scale(1.05); /* Slightly enlarges when the word is changing */
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-/* Pulsing border for highlight effect */
-.wheel.pulse {
-  animation: pulseBorder 1.5s infinite;
-}
-
-@keyframes pulseBorder {
-  0% {
-    border: 3px solid rgba(0, 255, 0, 0.2);
-  }
-  50% {
-    border: 3px solid rgba(0, 255, 0, 0.6);
-  }
-  100% {
-    border: 3px solid rgba(0, 255, 0, 0.2);
-  }
-}
-
 .slot {
-  font-size: 72px; /* Ensure larger, clear text */
+  font-size: 72px; /* Large font for clear visibility */
   display: none;
   color: black;
   transition: opacity 1s ease-in-out;
-  text-align: center; /* Ensure text is centered */
+  text-align: center; /* Center text */
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif; /* Apply Comic Sans to the text */
 }
 
-/* Vowel styling */
+/* Styling for vowels */
 .vowel {
   color: red;
 }
@@ -73,6 +52,7 @@ button {
   cursor: pointer;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif; /* Ensure button also has Comic Sans */
 }
 
 button:hover {
@@ -87,6 +67,7 @@ input[type="text"] {
   font-size: 18px;
   border: 2px solid #4CAF50;
   border-radius: 5px;
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif; /* Comic Sans for input field */
 }
 
 /* Responsive design for smaller screens */
@@ -97,14 +78,14 @@ input[type="text"] {
   }
   
   .slot {
-    font-size: 64px; /* Larger font size for better visibility */
+    font-size: 64px; /* Adjust font size for smaller screens */
     text-align: center; /* Ensure text is centered */
     padding: 0; /* Remove any padding */
-    line-height: normal; /* Adjust line height for better spacing */
+    line-height: normal; /* Adjust line height */
   }
 
   button {
     font-size: 20px;
     padding: 8px 16px;
   }
-  }
+}
