@@ -12,7 +12,7 @@ let cvcWords = [
     'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
 ];
 
-// Load audio dynamically based on word (for future audio integration)
+// Load audio dynamically based on word (optional future feature)
 function playAudioForWord(word) {
     console.log(`Audio for ${word} would play here.`);
 }
@@ -35,17 +35,17 @@ function renderSlots() {
         }
         
         slot.innerHTML = coloredWord;  // Use innerHTML to insert HTML content
-        slot.style.display = 'none';
+        slot.style.display = 'none';  // Ensure all slots are hidden initially
         wheel.appendChild(slot);
     });
 }
 
-renderSlots();
+renderSlots();  // Render the words
 
 const slots = document.querySelectorAll('.slot');
 let currentSlot = 0;
-slots[currentSlot].style.display = 'flex';
-revealLetters(slots[currentSlot]);  // Reveal letters for the first word
+slots[currentSlot].style.display = 'flex';  // Show the first word
+revealLetters(slots[currentSlot]);  // Apply reveal effect to the first word
 
 // Spin button event listener
 document.getElementById('spinButton').addEventListener('click', () => {
@@ -61,7 +61,6 @@ document.getElementById('spinButton').addEventListener('click', () => {
         // Pick a random slot and show the new word
         const randomSlot = Math.floor(Math.random() * cvcWords.length);
         slots[randomSlot].style.display = 'flex';
-        
         lastRandom = randomSlot;
         shuffleCount++;
 
@@ -70,7 +69,7 @@ document.getElementById('spinButton').addEventListener('click', () => {
             clearInterval(shuffleEffect);
             slots[lastRandom].style.display = 'none';
             slots[currentSlot].style.display = 'flex';  // Show final word
-            revealLetters(slots[currentSlot]);  // Apply reveal effect
+            revealLetters(slots[currentSlot]);  // Apply reveal effect to final word
         }
     }, 100);
 
@@ -92,7 +91,7 @@ document.getElementById('spinButton').addEventListener('click', () => {
         
         wheel.classList.remove('active');  // Reset the scaling effect after spin
         
-        // Reveal letters one by one
+        // Reveal letters one by one for the final word
         revealLetters(slots[currentSlot]);
     }, 2500);
 });
