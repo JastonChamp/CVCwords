@@ -1,76 +1,48 @@
 const wheel = document.querySelector('.wheel');
 let cvcWords = [
+    // List of words
     'hop', 'nut', 'bed', 'cat', 'dog', 'pen', 'run', 'bug', 'fox', 'hat',
     'jam', 'net', 'map', 'pig', 'tub', 'cup', 'van', 'wax', 'win', 'box',
-    'bat', 'bet', 'bit', 'bot', 'but', 'cut', 'dot', 'fit', 'gut', 'hit',
-    'hot', 'jet', 'kit', 'lot', 'met', 'not', 'pat', 'pot', 'rat', 'sat',
-    'set', 'sit', 'tan', 'tap', 'tin', 'top', 'wet', 'wit', 'yet', 'zoo',
-    'dim', 'dip', 'lip', 'lit', 'mix', 'mop', 'nip', 'pan', 'pin', 'pit',
-    'pod', 'pop', 'rim', 'rip', 'rot', 'sob', 'sum', 'sun', 'tap', 'ten',
-    'tip', 'tug', 'vet', 'wed', 'wig', 'win', 'yam', 'yen', 'yip',
-    'bud', 'bun', 'bus', 'cob', 'cod', 'cog', 'con', 'cop', 'cub', 'dud',
-    'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
+    // Add more words as required
 ];
 
-function playAudioForWord(word) {
-    // This is a placeholder function for potential future audio integration
-    console.log(`Audio for ${word} would play here.`);
-}
-
+// Function to render slots with word
 function renderSlots() {
-    wheel.innerHTML = '';
+    wheel.innerHTML = ''; // Clear previous slots
     cvcWords.forEach(word => {
         const slot = document.createElement('div');
         slot.className = 'slot';
-        slot.textContent = word;
-        slot.style.display = 'none';
-        wheel.appendChild(slot);
+        slot.textContent = word; // Set text content to word
+        slot.style.display = 'none'; // Initially hide slot
+        wheel.appendChild(slot); // Add slot to wheel
     });
 }
 
-function revealLetters(slot) {
-    const letters = slot.textContent.split('');
-    slot.innerHTML = ''; // Clear the slot
-    letters.forEach((letter, index) => {
-        const span = document.createElement('span');
-        span.textContent = letter;
-        span.style.opacity = 0;
-        slot.appendChild(span);
-        setTimeout(() => {
-            span.style.opacity = 1;
-        }, index * 500); // Adjust timing for revealing letters
-    });
+// Asynchronous function to reveal letters one by one
+async function revealLetters(slot) {
+    const letters = slot.textContent.split(''); // Split word into letters
+    slot.innerHTML = ''; // Clear slot text
+    for (let letter of letters) {
+        const span = document.createElement('span'); // Create span for each letter
+        span.textContent = letter; // Set text content to letter
+        span.style.opacity = '0'; // Initially hide letter
+        slot.appendChild(span); // Add letter span to slot
+        await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
+        span.style.opacity = '1'; // Reveal letter
+    }
 }
 
-renderSlots();
+// Event listener for spin button
+document.getElementById('spinButton').addEventListener('click', async () => {
+    const slots = document.querySelectorAll('.slot'); // Get all slots
+    const previousSlot = document.querySelector('.slot:not([style*="display: none"])'); // Find visible slot
+    if (previousSlot) previousSlot.style.display = 'none'; // Hide previous slot
 
-const slots = document.querySelectorAll('.slot');
-let currentSlot = 0;
-slots[currentSlot].style.display = 'flex';
-revealLetters(slots[currentSlot]);
+    const randomIndex = Math.floor(Math.random() * cvcWords.length); // Get random index
+    const selectedSlot = slots[randomIndex]; // Select random slot
+    selectedSlot.style.display = 'block'; // Show selected slot
 
-document.getElementById('spinButton').addEventListener('click', () => {
-    const currentWord = slots[currentSlot];
-    currentWord.style.display = 'none';
-
-    let nextSlot = Math.floor(Math.random() * cvcWords.length);
-    while (nextSlot === currentSlot) {
-        nextSlot = Math.floor(Math.random() * cvcWords.length); // Ensure the next word is different
-    }
-    const nextWord = slots[nextSlot];
-    nextWord.style.display = 'flex';
-    revealLetters(nextWord);
-    currentSlot = nextSlot;
-
-    playAudioForWord(cvcWords[currentSlot]);
+    await revealLetters(selectedSlot); // Reveal letters one by one
 });
 
-document.getElementById('addWordButton').addEventListener('click', () => {
-    const customWord = document.getElementById('customWordInput').value.trim().toLowerCase();
-    if (customWord.length === 3 && /^[a-z]+$/.test(customWord)) {
-        cvcWords.push(customWord);
-        renderSlots();  // Re-render the slots to include the new word
-    } else {
-        alert('Please enter a valid 3-letter word.');
-    }
-});
+renderSlots(); // Call renderSlots to setup initial slots
