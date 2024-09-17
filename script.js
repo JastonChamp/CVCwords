@@ -55,13 +55,17 @@ function renderSlots() {
     });
 }
 
-// Asynchronous function to reveal letters one by one without phonetic sound
+// Asynchronous function to reveal letters one by one with correct timing
 async function revealLetters(slot, word) {
     const letters = slot.querySelectorAll('.letter'); // Get all letter spans
+    // Log the word being revealed for debugging
+    console.log(`Revealing word: ${word}`);
+    
     for (let i = 0; i < letters.length; i++) {
         const letter = letters[i];
-        await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
-        letter.style.opacity = '1'; // Reveal letter one by one
+        console.log(`Revealing letter: ${letter.textContent}`); // Log each letter
+        await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms between each letter reveal
+        letter.style.opacity = '1'; // Reveal the letter
     }
 
     // After revealing all letters, say the full word
