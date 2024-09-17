@@ -16,12 +16,52 @@ let cvcWords = [
 let wordsRevealed = 0; // Track how many words have been revealed
 const totalWords = cvcWords.length;
 
-// Function to trigger Text-to-Speech for individual letters and the full word
+// Phonetic mapping for letters
+const phoneticMap = {
+    'a': 'æ',   // short "a" sound
+    'b': 'b',   // "buh"
+    'c': 'k',   // "kuh"
+    'd': 'd',   // "duh"
+    'e': 'ɛ',   // short "e" sound (like "eh")
+    'f': 'f',   // "fuh"
+    'g': 'g',   // "guh"
+    'h': 'h',   // "huh"
+    'i': 'ɪ',   // short "i" sound (like "ih")
+    'j': 'ʤ',   // "juh"
+    'k': 'k',   // "kuh"
+    'l': 'l',   // "luh"
+    'm': 'm',   // "muh"
+    'n': 'n',   // "nuh"
+    'o': 'ɑ',   // short "o" sound (like "ah")
+    'p': 'p',   // "puh"
+    'q': 'k',   // "kuh" (same as "c" for simplicity)
+    'r': 'r',   // "ruh"
+    's': 's',   // "sss"
+    't': 't',   // "tuh"
+    'u': 'ʌ',   // short "u" sound (like "uh")
+    'v': 'v',   // "vuh"
+    'w': 'w',   // "wuh"
+    'x': 'ks',  // "ks"
+    'y': 'j',   // "yuh"
+    'z': 'z'    // "zzz"
+};
+
+// Function to trigger Text-to-Speech for individual letters and the full word using phonetics
+function speakPhoneticLetter(letter) {
+    const phonetic = phoneticMap[letter.toLowerCase()] || letter; // Get the phonetic sound, fallback to letter if not found
+    speakText(phonetic); // Speak the phonetic sound
+}
+
+// Function to trigger Text-to-Speech for the word itself
+function speakWord(word) {
+    speakText(word); // Speak the full word after all letters are revealed
+}
+
+// Function to trigger Text-to-Speech
 function speakText(message) {
     const synth = window.speechSynthesis;
     const utterance = new SpeechSynthesisUtterance(message);
-
-    // Customize the language, voice, or rate
+    
     utterance.lang = 'en-US'; // Set language (English - US)
     utterance.rate = 1; // Speed of the speech (1 is normal speed)
 
@@ -51,7 +91,7 @@ function renderSlots() {
     });
 }
 
-// Asynchronous function to reveal letters one by one and say each letter
+// Asynchronous function to reveal letters one by one and say the phonetic sound
 async function revealLetters(slot, word) {
     const letters = slot.querySelectorAll('.letter'); // Get all letter spans
     for (let i = 0; i < letters.length; i++) {
@@ -59,12 +99,12 @@ async function revealLetters(slot, word) {
         await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
         letter.style.opacity = '1'; // Reveal letter one by one
 
-        // Speak the revealed letter
-        speakText(letter.textContent);
+        // Speak the phonetic sound of the revealed letter
+        speakPhoneticLetter(letter.textContent);
     }
 
     // After revealing all letters, say the full word
-    speakText(word);
+    speakWord(word);
 }
 
 // Function to show and speak positive feedback
