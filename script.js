@@ -16,6 +16,18 @@ let cvcWords = [
 let wordsRevealed = 0; // Track how many words have been revealed
 const totalWords = cvcWords.length;
 
+// Function to trigger voiceover with the compliment
+function speakCompliment(message) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    // Customize the language, voice, or rate
+    utterance.lang = 'en-US'; // Set language (English - US)
+    utterance.rate = 1; // Speed of the speech (1 is normal speed)
+
+    synth.speak(utterance); // Speak the compliment
+}
+
 // Function to render slots with word and preserve vowel coloring
 function renderSlots() {
     wheel.innerHTML = ''; // Clear previous slots
@@ -48,14 +60,20 @@ async function revealLetters(slot) {
     }
 }
 
-// Function to show positive feedback after the word is revealed
+// Function to show and speak positive feedback
 const feedbackMessages = ['Great Job!', 'Well Done!', 'Keep Going!', 'You Did It!'];
 
 async function showFeedback() {
     const feedback = document.createElement('div');
     feedback.className = 'feedback';
-    feedback.textContent = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
+    
+    // Randomly select a message from the feedbackMessages array
+    const randomMessage = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
+    feedback.textContent = randomMessage;
     wheel.appendChild(feedback);
+
+    // Trigger the voiceover for the compliment
+    speakCompliment(randomMessage); // Speak the compliment aloud
 
     setTimeout(() => feedback.remove(), 2000); // Display feedback for 2 seconds
 }
@@ -64,7 +82,18 @@ async function showFeedback() {
 function updateProgressBar() {
     wordsRevealed++;
     const progress = (wordsRevealed / totalWords) * 100;
-    document.getElementById('progressFill').style.width = `${progress}%`;
+    const progressFill = document.getElementById('progressFill');
+
+    progressFill.style.width = `${progress}%`;
+
+    // RAG color evaluation based on progress
+    if (progress < 30) {
+        progressFill.style.backgroundColor = 'red'; // Red for < 30%
+    } else if (progress < 70) {
+        progressFill.style.backgroundColor = 'orange'; // Amber for 30-70%
+    } else {
+        progressFill.style.backgroundColor = 'green'; // Green for > 70%
+    }
 
     // Update the word count display
     wordCountDisplay.textContent = `${wordsRevealed} / ${totalWords} Words Revealed`;
@@ -90,7 +119,7 @@ document.getElementById('spinButton').addEventListener('click', async () => {
     selectedSlot.style.display = 'block'; // Show selected slot
 
     await revealLetters(selectedSlot); // Reveal letters one by one
-    showFeedback(); // Show positive feedback
+    showFeedback(); // Display and speak the feedback
     updateProgressBar(); // Update the progress bar and word count
 });
 
