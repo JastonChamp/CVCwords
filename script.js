@@ -16,6 +16,10 @@ let cvcWords = [
 let wordsRevealed = 0; // Track how many words have been revealed
 const totalWords = cvcWords.length;
 
+// Sound effects
+const spinSound = new Audio('spin-sound.mp3'); // Spin sound file
+const revealSound = new Audio('reveal-sound.mp3'); // Reveal sound file
+
 // Function to trigger Text-to-Speech for the word itself
 function speakWord(word) {
     speakText(word); // Speak the full word after all letters are revealed
@@ -55,7 +59,7 @@ function renderSlots() {
     });
 }
 
-// Asynchronous function to reveal letters one by one with correct timing
+// Asynchronous function to reveal letters one by one with sound effects and a delay before word audio
 async function revealLetters(slot, word) {
     const letters = slot.querySelectorAll('.letter'); // Get all letter spans
     console.log(`Revealing word: ${word}`); // Log the word for debugging
@@ -65,9 +69,13 @@ async function revealLetters(slot, word) {
         console.log(`Revealing letter: ${letter.textContent} of word: ${word}`); // Log each letter with the word for debugging
         await new Promise(resolve => setTimeout(resolve, 700)); // Wait 700ms between each letter reveal
         letter.style.opacity = '1'; // Reveal the letter
+        revealSound.play(); // Play reveal sound
     }
 
-    // After revealing all letters, say the full word
+    // Add a delay before saying the full word (e.g., 2000ms = 2 seconds)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // After the delay, say the full word
     console.log(`Finished revealing word: ${word}`); // Log word completion for debugging
     speakWord(word);
 }
@@ -116,8 +124,11 @@ function updateProgressBar() {
     }
 }
 
-// Event listener for spin button
+// Event listener for spin button with spin sound effect
 document.getElementById('spinButton').addEventListener('click', async () => {
+    // Play spin sound
+    spinSound.play();
+
     // Add the spin effect
     wheel.classList.add('spin-effect');
     setTimeout(() => wheel.classList.remove('spin-effect'), 300); // Remove effect after 300ms
