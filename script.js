@@ -58,13 +58,12 @@ function renderSlots() {
 // Asynchronous function to reveal letters one by one with correct timing
 async function revealLetters(slot, word) {
     const letters = slot.querySelectorAll('.letter'); // Get all letter spans
-    // Log the word being revealed for debugging
-    console.log(`Revealing word: ${word}`);
+    console.log(`Revealing word: ${word}`); // Log the word for debugging
     
     for (let i = 0; i < letters.length; i++) {
         const letter = letters[i];
-        console.log(`Revealing letter: ${letter.textContent}`); // Log each letter
-        await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms between each letter reveal
+        console.log(`Revealing letter: ${letter.textContent}`); // Log each letter for debugging
+        await new Promise(resolve => setTimeout(resolve, 700)); // Increased delay to 700ms between each letter reveal
         letter.style.opacity = '1'; // Reveal the letter
     }
 
