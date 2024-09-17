@@ -59,15 +59,16 @@ function renderSlots() {
 async function revealLetters(slot, word) {
     const letters = slot.querySelectorAll('.letter'); // Get all letter spans
     console.log(`Revealing word: ${word}`); // Log the word for debugging
-    
+
     for (let i = 0; i < letters.length; i++) {
         const letter = letters[i];
-        console.log(`Revealing letter: ${letter.textContent}`); // Log each letter for debugging
-        await new Promise(resolve => setTimeout(resolve, 700)); // Increased delay to 700ms between each letter reveal
+        console.log(`Revealing letter: ${letter.textContent} of word: ${word}`); // Log each letter with the word for debugging
+        await new Promise(resolve => setTimeout(resolve, 700)); // Wait 700ms between each letter reveal
         letter.style.opacity = '1'; // Reveal the letter
     }
 
     // After revealing all letters, say the full word
+    console.log(`Finished revealing word: ${word}`); // Log word completion for debugging
     speakWord(word);
 }
 
@@ -128,6 +129,8 @@ document.getElementById('spinButton').addEventListener('click', async () => {
     const randomIndex = Math.floor(Math.random() * cvcWords.length); // Get random index
     const selectedSlot = slots[randomIndex]; // Select random slot
     const selectedWord = cvcWords[randomIndex]; // Get the corresponding word
+
+    console.log(`Selected word: ${selectedWord}`); // Log the selected word
 
     selectedSlot.style.display = 'block'; // Show selected slot
 
