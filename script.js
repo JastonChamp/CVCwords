@@ -15,10 +15,10 @@ const spinButton = document.getElementById('spinButton');
 const wordBox = document.querySelector('.wheel');
 const progressText = document.getElementById('progressText');
 const progressBar = document.getElementById('progressBar');
-const complimentBox = document.getElementById('complimentBox');  // Added compliment box
+const complimentBox = document.getElementById('complimentBox');  // Compliment box
 
 const spinSound = new Audio('spin-sound.mp3');
-let revealSound = new Audio('reveal-sound.mp3'); // Add reveal sound
+let revealSound = new Audio('reveal-sound.mp3'); // Reveal sound for letters
 
 spinButton.addEventListener('click', spin);
 
@@ -53,7 +53,7 @@ function revealWord(word) {
             setTimeout(() => {
                 speakWord(word); 
                 setTimeout(() => {
-                    giveCompliment();  // Compliment comes after word is spoken
+                    giveCompliment();  // Compliment after word is spoken
                     updateProgress();
                 }, 1500); // Delay before compliment
             }, 2000); // Delay before speaking word
@@ -73,7 +73,7 @@ function speakWord(word) {
 function giveCompliment() {
     const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
-    complimentBox.textContent = compliment;  // Compliment text goes in complimentBox
+    complimentBox.textContent = compliment;  // Compliment text in complimentBox
     complimentBox.style.color = 'green';
     complimentBox.style.fontSize = '30px';
 
@@ -86,3 +86,6 @@ function updateProgress() {
     progressText.textContent = `${revealedWords} / ${words.length} Words Revealed`;
     progressBar.value = (revealedWords / words.length) * 100;
 }
+
+// Initialize progress bar
+document.getElementById('progressBar').style.width = '0%';
