@@ -105,11 +105,12 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate = 0.85; // Slightly slower pace for smoother sound
-    utterance.pitch = 1.2; // Lower pitch to reduce sharpness
+    utterance.rate = 0.8;  // Further slowed down for smoother delivery
+    utterance.pitch = 1.1; // Further lowered pitch for a more pleasant tone
+    utterance.volume = 0.9; // Reduced volume to avoid sharpness
 
     if (selectedVoice) {
-        utterance.voice = selectedVoice;  // Set to preferred female voice
+        utterance.voice = selectedVoice;  // Use selected female voice
     }
 
     window.speechSynthesis.speak(utterance);
@@ -123,17 +124,16 @@ function giveCompliment() {
     complimentBox.style.fontSize = '30px';
 
     const utterance = new SpeechSynthesisUtterance(compliment);
-    utterance.rate = 0.85; // Same slower pace for consistency
-    utterance.pitch = 1.2; // Lower pitch for smoother, less sharp tone
+    utterance.rate = 0.8;  // Same slower rate
+    utterance.pitch = 1.1; // Same lowered pitch
+    utterance.volume = 0.9; // Reduced volume for smoother sound
 
     if (selectedVoice) {
-        utterance.voice = selectedVoice;  // Ensure same female voice is used
+        utterance.voice = selectedVoice;  // Consistent female voice
     }
 
     window.speechSynthesis.speak(utterance);
 }
-
-
 
 function updateProgress() {
     revealedWords++;
