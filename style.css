@@ -1,91 +1,87 @@
-/* General styling for the whole page */
-body {
-    font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
-    background-color: #e0f7fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+const words = [
+    'hop', 'nut', 'bed', 'cat', 'dog', 'pen', 'run', 'bug', 'fox', 'hat',
+    'jam', 'net', 'map', 'pig', 'tub', 'cup', 'van', 'wax', 'win', 'box',
+    'bat', 'bet', 'bit', 'bot', 'but', 'cut', 'dot', 'fit', 'gut', 'hit',
+    'hot', 'jet', 'kit', 'lot', 'met', 'not', 'pat', 'pot', 'rat', 'sat',
+    'set', 'sit', 'tan', 'tap', 'tin', 'top', 'wet', 'wit', 'yet', 'zoo',
+    'dim', 'dip', 'lip', 'lit', 'mix', 'mop', 'nip', 'pan', 'pin', 'pit',
+    'pod', 'pop', 'rim', 'rip', 'rot', 'sob', 'sum', 'sun', 'tap', 'ten',
+    'tip', 'tug', 'vet', 'wed', 'wig', 'win', 'yam', 'yen', 'yip',
+    'bud', 'bun', 'bus', 'cob', 'cod', 'cog', 'con', 'cop', 'cub', 'dud',
+    'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
+];
+
+// Function to get a random compliment
+function getRandomCompliment() {
+    const compliments = ['Great job!', 'Well done!', 'Fantastic!', 'You did it!', 'Amazing!'];
+    return compliments[Math.floor(Math.random() * compliments.length)];
 }
 
-.container {
-    text-align: center;
+// Function to check if a letter is a vowel
+function isVowel(letter) {
+    return 'aeiou'.includes(letter);
 }
 
-.word-box {
-    font-size: 5rem;
-    margin: 20px;
-    width: 300px;
-    height: 300px;
-    line-height: 300px;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
+// Function to reveal a word letter by letter
+function revealWordLetterByLetter(word) {
+    let index = 0;
+    wordBox.innerHTML = '';  // Clear the word box
+    const complimentText = document.getElementById('complimentText');
+    complimentText.textContent = '';  // Clear previous compliment
+    wordBox.classList.remove('shake');
+    
+    const revealInterval = setInterval(() => {
+        const letterSpan = document.createElement('span');
+        letterSpan.textContent = word[index];
+        if (isVowel(word[index])) {
+            letterSpan.style.color = 'red';  // Red color for vowels
+        } else {
+            letterSpan.style.color = 'black';  // Black color for consonants
+        }
+        wordBox.appendChild(letterSpan);
+        index++;
+        if (index >= word.length) {
+            clearInterval(revealInterval);
+            const compliment = getRandomCompliment();
+            setTimeout(() => {
+                complimentText.textContent = compliment;  // Display compliment in its own div
+                wordBox.classList.add('shake');  // Add shake effect
+                speakCompliment(compliment);
+                speakWord(word);  // Speak the word after reveal
+            }, 1000);  // Delay before speaking compliment
+        }
+    }, 500);  // Adjust speed of letter-by-letter reveal here
 }
 
-/* Button styling */
-button {
-    padding: 10px 20px;
-    font-size: 1.5rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+// Function to speak the word using the Web Speech API
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    window.speechSynthesis.speak(utterance);
 }
 
-button:hover {
-    background-color: #45a049;
+// Function to speak the compliment
+function speakCompliment(compliment) {
+    const utterance = new SpeechSynthesisUtterance(compliment);
+    window.speechSynthesis.speak(utterance);
 }
 
-/* Progress bar container */
-.progress-container {
-    width: 100%;
-    background-color: #ddd;
-    margin: 20px 0;
-    height: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    max-width: 600px;
-    margin: 0 auto 20px auto;
+// Selecting elements from the DOM
+const wordBox = document.querySelector('.wheel');
+const spinButton = document.getElementById('spinButton');
+let progress = 0;  // Track the number of words revealed
+const progressBar = document.getElementById('progressBar').firstElementChild;
+const progressText = document.getElementById('progressText');
+
+// Function to update the progress bar
+function updateProgress() {
+    progress++;
+    progressBar.style.width = `${(progress / words.length) * 100}%`;
+    progressText.textContent = `${progress} / ${words.length} Words Revealed`;
 }
 
-/* Progress bar fill */
-.progress-bar {
-    width: 0%;
-    height: 100%;
-    background-color: #f44336;
-    transition: width 0.4s ease;
-}
-
-/* Progress text */
-#progressText {
-    font-size: 1.2rem;
-    color: #333;
-}
-
-/* Shake effect */
-@keyframes shake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    25% {
-        transform: translateX(-10px);
-    }
-    50% {
-        transform: translateX(10px);
-    }
-    75% {
-        transform: translateX(-10px);
-    }
-}
-
-.shake {
-    animation: shake 0.5s;
-}
+// Event listener for the spin button
+spinButton.addEventListener('click', () => {
+    const randomWord = words[Math.floor(Math.random() * words.length)];
+    revealWordLetterByLetter(randomWord);
+    updateProgress();
+});
