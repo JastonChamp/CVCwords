@@ -1,39 +1,72 @@
-/* Update spacing, padding, and font size */
+body {
+    font-family: 'Comic Sans MS', sans-serif;
+    background-color: #E0F7FA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
 .spinner {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px;
-    margin-bottom: 20px;
+    margin-top: 50px;
 }
 
-button#spinButton {
+.wheel {
+    width: 300px;
+    height: 300px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.slot {
+    font-size: 48px;
+    font-weight: bold;
+    color: black;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
     background-color: green;
     color: white;
-    font-size: 18px;
-    padding: 10px 20px;
-    border-radius: 10px;
     border: none;
-    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.progress-bar {
+    width: 80%;
+    height: 10px;
+    background-color: #ccc;
+    margin-top: 20px;
+    border-radius: 5px;
 }
 
 #progressFill {
-    height: 15px;
-    border-radius: 10px;
+    height: 100%;
+    width: 0;
+    background-color: red;
+    border-radius: 5px;
 }
 
 #wordCount {
-    font-family: 'Comic Sans MS', sans-serif;
+    margin-top: 10px;
     font-size: 18px;
-    color: black;
-    text-align: center;
-    margin-top: 15px;
 }
 
 .feedback {
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 20px;
-    color: green;
-    text-align: center;
+    margin-top: 10px;
+    color: #00796B;
 }
