@@ -1,107 +1,64 @@
-const cvcWords = [
-    'tap', 'cat', 'bat', 'rat', 'fat', 'hat', 'pat', 'sat', 'mat', 'fan',
-    'fun', 'map', 'man', 'gap', 'cap', 'bag', 'tag', 'big', 'pig', 'wig',
-    'red', 'bed', 'led', 'pen', 'ten', 'hen', 'net', 'pet', 'wet', 'bet',
-    'pot', 'dot', 'hot', 'cot', 'lot', 'top', 'hop', 'dog', 'log', 'fog',
-    'run', 'sun', 'bun', 'gun', 'mug', 'jug', 'tub', 'rub', 'sub', 'nut',
-    'cut', 'but', 'put', 'jug', 'bud', 'mud', 'fun', 'dud'
+const words = [
+    // Short A
+    'bat', 'bag', 'cap', 'cat', 'fan', 'fat', 'mat', 'man', 'nap', 'rat', 
+    'sat', 'van', 'jam', 'lag', 'ram', 'cab', 'dam', 'gap', 'lap', 'map',
+    // Short E
+    'bed', 'beg', 'bet', 'den', 'jet', 'leg', 'let', 'net', 'pen', 'red', 
+    'vet', 'web', 'men', 'pet', 'peg', 'fed', 'hen', 'met', 'ten', 'wed',
+    // Short I
+    'bit', 'dig', 'fit', 'hit', 'kit', 'lid', 'mix', 'nip', 'pig', 'rid', 
+    'sit', 'wig', 'dim', 'fin', 'lit', 'pin', 'bin', 'zip', 'lip', 'tip', 
+    // Short O
+    'bog', 'dot', 'dog', 'fog', 'hot', 'job', 'log', 'mob', 'not', 'pot', 
+    'rob', 'top', 'cot', 'dot', 'got', 'jot', 'lot', 'rot', 'sot', 'hop', 
+    // Short U
+    'bun', 'cub', 'fun', 'gun', 'hug', 'jug', 'mud', 'nut', 'pup', 'rug', 
+    'sun', 'tub', 'bud', 'cut', 'dug', 'fun', 'gut', 'hut', 'mug', 'run'
 ];
 
-let revealedWords = 0;
+let wordIndex = 0;
+let wordsRevealed = 0;
 
-// Preload sounds
-const spinSound = new Audio('spin-sound.mp3');
-const revealSound = new Audio('reveal-sound.mp3');  // Added reveal sound
-const feedbackMessages = ['Well Done!', 'Great Job!', 'Excellent!', 'You Got It!', 'Awesome!'];
+function revealWord() {
+    const word = words[wordIndex];
+    const letters = word.split("");
+    const wordContainer = document.querySelector('.wheel');
+    wordContainer.innerHTML = ''; // Clear the container before showing new letters
 
-// Function to speak text
-function speakText(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
-}
-
-// Function to reveal letters with correct vowel color
-async function revealLetters(slot, word) {
-    slot.textContent = '';  // Clear existing content
-
-    for (let i = 0; i < word.length; i++) {
-        const letter = word[i];
-        
-        // Check if it's a vowel and color accordingly
-        const letterSpan = document.createElement('span');
-        if (['a', 'e', 'i', 'o', 'u'].includes(letter.toLowerCase())) {
-            letterSpan.style.color = 'red';  // Color vowels red
+    let letterIndex = 0;
+    const revealInterval = setInterval(() => {
+        if (letterIndex < letters.length) {
+            const span = document.createElement('span');
+            span.textContent = letters[letterIndex];
+            if (letters[letterIndex] === 'a' || letters[letterIndex] === 'e' || letters[letterIndex] === 'i' || letters[letterIndex] === 'o' || letters[letterIndex] === 'u') {
+                span.style.color = 'red'; // Highlight vowels in red
+            }
+            wordContainer.appendChild(span);
+            letterIndex++;
         } else {
-            letterSpan.style.color = 'black';
+            clearInterval(revealInterval);
+            playWordAudio(word); // Play the word audio after all letters are revealed
         }
-
-        letterSpan.textContent = letter;
-        slot.appendChild(letterSpan);  // Append each letter
-
-        revealSound.play();  // Play reveal sound for each letter
-        await new Promise(resolve => setTimeout(resolve, 500));  // Pause between letters
-    }
-
-    // Play the word audio after all letters are revealed
-    setTimeout(() => {
-        speakText(word);  // Speak the full word
-        setTimeout(() => showFeedback(), 2000);  // Show feedback after word is spoken
-    }, 1000);  // Small delay before speaking the word
+    }, 500); // Adjust the timing if needed
 }
 
-// Function to update the progress bar
-function updateProgressBar() {
-    revealedWords++;
-    const progressBar = document.getElementById('progressFill');
-    const wordCountText = document.getElementById('wordCount');
-    
-    const progressPercentage = (revealedWords / cvcWords.length) * 100;
-    progressBar.style.width = `${progressPercentage}%`;  // Update progress bar width
-    wordCountText.textContent = `${revealedWords} / ${cvcWords.length} Words Revealed`;  // Update word count
+function playWordAudio(word) {
+    const audio = new SpeechSynthesisUtterance(word);
+    audio.lang = 'en-US';
+    window.speechSynthesis.speak(audio);
 }
 
-// Function to show feedback message
-async function showFeedback() {
-    const feedback = document.createElement('div');
-    feedback.className = 'feedback';
-
-    const randomMessage = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
-    feedback.textContent = randomMessage;
-
-    const spinner = document.querySelector('.spinner');
-    document.body.insertBefore(feedback, spinner);
-
-    speakText(randomMessage);  // Speak the feedback message
-
-    setTimeout(() => feedback.remove(), 2000);  // Remove feedback after 2 seconds
+function updateProgress() {
+    wordsRevealed++;
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressValue = (wordsRevealed / words.length) * 100;
+    progressBar.value = progressValue;
+    progressText.textContent = `${wordsRevealed} / ${words.length} Words Revealed`;
 }
 
-// Event listener for spin button
-document.getElementById('spinButton').addEventListener('click', async () => {
-    spinSound.play();  // Play spin sound
-    const randomWord = cvcWords[Math.floor(Math.random() * cvcWords.length)];
-
-    renderSlots();  // Re-render all slots
-    const slots = document.querySelectorAll('.slot');
-    const randomSlot = slots[Math.floor(Math.random() * slots.length)];
-
-    randomSlot.style.display = 'block';  // Show the slot
-    await revealLetters(randomSlot, randomWord);  // Reveal letters with correct colors
-    updateProgressBar();  // Update the progress bar
+document.getElementById('spinButton').addEventListener('click', () => {
+    revealWord();
+    wordIndex = (wordIndex + 1) % words.length; // Move to the next word or loop back to the first
+    updateProgress(); // Update the progress bar and word count
 });
-
-// Function to render word slots
-function renderSlots() {
-    const wheel = document.querySelector('.wheel');
-    wheel.innerHTML = '';  // Clear existing slots
-
-    for (let i = 0; i < cvcWords.length; i++) {
-        const slot = document.createElement('div');
-        slot.className = 'slot';
-        slot.style.display = 'none';  // Hide slots initially
-        wheel.appendChild(slot);  // Append each slot to the wheel
-    }
-}
-
-// Initial setup
-renderSlots();
