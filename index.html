@@ -2,29 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css"> <!-- Corrected the stylesheet name -->
-    <title>CVC Spinner</title>
+    <title>CVC Word Spinner</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Feedback Text -->
-    <h1 id="complimentText" class="hidden"></h1> <!-- Compliment Text will show after spin -->
-
-    <!-- Spinner Word Box -->
-    <div id="wheel" class="wheel"></div> <!-- The word will appear here -->
-    
-    <!-- Spin Button -->
-    <button id="spinButton">Spin</button>
-
-    <!-- Progress Bar -->
-    <div id="progressBar">
-        <div id="progress"></div> <!-- This is the filling part of the progress bar -->
+    <div class="spinner">
+        <div class="wheel"></div>
     </div>
+    <button id="spinButton">Spin</button>
+    <progress id="progressBar" value="0" max="100"></progress>
+    <p id="progressText">0 / 99 Words Revealed</p>
 
-    <!-- Progress Text -->
-    <div id="progressText">0 / 99 Words Revealed</div> <!-- Progress display -->
-    
-    <script src="script.js"></script> <!-- Link to the JS file -->
+    <script src="script.js"></script>
 </body>
 </html>
