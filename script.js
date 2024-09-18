@@ -89,17 +89,27 @@ function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
 }
 
+let selectedVoice;
+
+function setFemaleVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    selectedVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
+}
+
+// Ensure the voices are loaded before using them
+if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = setFemaleVoice;
+} else {
+    setFemaleVoice(); // Fallback for older browsers
+}
+
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance(word);
     utterance.rate = 0.9; // Child-friendly pace
     utterance.pitch = 1.5; // Child-friendly tone
 
-    // Choose the female voice if available
-    const voices = window.speechSynthesis.getVoices();
-    const femaleVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
-
-    if (femaleVoice) {
-        utterance.voice = femaleVoice;  // Set to preferred female voice
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;  // Set to preferred female voice
     }
 
     window.speechSynthesis.speak(utterance);
@@ -114,10 +124,15 @@ function giveCompliment() {
 
     const utterance = new SpeechSynthesisUtterance(compliment);
     utterance.rate = 0.9; // Child-friendly rate
-    utterance.pitch = 1.5; // Child-friendly pitch
-    utterance.volume = 1; // Full volume
+    utterance.pitch = 1.5; // Child-friendly tone
+
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;  // Ensure same female voice is used
+    }
+
     window.speechSynthesis.speak(utterance);
 }
+
 
 function updateProgress() {
     revealedWords++;
