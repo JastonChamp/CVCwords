@@ -11,69 +11,91 @@ const words = [
     'sun', 'tub', 'bud', 'cut', 'dug', 'fun', 'gut', 'hut', 'mug', 'run'
 ];
 
-let wordIndex = 0;
-let wordsRevealed = 0;
+let currentIndex = 0;
+let wordRevealed = 0;
+let wordCount = words.length;
 
-function revealWord() {
-    const word = words[wordIndex];
-    const letters = word.split("");
-    const wordContainer = document.querySelector('.wheel');
-    wordContainer.innerHTML = ''; // Clear the container before showing new letters
+const spinButton = document.getElementById('spinButton');
+const wheel = document.getElementById('wheel');
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
 
-    let letterIndex = 0;
-    const revealInterval = setInterval(() => {
-        if (letterIndex < letters.length) {
-            const span = document.createElement('span');
-            span.textContent = letters[letterIndex];
-            if (letters[letterIndex] === 'a' || letters[letterIndex] === 'e' || letters[letterIndex] === 'i' || letters[letterIndex] === 'o' || letters[letterIndex] === 'u') {
-                span.style.color = 'red'; // Highlight vowels in red
-            }
-            wordContainer.appendChild(span);
-            letterIndex++;
-        } else {
-            clearInterval(revealInterval);
-            playWordAudio(word); // Play the word audio after all letters are revealed
-            setTimeout(() => {
-                addShakeEffect(); // Add shake effect after the word is revealed
-                playCompliment();  // Play compliment sound after revealing
-            }, 500); // Small delay before shaking and compliment
-        }
-    }, 500); // Adjust the timing if needed
-}
+// Audio
+const revealSound = new Audio('reveal-sound.mp3');
+const spinSound = new Audio('spin-sound.mp3');
 
-function playWordAudio(word) {
-    const audio = new SpeechSynthesisUtterance(word);
-    audio.lang = 'en-US';
-    window.speechSynthesis.speak(audio);
-}
-
-function playCompliment() {
-    const compliments = ["Well done!", "Great job!", "Keep going!", "Awesome!"];
-    const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
-    const complimentAudio = new SpeechSynthesisUtterance(randomCompliment);
-    complimentAudio.lang = 'en-US';
-    window.speechSynthesis.speak(complimentAudio);
-}
-
-function addShakeEffect() {
-    const wordContainer = document.querySelector('.wheel');
-    wordContainer.classList.add('shake');
+// Function to spin and reveal the letters of a word
+function spin() {
+    spinSound.play();
+    wheel.classList.add('shake'); // Add the shake effect
     setTimeout(() => {
-        wordContainer.classList.remove('shake');
-    }, 500); // Shake effect lasts for 0.5 seconds
+        wheel.classList.remove('shake');
+        let word = words[currentIndex];
+        revealWord(word);
+        currentIndex = (currentIndex + 1) % wordCount;
+    }, 1000); // Spin animation lasts for 1 second
 }
 
+// Function to reveal the letters one by one
+function revealWord(word) {
+    wheel.innerHTML = ''; // Clear the box
+    let letters = word.split('');
+    let delay = 500; // Delay between each letter reveal
+
+    letters.forEach((letter, index) => {
+        setTimeout(() => {
+            const span = document.createElement('span');
+            span.textContent = letter;
+
+            if ('aeiou'.includes(letter)) {
+                span.style.color = 'red'; // Color vowels in red
+            } else {
+                span.style.color = 'black'; // Consonants stay black
+            }
+
+            wheel.appendChild(span);
+            revealSound.play();
+        }, delay * index);
+    });
+
+    // After all letters are revealed, say the word
+    setTimeout(() => {
+        const speech = new SpeechSynthesisUtterance(word);
+        speech.lang = 'en-US';
+        speechSynthesis.speak(speech);
+        wordRevealed++;
+        updateProgress();
+        showCompliment();
+    }, delay * letters.length);
+}
+
+// Function to update the progress bar and text
 function updateProgress() {
-    wordsRevealed++;
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const progressValue = (wordsRevealed / words.length) * 100;
-    progressBar.value = progressValue;
-    progressText.textContent = `${wordsRevealed} / ${words.length} Words Revealed`;
+    const progressPercentage = (wordRevealed / wordCount) * 100;
+    progressBar.style.width = progressPercentage + '%';
+    progressText.textContent = `${wordRevealed} / ${wordCount} Words Revealed`;
 }
 
-document.getElementById('spinButton').addEventListener('click', () => {
-    revealWord();
-    wordIndex = (wordIndex + 1) % words.length; // Move to the next word or loop back to the first
-    updateProgress(); // Update the progress bar and word count
-});
+// Function to show a compliment after the word is revealed
+function showCompliment() {
+    const compliments = ['Great Job!', 'Well Done!', 'You Did It!', 'Awesome!'];
+    const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+    
+    setTimeout(() => {
+        const compliment = document.createElement('div');
+        compliment.textContent = randomCompliment;
+        compliment.style.fontSize = '2rem';
+        compliment.style.color = '#4caf50';
+        compliment.style.position = 'absolute';
+        compliment.style.top = '10%';
+        compliment.style.left = '50%';
+        compliment.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(compliment);
+
+        setTimeout(() => {
+            document.body.removeChild(compliment);
+        }, 1500);
+    }, 1000); // Compliment appears 1 second after the word reveal
+}
+
+spinButton.addEventListener('click', spin);
