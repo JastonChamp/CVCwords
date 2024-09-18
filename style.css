@@ -1,71 +1,80 @@
 body {
-    font-family: 'Comic Sans MS', sans-serif;
-    background-color: #E0F7FA;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
+    background-color: #e0f7fa;
     margin: 0;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
-.spinner {
+#wheel {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
-}
-
-.wheel {
     width: 300px;
     height: 300px;
+    border-radius: 20px;
     background-color: white;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.slot {
-    font-size: 48px;
-    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 3rem; /* Bigger font size for words */
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
 }
 
 button {
-    margin-top: 20px;
     padding: 10px 20px;
-    font-size: 20px;
-    background-color: green;
-    color: white;
+    font-size: 1.5rem;
     border: none;
-    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.progress-bar {
+button:hover {
+    background-color: #388e3c;
+}
+
+#progressBar {
     width: 80%;
-    height: 10px;
-    background-color: #ccc;
+    height: 20px;
     margin-top: 20px;
-    border-radius: 5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: #ddd;
 }
 
-#progressFill {
-    height: 100%;
-    width: 0;
+#progressBar::-webkit-progress-bar {
+    background-color: #f3f3f3;
+}
+
+#progressBar::-webkit-progress-value {
     background-color: red;
-    border-radius: 5px;
 }
 
-#wordCount {
-    margin-top: 10px;
-    font-size: 18px;
+#progressText {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
 }
 
-.feedback {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 10px;
-    color: #00796B;
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% { transform: translate(2px, 2px) rotate(0deg); }
+    10% { transform: translate(-2px, -2px) rotate(-1deg); }
+    20% { transform: translate(-4px, 0px) rotate(1deg); }
+    30% { transform: translate(4px, 2px) rotate(0deg); }
+    40% { transform: translate(-2px, 2px) rotate(-1deg); }
+    50% { transform: translate(2px, -2px) rotate(1deg); }
+    60% { transform: translate(4px, 0px) rotate(0deg); }
+    70% { transform: translate(-2px, -2px) rotate(-1deg); }
+    80% { transform: translate(2px, 2px) rotate(1deg); }
+    90% { transform: translate(2px, 0px) rotate(0deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
