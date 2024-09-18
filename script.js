@@ -91,9 +91,17 @@ function isVowel(letter) {
 
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate = 0.9; // Slightly slower for child-friendly pace
-    utterance.pitch = 1.5; // Higher pitch for child-friendly tone
-    utterance.volume = 1; // Full volume
+    utterance.rate = 0.9; // Child-friendly pace
+    utterance.pitch = 1.5; // Child-friendly tone
+
+    // Choose the female voice if available
+    const voices = window.speechSynthesis.getVoices();
+    const femaleVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
+
+    if (femaleVoice) {
+        utterance.voice = femaleVoice;  // Set to preferred female voice
+    }
+
     window.speechSynthesis.speak(utterance);
 }
 
