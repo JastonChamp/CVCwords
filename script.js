@@ -1,146 +1,13 @@
-// Custom Phonetic Mapping for CVC words using IPA
-const phoneticMap = {
-    // Short 'A' sound
-    'cat': 'kæt',
-    'bat': 'bæt',
-    'rat': 'ræt',
-    'hat': 'hæt',
-    'mat': 'mæt',
-    'sat': 'sæt',
-    'pat': 'pæt',
-    'fat': 'fæt',
-    'lap': 'læp',
-    'tap': 'tæp',
-    'pan': 'pæn',
-    'can': 'kæn',
-    'man': 'mæn',
-    'ran': 'ræn',
-    'fan': 'fæn',
-    'bad': 'bæd',
-    'mad': 'mæd',
-    'sad': 'sæd',
-    'dad': 'dæd',
-    'bag': 'bæg',
-    'tag': 'tæg',
-    'lag': 'læg',
-    'rag': 'ræg',
-    'jam': 'dʒæm',
-    'ram': 'ræm',
-    'dam': 'dæm',
-    'ham': 'hæm',
-    'cap': 'kæp',
-    'nap': 'næp',
-    'sap': 'sæp',
-
-    // Short 'E' sound
-    'bet': 'bɛt',
-    'met': 'mɛt',
-    'let': 'lɛt',
-    'pet': 'pɛt',
-    'net': 'nɛt',
-    'set': 'sɛt',
-    'wet': 'wɛt',
-    'pen': 'pɛn',
-    'den': 'dɛn',
-    'men': 'mɛn',
-    'red': 'rɛd',
-    'led': 'lɛd',
-    'fed': 'fɛd',
-    'bed': 'bɛd',
-    'beg': 'bɛg',
-    'peg': 'pɛg',
-    'leg': 'lɛg',
-    'ten': 'tɛn',
-    'hen': 'hɛn',
-    'ben': 'bɛn',
-
-    // Short 'I' sound
-    'bit': 'bɪt',
-    'fit': 'fɪt',
-    'kit': 'kɪt',
-    'sit': 'sɪt',
-    'lit': 'lɪt',
-    'hit': 'hɪt',
-    'pit': 'pɪt',
-    'tip': 'tɪp',
-    'rip': 'rɪp',
-    'zip': 'zɪp',
-    'win': 'wɪn',
-    'bin': 'bɪn',
-    'pin': 'pɪn',
-    'sin': 'sɪn',
-    'tin': 'tɪn',
-    'fin': 'fɪn',
-    'kid': 'kɪd',
-    'lid': 'lɪd',
-    'rid': 'rɪd',
-    'mid': 'mɪd',
-    'big': 'bɪg',
-    'dig': 'dɪg',
-    'pig': 'pɪg',
-    'wig': 'wɪg',
-    'jig': 'dʒɪg',
-    'fig': 'fɪg',
-    'mix': 'mɪks',
-    'fix': 'fɪks',
-    'six': 'sɪks',
-    'nix': 'nɪks',
-
-    // Short 'O' sound
-    'hot': 'hɒt',
-    'cot': 'kɒt',
-    'dot': 'dɒt',
-    'lot': 'lɒt',
-    'pot': 'pɒt',
-    'not': 'nɒt',
-    'got': 'gɒt',
-    'rot': 'rɒt',
-    'log': 'lɒg',
-    'dog': 'dɒg',
-    'bog': 'bɒg',
-    'fog': 'fɒg',
-    'hog': 'hɒg',
-    'jog': 'dʒɒg',
-    'mom': 'mɒm',
-    'pop': 'pɒp',
-    'mop': 'mɒp',
-    'top': 'tɒp',
-    'hop': 'hɒp',
-    'cop': 'kɒp',
-
-    // Short 'U' sound
-    'but': 'bʌt',
-    'cut': 'kʌt',
-    'hut': 'hʌt',
-    'nut': 'nʌt',
-    'put': 'pʌt',
-    'rug': 'rʌg',
-    'bug': 'bʌg',
-    'jug': 'dʒʌg',
-    'mug': 'mʌg',
-    'hug': 'hʌg',
-    'bun': 'bʌn',
-    'fun': 'fʌn',
-    'run': 'rʌn',
-    'sun': 'sʌn',
-    'gun': 'gʌn',
-    'pun': 'pʌn',
-    'cub': 'kʌb',
-    'tub': 'tʌb',
-    'sub': 'sʌb',
-    'rub': 'rʌb',
-    'mud': 'mʌd',
-    'bud': 'bʌd',
-    'rud': 'rʌd',
-    'dug': 'dʌg',
-    'lug': 'lʌg',
-    'pug': 'pʌg',
-    'mug': 'mʌg',
-    'hug': 'hʌg'
-};
-
-// List of words using phonetic map keys
-const words = Object.keys(phoneticMap);
+const words = [
+    'cat', 'dog', 'bat', 'rat', 'hat', 'log', 'jug', 'mop', 'top', 'pan',
+    'fan', 'man', 'can', 'hop', 'pop', 'sap', 'tap', 'zip', 'lip', 'rip',
+    'sun', 'fun', 'run', 'tin', 'pin', 'win', 'kit', 'bit', 'fit', 'sit',
+    'net', 'let', 'bet', 'pet', 'dot', 'lot', 'pot', 'rot', 'cot', 'got',
+    'hut', 'but', 'cut', 'nut', 'rug', 'bug', 'jug', 'mud', 'bud', 'rub',
+    'bag', 'tag', 'lag', 'rag', 'sip', 'tip', 'lip', 'rip', 'sip', 'zip',
+    'mad', 'sad', 'bad', 'lad', 'pad', 'ram', 'bam', 'jam', 'bam', 'ham',
+    'dig', 'pig', 'big', 'wig', 'jig', 'tag', 'wag', 'rag', 'bag', 'hag'
+];
 
 let revealedWords = 0;
 
@@ -189,9 +56,9 @@ function revealWord(word) {
         } else {
             clearInterval(revealInterval);
 
-            // Speak the phonetic representation of the word 1.5 seconds after all letters are revealed
+            // Speak the word 1.5 seconds after all letters are revealed
             setTimeout(() => {
-                speakPhonetic(word); 
+                speakWord(word); 
                 setTimeout(() => {
                     giveCompliment();  // Compliment after word is spoken
                     updateProgress();
@@ -205,13 +72,11 @@ function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
 }
 
-// Speak the phonetic approximation of the word
-function speakPhonetic(word) {
-    const phoneticWord = phoneticMap[word] || word;  // Use phonetic map if available, otherwise use the word
-    const utterance = new SpeechSynthesisUtterance(phoneticWord);
-    utterance.rate = 0.9; // Child-friendly rate
-    utterance.pitch = 1.5; // Child-friendly pitch
-    utterance.volume = 1;  // Full volume
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.rate = 0.9; // Slightly slower for child-friendly pace
+    utterance.pitch = 1.5; // Higher pitch for child-friendly tone
+    utterance.volume = 1; // Full volume
     window.speechSynthesis.speak(utterance);
 }
 
@@ -225,7 +90,7 @@ function giveCompliment() {
     const utterance = new SpeechSynthesisUtterance(compliment);
     utterance.rate = 0.9; // Child-friendly rate
     utterance.pitch = 1.5; // Child-friendly pitch
-    utterance.volume = 1;  // Full volume
+    utterance.volume = 1; // Full volume
     window.speechSynthesis.speak(utterance);
 }
 
