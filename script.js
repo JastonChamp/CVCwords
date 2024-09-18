@@ -1,87 +1,80 @@
 const words = [
-    'hop', 'nut', 'bed', 'cat', 'dog', 'pen', 'run', 'bug', 'fox', 'hat',
-    'jam', 'net', 'map', 'pig', 'tub', 'cup', 'van', 'wax', 'win', 'box',
-    'bat', 'bet', 'bit', 'bot', 'but', 'cut', 'dot', 'fit', 'gut', 'hit',
-    'hot', 'jet', 'kit', 'lot', 'met', 'not', 'pat', 'pot', 'rat', 'sat',
-    'set', 'sit', 'tan', 'tap', 'tin', 'top', 'wet', 'wit', 'yet', 'zoo',
-    'dim', 'dip', 'lip', 'lit', 'mix', 'mop', 'nip', 'pan', 'pin', 'pit',
-    'pod', 'pop', 'rim', 'rip', 'rot', 'sob', 'sum', 'sun', 'tap', 'ten',
-    'tip', 'tug', 'vet', 'wed', 'wig', 'win', 'yam', 'yen', 'yip',
-    'bud', 'bun', 'bus', 'cob', 'cod', 'cog', 'con', 'cop', 'cub', 'dud',
-    'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
+    'cat', 'dog', 'bat', 'rat', 'hat', 'log', 'jug', 'mop', 'top', 'pan',
+    'fan', 'man', 'can', 'hop', 'pop', 'sap', 'tap', 'zip', 'lip', 'rip',
+    'sun', 'fun', 'run', 'tin', 'pin', 'win', 'kit', 'bit', 'fit', 'sit',
+    'net', 'let', 'bet', 'pet', 'dot', 'lot', 'pot', 'rot', 'cot', 'got',
+    'hut', 'but', 'cut', 'nut', 'rug', 'bug', 'jug', 'mud', 'bud', 'rub',
+    'bag', 'tag', 'lag', 'rag', 'sip', 'tip', 'lip', 'dip', 'map', 'nap',
+    'cap', 'lap', 'gap', 'zap', 'jam', 'ram', 'bam', 'ham', 'cab', 'jab',
+    'dab', 'lab', 'sad', 'lad', 'bad', 'mad', 'pad', 'bed', 'red', 'led',
+    'fed', 'wed', 'peg', 'leg', 'beg', 'ten', 'hen', 'pen', 'men', 'den',
+    'hen', 'bin', 'fin', 'sin', 'tin', 'win', 'kid', 'rid', 'bid', 'hid',
+    'rod', 'cod', 'pod', 'nod', 'mud', 'tug', 'rug', 'jug', 'bug', 'hug'
 ];
 
-// Function to get a random compliment
-function getRandomCompliment() {
-    const compliments = ['Great job!', 'Well done!', 'Fantastic!', 'You did it!', 'Amazing!'];
-    return compliments[Math.floor(Math.random() * compliments.length)];
-}
+let revealedWords = 0;
+let totalWords = words.length;
 
-// Function to check if a letter is a vowel
-function isVowel(letter) {
-    return 'aeiou'.includes(letter);
-}
+// Sounds
+const revealSound = new Audio('reveal-sound.mp3'); // Make sure to upload this file
+const complimentSound = new Audio('compliment-sound.mp3'); // Optional if you have a compliment sound
 
-// Function to reveal a word letter by letter
-function revealWordLetterByLetter(word) {
-    let index = 0;
-    wordBox.innerHTML = '';  // Clear the word box
-    const complimentText = document.getElementById('complimentText');
-    complimentText.textContent = '';  // Clear previous compliment
-    wordBox.classList.remove('shake');
-    
-    const revealInterval = setInterval(() => {
-        const letterSpan = document.createElement('span');
-        letterSpan.textContent = word[index];
-        if (isVowel(word[index])) {
-            letterSpan.style.color = 'red';  // Red color for vowels
-        } else {
-            letterSpan.style.color = 'black';  // Black color for consonants
-        }
-        wordBox.appendChild(letterSpan);
-        index++;
-        if (index >= word.length) {
-            clearInterval(revealInterval);
-            const compliment = getRandomCompliment();
-            setTimeout(() => {
-                complimentText.textContent = compliment;  // Display compliment in its own div
-                wordBox.classList.add('shake');  // Add shake effect
-                speakCompliment(compliment);
-                speakWord(word);  // Speak the word after reveal
-            }, 1000);  // Delay before speaking compliment
-        }
-    }, 500);  // Adjust speed of letter-by-letter reveal here
-}
-
-// Function to speak the word using the Web Speech API
-function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
-    window.speechSynthesis.speak(utterance);
-}
-
-// Function to speak the compliment
-function speakCompliment(compliment) {
-    const utterance = new SpeechSynthesisUtterance(compliment);
-    window.speechSynthesis.speak(utterance);
-}
-
-// Selecting elements from the DOM
-const wordBox = document.querySelector('.wheel');
-const spinButton = document.getElementById('spinButton');
-let progress = 0;  // Track the number of words revealed
-const progressBar = document.getElementById('progressBar').firstElementChild;
-const progressText = document.getElementById('progressText');
-
-// Function to update the progress bar
+// Update the progress bar
 function updateProgress() {
-    progress++;
-    progressBar.style.width = `${(progress / words.length) * 100}%`;
-    progressText.textContent = `${progress} / ${words.length} Words Revealed`;
+    const progress = document.getElementById('progress');
+    const progressText = document.getElementById('progressText');
+    revealedWords++;
+    const percent = (revealedWords / totalWords) * 100;
+    progress.style.width = percent + '%';
+    progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
 }
 
-// Event listener for the spin button
-spinButton.addEventListener('click', () => {
+// Show a compliment
+function showCompliment() {
+    const compliments = ['Great!', 'Well Done!', 'Fantastic!', 'Awesome!', 'You Did It!'];
+    const complimentText = document.getElementById('complimentText');
+    complimentText.textContent = compliments[Math.floor(Math.random() * compliments.length)];
+    complimentText.classList.remove('hidden');
+    // Play the compliment sound if available
+    complimentSound.play();
+    setTimeout(() => {
+        complimentText.classList.add('hidden');
+    }, 1500); // Hide after 1.5 seconds
+}
+
+// Check if the character is a vowel
+function isVowel(char) {
+    return ['a', 'e', 'i', 'o', 'u'].includes(char);
+}
+
+// Spin the word
+function spin() {
+    const wordDisplay = document.getElementById('wheel');
     const randomWord = words[Math.floor(Math.random() * words.length)];
-    revealWordLetterByLetter(randomWord);
-    updateProgress();
-});
+    wordDisplay.innerHTML = ''; // Clear previous word
+    let delay = 0;
+
+    // Reveal letters one by one
+    for (let i = 0; i < randomWord.length; i++) {
+        setTimeout(() => {
+            const letterSpan = document.createElement('span');
+            letterSpan.textContent = randomWord[i];
+            // Color vowels in red
+            if (isVowel(randomWord[i])) {
+                letterSpan.style.color = 'red';
+            }
+            wordDisplay.appendChild(letterSpan);
+            // Play the reveal sound
+            revealSound.play();
+        }, delay += 300); // Delay for letter reveal
+    }
+
+    // After all letters are revealed, give a compliment and update progress
+    setTimeout(() => {
+        showCompliment();
+        updateProgress();
+    }, delay + 500); // Compliment after all letters are revealed
+}
+
+// Spin button event listener
+document.getElementById('spinButton').addEventListener('click', spin);
