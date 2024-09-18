@@ -4,77 +4,81 @@ const words = [
     'sun', 'fun', 'run', 'tin', 'pin', 'win', 'kit', 'bit', 'fit', 'sit',
     'net', 'let', 'bet', 'pet', 'dot', 'lot', 'pot', 'rot', 'cot', 'got',
     'hut', 'but', 'cut', 'nut', 'rug', 'bug', 'jug', 'mud', 'bud', 'rub',
-    'bag', 'tag', 'lag', 'rag', 'sip', 'tip', 'lip', 'dip', 'map', 'nap',
-    'cap', 'lap', 'gap', 'zap', 'jam', 'ram', 'bam', 'ham', 'cab', 'jab',
-    'dab', 'lab', 'sad', 'lad', 'bad', 'mad', 'pad', 'bed', 'red', 'led',
-    'fed', 'wed', 'peg', 'leg', 'beg', 'ten', 'hen', 'pen', 'men', 'den',
-    'hen', 'bin', 'fin', 'sin', 'tin', 'win', 'kid', 'rid', 'bid', 'hid',
-    'rod', 'cod', 'pod', 'nod', 'mud', 'tug', 'rug', 'jug', 'bug', 'hug'
+    'bag', 'tag', 'lag', 'rag', 'sip', 'tip', 'lip', 'rip', 'sip', 'zip',
+    'mad', 'sad', 'bad', 'lad', 'pad', 'ram', 'bam', 'jam', 'bam', 'ham',
+    'dig', 'pig', 'big', 'wig', 'jig', 'tag', 'wag', 'rag', 'bag', 'hag'
 ];
 
 let revealedWords = 0;
-let totalWords = words.length;
 
-// Sounds
-const revealSound = new Audio('reveal-sound.mp3'); // Make sure to upload this file
-const complimentSound = new Audio('compliment-sound.mp3'); // Optional if you have a compliment sound
+const spinButton = document.getElementById('spinButton');
+const wordBox = document.querySelector('.wheel');
+const progressText = document.getElementById('progressText');
+const progressBar = document.getElementById('progressBar');
 
-// Update the progress bar
-function updateProgress() {
-    const progress = document.getElementById('progress');
-    const progressText = document.getElementById('progressText');
-    revealedWords++;
-    const percent = (revealedWords / totalWords) * 100;
-    progress.style.width = percent + '%';
-    progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
-}
+const spinSound = new Audio('spin-sound.mp3');
+let revealSound = new Audio('reveal-sound.mp3'); // Add reveal sound
 
-// Show a compliment
-function showCompliment() {
-    const compliments = ['Great!', 'Well Done!', 'Fantastic!', 'Awesome!', 'You Did It!'];
-    const complimentText = document.getElementById('complimentText');
-    complimentText.textContent = compliments[Math.floor(Math.random() * compliments.length)];
-    complimentText.classList.remove('hidden');
-    // Play the compliment sound if available
-    complimentSound.play();
-    setTimeout(() => {
-        complimentText.classList.add('hidden');
-    }, 1500); // Hide after 1.5 seconds
-}
+spinButton.addEventListener('click', spin);
 
-// Check if the character is a vowel
-function isVowel(char) {
-    return ['a', 'e', 'i', 'o', 'u'].includes(char);
-}
-
-// Spin the word
 function spin() {
-    const wordDisplay = document.getElementById('wheel');
-    const randomWord = words[Math.floor(Math.random() * words.length)];
-    wordDisplay.innerHTML = ''; // Clear previous word
-    let delay = 0;
-
-    // Reveal letters one by one
-    for (let i = 0; i < randomWord.length; i++) {
-        setTimeout(() => {
-            const letterSpan = document.createElement('span');
-            letterSpan.textContent = randomWord[i];
-            // Color vowels in red
-            if (isVowel(randomWord[i])) {
-                letterSpan.style.color = 'red';
-            }
-            wordDisplay.appendChild(letterSpan);
-            // Play the reveal sound
-            revealSound.play();
-        }, delay += 300); // Delay for letter reveal
-    }
-
-    // After all letters are revealed, give a compliment and update progress
-    setTimeout(() => {
-        showCompliment();
-        updateProgress();
-    }, delay + 500); // Compliment after all letters are revealed
+    spinSound.play();  // Play spin sound
+    const word = words[Math.floor(Math.random() * words.length)];
+    revealWord(word);
 }
 
-// Spin button event listener
-document.getElementById('spinButton').addEventListener('click', spin);
+function revealWord(word) {
+    wordBox.innerHTML = ''; // Clear the word box
+    let index = 0;
+    let revealInterval = setInterval(() => {
+        if (index < word.length) {
+            let span = document.createElement('span');
+            span.textContent = word[index];
+            
+            // Color vowels red
+            if (isVowel(word[index])) {
+                span.style.color = 'red';
+            }
+            
+            wordBox.appendChild(span);
+            revealSound.play();  // Play reveal sound for each letter
+            
+            index++;
+        } else {
+            clearInterval(revealInterval);
+            speakWord(word);  // Speak the word after it is fully revealed
+            setTimeout(() => {
+                giveCompliment();  // Give compliment after word is revealed
+                updateProgress();
+            }, 1000); // Delay before compliment
+        }
+    }, 500);  // Reveal a letter every 500ms
+}
+
+function isVowel(letter) {
+    return 'aeiou'.includes(letter.toLowerCase());
+}
+
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    window.speechSynthesis.speak(utterance);
+}
+
+function giveCompliment() {
+    const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
+    const compliment = compliments[Math.floor(Math.random() * compliments.length)];
+    const complimentElement = document.createElement('p');
+    complimentElement.textContent = compliment;
+    complimentElement.style.color = 'green';
+    complimentElement.style.fontSize = '30px';
+    wordBox.appendChild(complimentElement);
+
+    const utterance = new SpeechSynthesisUtterance(compliment); // Speak compliment
+    window.speechSynthesis.speak(utterance);
+}
+
+function updateProgress() {
+    revealedWords++;
+    progressText.textContent = `${revealedWords} / ${words.length} Words Revealed`;
+    progressBar.value = (revealedWords / words.length) * 100;
+}
