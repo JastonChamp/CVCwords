@@ -18,7 +18,7 @@ const progressBar = document.getElementById('progressBar');
 const complimentBox = document.getElementById('complimentBox');
 
 const spinSound = new Audio('spin-sound.mp3');
-let revealSound = new Audio('reveal-sound.mp3'); 
+let revealSound = new Audio('reveal-sound.mp3');
 
 spinButton.addEventListener('click', spin);
 
@@ -26,7 +26,7 @@ function spin() {
     spinSound.play();  // Play spin sound
 
     // Add shake effect
-    wordBox.classList.add('shake'); 
+    wordBox.classList.add('shake');
     setTimeout(() => {
         wordBox.classList.remove('shake'); // Remove shake effect after animation
     }, 500);
@@ -74,8 +74,9 @@ function isVowel(letter) {
 
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate = 1; // You can adjust the speaking rate if necessary
-    utterance.pitch = 1;
+    utterance.rate = 0.9; // Slightly slower for child-friendly pace
+    utterance.pitch = 1.5; // Higher pitch for child-friendly tone
+    utterance.volume = 1; // Full volume
     window.speechSynthesis.speak(utterance);
 }
 
@@ -86,9 +87,10 @@ function giveCompliment() {
     complimentBox.style.color = 'green';
     complimentBox.style.fontSize = '30px';
 
-    const utterance = new SpeechSynthesisUtterance(compliment); // Speak compliment
-    utterance.rate = 1; // Adjust speech rate if necessary
-    utterance.pitch = 1;
+    const utterance = new SpeechSynthesisUtterance(compliment);
+    utterance.rate = 0.9; // Child-friendly rate
+    utterance.pitch = 1.5; // Child-friendly pitch
+    utterance.volume = 1; // Full volume
     window.speechSynthesis.speak(utterance);
 }
 
