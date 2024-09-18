@@ -1,12 +1,41 @@
+// Custom Phonetic Mapping for words
+const phoneticMap = {
+    'cat': 'kæt',
+    'dog': 'dɒg',
+    'bat': 'bæt',
+    'rat': 'ræt',
+    'hat': 'hæt',
+    'log': 'lɒg',
+    'jug': 'dʒʌg',
+    'mop': 'mɒp',
+    'top': 'tɒp',
+    'pan': 'pæn',
+    // Continue adding more phonetic mappings as necessary
+};
+
 const words = [
-    'cat', 'dog', 'bat', 'rat', 'hat', 'log', 'jug', 'mop', 'top', 'pan',
-    'fan', 'man', 'can', 'hop', 'pop', 'sap', 'tap', 'zip', 'lip', 'rip',
-    'sun', 'fun', 'run', 'tin', 'pin', 'win', 'kit', 'bit', 'fit', 'sit',
-    'net', 'let', 'bet', 'pet', 'dot', 'lot', 'pot', 'rot', 'cot', 'got',
-    'hut', 'but', 'cut', 'nut', 'rug', 'bug', 'jug', 'mud', 'bud', 'rub',
-    'bag', 'tag', 'lag', 'rag', 'sip', 'tip', 'lip', 'rip', 'sip', 'zip',
-    'mad', 'sad', 'bad', 'lad', 'pad', 'ram', 'bam', 'jam', 'bam', 'ham',
-    'dig', 'pig', 'big', 'wig', 'jig', 'tag', 'wag', 'rag', 'bag', 'hag'
+    // Short 'A' sound
+    'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
+    'pan', 'can', 'man', 'ran', 'fan', 'bad', 'mad', 'sad', 'dad', 'bag',
+    'tag', 'lag', 'rag', 'jam', 'ram', 'dam', 'ham', 'cap', 'nap', 'sap',
+
+    // Short 'E' sound
+    'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
+    'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
+
+    // Short 'I' sound
+    'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
+    'win', 'bin', 'pin', 'sin', 'tin', 'fin', 'kid', 'lid', 'rid', 'mid',
+    'big', 'dig', 'pig', 'wig', 'jig', 'fig', 'mix', 'fix', 'six', 'nix',
+
+    // Short 'O' sound
+    'hot', 'cot', 'dot', 'lot', 'pot', 'not', 'got', 'rot', 'log', 'dog',
+    'bog', 'fog', 'hog', 'jog', 'mom', 'pop', 'mop', 'top', 'hop', 'cop',
+
+    // Short 'U' sound
+    'but', 'cut', 'hut', 'nut', 'put', 'rug', 'bug', 'jug', 'mug', 'hug',
+    'bun', 'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
+    'mud', 'bud', 'rud', 'dug', 'lug', 'pug', 'mug', 'hug'
 ];
 
 let revealedWords = 0;
@@ -56,9 +85,9 @@ function revealWord(word) {
         } else {
             clearInterval(revealInterval);
 
-            // Speak the word 1.5 seconds after all letters are revealed
+            // Speak the phonetic representation of the word 1.5 seconds after all letters are revealed
             setTimeout(() => {
-                speakWord(word); 
+                speakPhonetic(word); 
                 setTimeout(() => {
                     giveCompliment();  // Compliment after word is spoken
                     updateProgress();
@@ -72,11 +101,13 @@ function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
 }
 
-function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate = 0.9; // Slightly slower for child-friendly pace
-    utterance.pitch = 1.5; // Higher pitch for child-friendly tone
-    utterance.volume = 1; // Full volume
+// Speak the phonetic approximation of the word
+function speakPhonetic(word) {
+    const phoneticWord = phoneticMap[word] || word;  // Use phonetic map if available, otherwise use the word
+    const utterance = new SpeechSynthesisUtterance(phoneticWord);
+    utterance.rate = 0.9; // Child-friendly rate
+    utterance.pitch = 1.5; // Child-friendly pitch
+    utterance.volume = 1;  // Full volume
     window.speechSynthesis.speak(utterance);
 }
 
@@ -90,7 +121,7 @@ function giveCompliment() {
     const utterance = new SpeechSynthesisUtterance(compliment);
     utterance.rate = 0.9; // Child-friendly rate
     utterance.pitch = 1.5; // Child-friendly pitch
-    utterance.volume = 1; // Full volume
+    utterance.volume = 1;  // Full volume
     window.speechSynthesis.speak(utterance);
 }
 
