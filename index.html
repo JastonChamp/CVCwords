@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>CVC Word Spinner</title>
+    <link rel="stylesheet" href="style.css"> <!-- Assuming you have the CSS saved in this file -->
+    <title>Spinner</title>
 </head>
 <body>
-    <div class="container">
-        <div id="wheel" class="word-box"></div>
-        <button id="spinButton">Spin</button>
-        <div class="progress-container">
-            <div id="progressBar" class="progress-bar"></div>
-        </div>
-        <p id="progressText">0 / 50 Words Revealed</p>
+    <!-- Spinner Section -->
+    <div id="wheel" class="wheel"></div>
+    
+    <!-- Compliment Text Display -->
+    <div id="complimentText"></div> <!-- This will show the compliment after the word is revealed -->
+    
+    <!-- Progress Bar -->
+    <div id="progressBar">
+        <div></div> <!-- Progress bar filled part -->
     </div>
-    <script src="script.js"></script>
+    
+    <!-- Progress Text -->
+    <div id="progressText"></div> <!-- This shows how many words have been revealed -->
+
+    <!-- Spin Button -->
+    <button id="spinButton">Spin</button>
+
+    <!-- JavaScript linking -->
+    <script src="script.js"></script> <!-- Assuming your JS file is script.js -->
 </body>
 </html>
