@@ -8,56 +8,43 @@ const words = [
     'pod', 'pop', 'rim', 'rip', 'rot', 'sob', 'sum', 'sun', 'tap', 'ten',
     'tip', 'tug', 'vet', 'wed', 'wig', 'win', 'yam', 'yen', 'yip',
     'bud', 'bun', 'bus', 'cob', 'cod', 'cog', 'con', 'cop', 'cub', 'dud',
-    'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud',
+    'dug', 'fun', 'gum', 'gun', 'hug', 'hum', 'hut', 'jog', 'jug', 'mud'
 ];
 
-const compliments = [
-    "Great Job!", "Well Done!", "Keep Going!", "You're Awesome!", "Fantastic!"
-];
-
-let wordIndex = 0;
-let wordsRevealed = 0;
-const totalWords = words.length;
-
-const wordBox = document.getElementById('wheel');
-const spinButton = document.getElementById('spinButton');
-const progressBar = document.getElementById('progressBar');
-const progressText = document.getElementById('progressText');
-
+// Function to get a random compliment
 function getRandomCompliment() {
+    const compliments = ['Great job!', 'Well done!', 'Fantastic!', 'You did it!', 'Amazing!'];
     return compliments[Math.floor(Math.random() * compliments.length)];
 }
 
-function updateProgress() {
-    wordsRevealed++;
-    const progressPercentage = (wordsRevealed / totalWords) * 100;
-    progressBar.style.width = progressPercentage + '%';
-    progressText.textContent = `${wordsRevealed} / ${totalWords} Words Revealed`;
+// Function to check if a letter is a vowel
+function isVowel(letter) {
+    return 'aeiou'.includes(letter);
 }
 
-function speakCompliment(compliment) {
-    const utterance = new SpeechSynthesisUtterance(compliment);
-    speechSynthesis.speak(utterance);
-}
-
-function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
-    speechSynthesis.speak(utterance);
-}
-
+// Function to reveal a word letter by letter
 function revealWordLetterByLetter(word) {
     let index = 0;
-    wordBox.textContent = '';  // Clear the word box
+    wordBox.innerHTML = '';  // Clear the word box
+    const complimentText = document.getElementById('complimentText');
+    complimentText.textContent = '';  // Clear previous compliment
     wordBox.classList.remove('shake');
     
     const revealInterval = setInterval(() => {
-        wordBox.textContent += word[index];
+        const letterSpan = document.createElement('span');
+        letterSpan.textContent = word[index];
+        if (isVowel(word[index])) {
+            letterSpan.style.color = 'red';  // Red color for vowels
+        } else {
+            letterSpan.style.color = 'black';  // Black color for consonants
+        }
+        wordBox.appendChild(letterSpan);
         index++;
         if (index >= word.length) {
             clearInterval(revealInterval);
             const compliment = getRandomCompliment();
             setTimeout(() => {
-                wordBox.textContent += ` ${compliment}`;
+                complimentText.textContent = compliment;  // Display compliment in its own div
                 wordBox.classList.add('shake');  // Add shake effect
                 speakCompliment(compliment);
                 speakWord(word);  // Speak the word after reveal
@@ -66,12 +53,35 @@ function revealWordLetterByLetter(word) {
     }, 500);  // Adjust speed of letter-by-letter reveal here
 }
 
+// Function to speak the word using the Web Speech API
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    window.speechSynthesis.speak(utterance);
+}
+
+// Function to speak the compliment
+function speakCompliment(compliment) {
+    const utterance = new SpeechSynthesisUtterance(compliment);
+    window.speechSynthesis.speak(utterance);
+}
+
+// Selecting elements from the DOM
+const wordBox = document.querySelector('.wheel');
+const spinButton = document.getElementById('spinButton');
+let progress = 0;  // Track the number of words revealed
+const progressBar = document.getElementById('progressBar').firstElementChild;
+const progressText = document.getElementById('progressText');
+
+// Function to update the progress bar
+function updateProgress() {
+    progress++;
+    progressBar.style.width = `${(progress / words.length) * 100}%`;
+    progressText.textContent = `${progress} / ${words.length} Words Revealed`;
+}
+
+// Event listener for the spin button
 spinButton.addEventListener('click', () => {
-    if (wordIndex >= totalWords) {
-        wordIndex = 0;
-    }
-    const word = words[wordIndex];
-    wordIndex++;
-    revealWordLetterByLetter(word);
+    const randomWord = words[Math.floor(Math.random() * words.length)];
+    revealWordLetterByLetter(randomWord);
     updateProgress();
 });
