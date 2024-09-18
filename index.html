@@ -4,28 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css"> <!-- Assuming you have the CSS saved in this file -->
-    <title>Spinner</title>
+    <link rel="stylesheet" href="style.css"> <!-- Corrected the stylesheet name -->
+    <title>CVC Spinner</title>
 </head>
 <body>
-    <!-- Spinner Section -->
-    <div id="wheel" class="wheel"></div>
-    
-    <!-- Compliment Text Display -->
-    <div id="complimentText"></div> <!-- This will show the compliment after the word is revealed -->
-    
-    <!-- Progress Bar -->
-    <div id="progressBar">
-        <div></div> <!-- Progress bar filled part -->
-    </div>
-    
-    <!-- Progress Text -->
-    <div id="progressText"></div> <!-- This shows how many words have been revealed -->
+    <!-- Feedback Text -->
+    <h1 id="complimentText" class="hidden"></h1> <!-- Compliment Text will show after spin -->
 
+    <!-- Spinner Word Box -->
+    <div id="wheel" class="wheel"></div> <!-- The word will appear here -->
+    
     <!-- Spin Button -->
     <button id="spinButton">Spin</button>
 
-    <!-- JavaScript linking -->
-    <script src="script.js"></script> <!-- Assuming your JS file is script.js -->
+    <!-- Progress Bar -->
+    <div id="progressBar">
+        <div id="progress"></div> <!-- This is the filling part of the progress bar -->
+    </div>
+
+    <!-- Progress Text -->
+    <div id="progressText">0 / 99 Words Revealed</div> <!-- Progress display -->
+    
+    <script src="script.js"></script> <!-- Link to the JS file -->
 </body>
 </html>
