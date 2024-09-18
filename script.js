@@ -1,17 +1,12 @@
 const words = [
-    // Short A
     'bat', 'bag', 'cap', 'cat', 'fan', 'fat', 'mat', 'man', 'nap', 'rat', 
     'sat', 'van', 'jam', 'lag', 'ram', 'cab', 'dam', 'gap', 'lap', 'map',
-    // Short E
     'bed', 'beg', 'bet', 'den', 'jet', 'leg', 'let', 'net', 'pen', 'red', 
     'vet', 'web', 'men', 'pet', 'peg', 'fed', 'hen', 'met', 'ten', 'wed',
-    // Short I
     'bit', 'dig', 'fit', 'hit', 'kit', 'lid', 'mix', 'nip', 'pig', 'rid', 
     'sit', 'wig', 'dim', 'fin', 'lit', 'pin', 'bin', 'zip', 'lip', 'tip', 
-    // Short O
     'bog', 'dot', 'dog', 'fog', 'hot', 'job', 'log', 'mob', 'not', 'pot', 
     'rob', 'top', 'cot', 'dot', 'got', 'jot', 'lot', 'rot', 'sot', 'hop', 
-    // Short U
     'bun', 'cub', 'fun', 'gun', 'hug', 'jug', 'mud', 'nut', 'pup', 'rug', 
     'sun', 'tub', 'bud', 'cut', 'dug', 'fun', 'gut', 'hut', 'mug', 'run'
 ];
@@ -38,6 +33,10 @@ function revealWord() {
         } else {
             clearInterval(revealInterval);
             playWordAudio(word); // Play the word audio after all letters are revealed
+            setTimeout(() => {
+                addShakeEffect(); // Add shake effect after the word is revealed
+                playCompliment();  // Play compliment sound after revealing
+            }, 500); // Small delay before shaking and compliment
         }
     }, 500); // Adjust the timing if needed
 }
@@ -46,6 +45,22 @@ function playWordAudio(word) {
     const audio = new SpeechSynthesisUtterance(word);
     audio.lang = 'en-US';
     window.speechSynthesis.speak(audio);
+}
+
+function playCompliment() {
+    const compliments = ["Well done!", "Great job!", "Keep going!", "Awesome!"];
+    const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+    const complimentAudio = new SpeechSynthesisUtterance(randomCompliment);
+    complimentAudio.lang = 'en-US';
+    window.speechSynthesis.speak(complimentAudio);
+}
+
+function addShakeEffect() {
+    const wordContainer = document.querySelector('.wheel');
+    wordContainer.classList.add('shake');
+    setTimeout(() => {
+        wordContainer.classList.remove('shake');
+    }, 500); // Shake effect lasts for 0.5 seconds
 }
 
 function updateProgress() {
