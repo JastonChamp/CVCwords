@@ -12,13 +12,13 @@ body {
 }
 
 .wheel {
-    width: 200px;
-    height: 200px;
+    width: 250px; /* Increased size */
+    height: 250px;
     background-color: white;
     margin: 0 auto;
     border-radius: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    font-size: 70px; /* Increased font size for better visibility */
+    font-size: 100px; /* Increased font size for better visibility */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,31 +27,41 @@ body {
 button {
     background-color: green;
     color: white;
-    font-size: 20px;
-    padding: 10px 20px;
+    font-size: 22px;
+    padding: 12px 25px;
     border: none;
-    border-radius: 5px;
-    margin-top: 20px; /* Added space between the button and word box */
+    border-radius: 7px;
+    margin-top: 25px; /* Added space between the button and word box */
 }
 
 progress {
     width: 80%;
-    height: 20px;
-    margin: 20px 0;
+    height: 25px; /* Made the progress bar thicker */
+    margin: 30px 0;
+    background-color: #f0f0f0;
 }
 
 .compliment-box {
-    font-size: 30px;
+    font-size: 40px; /* Increased font size for visibility */
     color: green;
     margin-bottom: 20px;
 }
 
 #spinButton {
     display: block;
-    margin: 10px auto; /* Centered the spin button */
+    margin: 20px auto; /* Centered the spin button with more spacing */
 }
 
 #progressBar {
-    margin: 20px auto;
+    margin: 30px auto;
     display: block; /* Centered the progress bar */
+    background-color: #f0f0f0;
+}
+
+#progressBar::-webkit-progress-value {
+    background-color: blue; /* Progress bar color */
+}
+
+#progressBar::-moz-progress-bar {
+    background-color: blue; /* Progress bar color for Firefox */
 }
