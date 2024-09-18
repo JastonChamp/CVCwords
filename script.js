@@ -124,30 +124,17 @@ function updateProgressBar() {
     }
 }
 
-// Event listener for spin button with spin sound effect
+// Event listener for Spin button
 document.getElementById('spinButton').addEventListener('click', async () => {
-    // Play spin sound
-    spinSound.play();
+    spinSound.play(); // Play spin sound
+    const randomWord = cvcWords[Math.floor(Math.random() * cvcWords.length)];
+    renderSlots(); // Re-render all slots with words
 
-    // Add the spin effect
-    wheel.classList.add('spin-effect');
-    setTimeout(() => wheel.classList.remove('spin-effect'), 300); // Remove effect after 300ms
+    const slots = wheel.querySelectorAll('.slot');
+    const randomSlot = slots[Math.floor(Math.random() * slots.length)];
 
-    const slots = document.querySelectorAll('.slot'); // Get all slots
-    const previousSlot = document.querySelector('.slot:not([style*="display: none"])'); // Find visible slot
-    if (previousSlot) previousSlot.style.display = 'none'; // Hide previous slot
-
-    const randomIndex = Math.floor(Math.random() * cvcWords.length); // Get random index
-    const selectedSlot = slots[randomIndex]; // Select random slot
-    const selectedWord = cvcWords[randomIndex]; // Get the corresponding word
-
-    console.log(`Selected word: ${selectedWord}`); // Log the selected word
-
-    selectedSlot.style.display = 'block'; // Show selected slot
-
-    await revealLetters(selectedSlot, selectedWord); // Reveal letters and say the word
-    showFeedback(); // Display and speak the feedback
-    updateProgressBar(); // Update the progress bar and word count
+    randomSlot.style.display = 'block'; // Show the random slot
+    await revealLetters(randomSlot, randomWord); // Reveal letters one by one
+    showFeedback(); // Show feedback after revealing the word
+    updateProgressBar(); // Update progress bar after each spin
 });
-
-renderSlots(); // Call renderSlots to setup initial slots
