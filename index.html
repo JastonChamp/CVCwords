@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>CVC Word Spinner</title>
 </head>
 <body>
-    <div class="spinner">
-        <div class="wheel">
-            <!-- Slots will be dynamically populated with JavaScript -->
+    <div class="container">
+        <div id="wheel" class="word-box"></div>
+        <button id="spinButton">Spin</button>
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
         </div>
+        <p id="progressText">0 / 50 Words Revealed</p>
     </div>
-    <button id="spinButton">Spin</button>
-    <div class="progress-bar">
-        <div id="progressFill"></div>
-    </div>
-    <div id="wordCount">0 / 50 Words Revealed</div>
     <script src="script.js"></script>
 </body>
 </html>
