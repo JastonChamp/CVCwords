@@ -15,6 +15,7 @@ const spinButton = document.getElementById('spinButton');
 const wordBox = document.querySelector('.wheel');
 const progressText = document.getElementById('progressText');
 const progressBar = document.getElementById('progressBar');
+const complimentBox = document.getElementById('complimentBox');  // Added compliment box
 
 const spinSound = new Audio('spin-sound.mp3');
 let revealSound = new Audio('reveal-sound.mp3'); // Add reveal sound
@@ -23,12 +24,13 @@ spinButton.addEventListener('click', spin);
 
 function spin() {
     spinSound.play();  // Play spin sound
+    wordBox.innerHTML = ''; // Clear previous word
+    complimentBox.innerHTML = ''; // Clear previous compliment
     const word = words[Math.floor(Math.random() * words.length)];
     revealWord(word);
 }
 
 function revealWord(word) {
-    wordBox.innerHTML = ''; // Clear the word box
     let index = 0;
     let revealInterval = setInterval(() => {
         if (index < word.length) {
@@ -46,11 +48,15 @@ function revealWord(word) {
             index++;
         } else {
             clearInterval(revealInterval);
-            speakWord(word);  // Speak the word after it is fully revealed
+            
+            // Speak the word 2 seconds after all letters are revealed
             setTimeout(() => {
-                giveCompliment();  // Give compliment after word is revealed
-                updateProgress();
-            }, 1000); // Delay before compliment
+                speakWord(word); 
+                setTimeout(() => {
+                    giveCompliment();  // Compliment comes after word is spoken
+                    updateProgress();
+                }, 1500); // Delay before compliment
+            }, 2000); // Delay before speaking word
         }
     }, 500);  // Reveal a letter every 500ms
 }
@@ -67,11 +73,9 @@ function speakWord(word) {
 function giveCompliment() {
     const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
-    const complimentElement = document.createElement('p');
-    complimentElement.textContent = compliment;
-    complimentElement.style.color = 'green';
-    complimentElement.style.fontSize = '30px';
-    wordBox.appendChild(complimentElement);
+    complimentBox.textContent = compliment;  // Compliment text goes in complimentBox
+    complimentBox.style.color = 'green';
+    complimentBox.style.fontSize = '30px';
 
     const utterance = new SpeechSynthesisUtterance(compliment); // Speak compliment
     window.speechSynthesis.speak(utterance);
