@@ -1,7 +1,7 @@
 const cvcWords = [
-    'tap', 'cat', 'bat', 'rat', 'fat', 'hat', 'pat', 'sat', 'mat', 'fan', 
-    'fun', 'map', 'man', 'gap', 'cap', 'bag', 'tag', 'big', 'pig', 'wig', 
-    'red', 'bed', 'led', 'pen', 'ten', 'hen', 'net', 'pet', 'wet', 'bet', 
+    'tap', 'cat', 'bat', 'rat', 'fat', 'hat', 'pat', 'sat', 'mat', 'fan',
+    'fun', 'map', 'man', 'gap', 'cap', 'bag', 'tag', 'big', 'pig', 'wig',
+    'red', 'bed', 'led', 'pen', 'ten', 'hen', 'net', 'pet', 'wet', 'bet',
     'pot', 'dot', 'hot', 'cot', 'lot', 'top', 'hop', 'dog', 'log', 'fog',
     'run', 'sun', 'bun', 'gun', 'mug', 'jug', 'tub', 'rub', 'sub', 'nut',
     'cut', 'but', 'put', 'jug', 'bud', 'mud', 'fun', 'dud'
@@ -55,8 +55,9 @@ async function showFeedback() {
     const randomMessage = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
     feedback.textContent = randomMessage;
 
-    // Insert the feedback message before the spinner
-    document.body.insertBefore(feedback, document.querySelector('.spinner'));
+    // Insert the feedback message above the spinner
+    const spinner = document.querySelector('.spinner');
+    document.body.insertBefore(feedback, spinner);
 
     // Trigger the voiceover for the compliment
     speakText(randomMessage);
@@ -75,7 +76,6 @@ document.getElementById('spinButton').addEventListener('click', async () => {
 
     randomSlot.style.display = 'block'; // Show the random slot
     await revealLetters(randomSlot, randomWord); // Reveal letters one by one
-    showFeedback(); // Show feedback after revealing the word
     updateProgressBar(); // Update progress bar after each spin
 });
 
@@ -88,6 +88,7 @@ function renderSlots() {
     for (let i = 0; i < cvcWords.length; i++) {
         const slot = document.createElement('div');
         slot.className = 'slot';
+        slot.style.display = 'none'; // Hide the slots initially
         wheel.appendChild(slot); // Append each slot to the wheel
     }
 }
