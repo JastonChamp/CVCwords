@@ -5,13 +5,12 @@ const cvcWords = [
     'pot', 'dot', 'hot', 'cot', 'lot', 'top', 'hop', 'dog', 'log', 'fog',
     'run', 'sun', 'bun', 'gun', 'mug', 'jug', 'tub', 'rub', 'sub', 'nut',
     'cut', 'but', 'put', 'jug', 'bud', 'mud', 'fun', 'dud'
-]; // Example words array
+];
 
 let revealedWords = 0;
 
 // Preload sounds
 const spinSound = new Audio('spin-sound.mp3');
-const revealSound = new Audio('reveal-sound.mp3'); // Placeholder, add this audio file
 const feedbackMessages = ['Well Done!', 'Great Job!', 'Excellent!', 'You Got It!', 'Awesome!'];
 
 function speakText(text) {
@@ -29,7 +28,7 @@ async function revealLetters(slot, word) {
     }
 
     // Play the word audio after all letters are revealed
-    setTimeout(() => speakText(word), 800);
+    setTimeout(() => speakText(word), 1000); // 1-second delay to give time for blending
 }
 
 function updateProgressBar() {
