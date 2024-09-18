@@ -15,15 +15,20 @@ const spinButton = document.getElementById('spinButton');
 const wordBox = document.querySelector('.wheel');
 const progressText = document.getElementById('progressText');
 const progressBar = document.getElementById('progressBar');
-const complimentBox = document.getElementById('complimentBox');  // Compliment box
+const complimentBox = document.getElementById('complimentBox');
 
 const spinSound = new Audio('spin-sound.mp3');
-let revealSound = new Audio('reveal-sound.mp3'); // Reveal sound for letters
+let revealSound = new Audio('reveal-sound.mp3'); 
 
 spinButton.addEventListener('click', spin);
 
 function spin() {
     spinSound.play();  // Play spin sound
+    wordBox.classList.add('shake'); // Add shake effect
+    setTimeout(() => {
+        wordBox.classList.remove('shake'); // Remove shake effect after animation
+    }, 500);
+
     wordBox.innerHTML = ''; // Clear previous word
     complimentBox.innerHTML = ''; // Clear previous compliment
     const word = words[Math.floor(Math.random() * words.length)];
@@ -73,7 +78,7 @@ function speakWord(word) {
 function giveCompliment() {
     const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
-    complimentBox.textContent = compliment;  // Compliment text in complimentBox
+    complimentBox.textContent = compliment;
     complimentBox.style.color = 'green';
     complimentBox.style.fontSize = '30px';
 
@@ -86,6 +91,3 @@ function updateProgress() {
     progressText.textContent = `${revealedWords} / ${words.length} Words Revealed`;
     progressBar.value = (revealedWords / words.length) * 100;
 }
-
-// Initialize progress bar
-document.getElementById('progressBar').style.width = '0%';
