@@ -28,7 +28,10 @@ async function revealLetters(slot, word) {
     }
 
     // Play the word audio after all letters are revealed
-    setTimeout(() => speakText(word), 1000); // 1-second delay to give time for blending
+    setTimeout(() => {
+        speakText(word);
+        setTimeout(() => showFeedback(), 2000); // Show feedback 2 seconds after the word is spoken
+    }, 1000); // Delay for blending the letters before the word sound
 }
 
 function updateProgressBar() {
@@ -88,3 +91,6 @@ function renderSlots() {
         wheel.appendChild(slot); // Append each slot to the wheel
     }
 }
+
+// Initial setup
+renderSlots();
