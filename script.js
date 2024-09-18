@@ -24,7 +24,9 @@ spinButton.addEventListener('click', spin);
 
 function spin() {
     spinSound.play();  // Play spin sound
-    wordBox.classList.add('shake'); // Add shake effect
+
+    // Add shake effect
+    wordBox.classList.add('shake'); 
     setTimeout(() => {
         wordBox.classList.remove('shake'); // Remove shake effect after animation
     }, 500);
@@ -53,17 +55,17 @@ function revealWord(word) {
             index++;
         } else {
             clearInterval(revealInterval);
-            
-            // Speak the word 2 seconds after all letters are revealed
+
+            // Speak the word 1.5 seconds after all letters are revealed
             setTimeout(() => {
                 speakWord(word); 
                 setTimeout(() => {
                     giveCompliment();  // Compliment after word is spoken
                     updateProgress();
-                }, 1500); // Delay before compliment
-            }, 2000); // Delay before speaking word
+                }, 1000); // Delay before compliment (adjusted for smoother experience)
+            }, 1500); // Delay before speaking word
         }
-    }, 500);  // Reveal a letter every 500ms
+    }, 400);  // Reveal a letter every 400ms (adjusted for faster reveal)
 }
 
 function isVowel(letter) {
@@ -72,6 +74,8 @@ function isVowel(letter) {
 
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance(word);
+    utterance.rate = 1; // You can adjust the speaking rate if necessary
+    utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
 }
 
@@ -83,6 +87,8 @@ function giveCompliment() {
     complimentBox.style.fontSize = '30px';
 
     const utterance = new SpeechSynthesisUtterance(compliment); // Speak compliment
+    utterance.rate = 1; // Adjust speech rate if necessary
+    utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
 }
 
@@ -91,3 +97,6 @@ function updateProgress() {
     progressText.textContent = `${revealedWords} / ${words.length} Words Revealed`;
     progressBar.value = (revealedWords / words.length) * 100;
 }
+
+// Initialize progress bar width (if needed)
+progressBar.value = 0;
