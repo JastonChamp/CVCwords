@@ -8,6 +8,7 @@ body {
 .spinner {
     display: inline-block;
     margin-bottom: 20px;
+    margin-top: 50px;
 }
 
 .wheel {
@@ -17,7 +18,7 @@ body {
     margin: 0 auto;
     border-radius: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    font-size: 50px;
+    font-size: 70px; /* Increased font size for better visibility */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,6 +31,7 @@ button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    margin-top: 20px; /* Added space between the button and word box */
 }
 
 progress {
@@ -42,4 +44,14 @@ progress {
     font-size: 30px;
     color: green;
     margin-bottom: 20px;
+}
+
+#spinButton {
+    display: block;
+    margin: 10px auto; /* Centered the spin button */
+}
+
+#progressBar {
+    margin: 20px auto;
+    display: block; /* Centered the progress bar */
 }
