@@ -1,6 +1,6 @@
 /* General body styling */
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
     background-color: #e3f7fc;
     text-align: center;
     padding: 0;
@@ -61,12 +61,29 @@ button#spinButton:hover {
     position: relative;
 }
 
-#progressBar::after {
-    content: '';
-    height: 100%;
-    background-color: green;
-    width: 0%;
-    display: block;
-    border-radius: 10px;
-    transition: width 0.5s ease;
+/* Responsive layout for mobile */
+@media screen and (max-width: 600px) {
+    .wheel {
+        width: 250px;
+        height: 250px;
+        font-size: 40px;
+    }
+
+    button#spinButton {
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+
+    #complimentBox {
+        font-size: 25px;
+    }
+
+    #progressText {
+        font-size: 16px;
+    }
+
+    #progressBar {
+        width: 90%;
+        height: 15px;
+    }
 }
