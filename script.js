@@ -25,7 +25,6 @@ const words = [
     'mud', 'bud', 'rud', 'dug', 'lug', 'pug', 'mug', 'hug', 'bud', 'gum'
 ];
 
-
 let revealedWords = 0;
 
 const spinButton = document.getElementById('spinButton');
@@ -36,6 +35,20 @@ const complimentBox = document.getElementById('complimentBox');
 
 const spinSound = new Audio('spin-sound.mp3');
 let revealSound = new Audio('reveal-sound.mp3');
+
+// Add voice selection
+let selectedVoice;
+
+function setFemaleVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    selectedVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
+}
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = setFemaleVoice;
+} else {
+    setFemaleVoice(); // Fallback for older browsers
+}
 
 spinButton.addEventListener('click', spin);
 
@@ -60,53 +73,39 @@ function revealWord(word) {
         if (index < word.length) {
             let span = document.createElement('span');
             span.textContent = word[index];
-            
+
             // Color vowels red
             if (isVowel(word[index])) {
                 span.style.color = 'red';
             }
-            
+
             wordBox.appendChild(span);
             revealSound.play();  // Play reveal sound for each letter
-            
             index++;
         } else {
             clearInterval(revealInterval);
 
             // Speak the word 1.5 seconds after all letters are revealed
             setTimeout(() => {
-                speakWord(word); 
+                speakWord(word);
                 setTimeout(() => {
                     giveCompliment();  // Compliment after word is spoken
                     updateProgress();
-                }, 1000); // Delay before compliment (adjusted for smoother experience)
+                }, 1000); // Delay before compliment
             }, 1500); // Delay before speaking word
         }
-    }, 400);  // Reveal a letter every 400ms (adjusted for faster reveal)
+    }, 400);  // Reveal a letter every 400ms
 }
 
 function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
 }
 
-let selectedVoice;
-
-function setFemaleVoice() {
-    const voices = window.speechSynthesis.getVoices();
-    selectedVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
-}
-
-// Ensure the voices are loaded before using them
-if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = setFemaleVoice;
-} else {
-    setFemaleVoice(); // Fallback for older browsers
-}
-
+// Speak the word with a female voice
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate = 0.8;  // Further slowed down for smoother delivery
-    utterance.pitch = 1.1; // Further lowered pitch for a more pleasant tone
+    utterance.rate = 0.8;  // Slowed down for smoother delivery
+    utterance.pitch = 1.1; // Lower pitch for pleasant tone
     utterance.volume = 0.9; // Reduced volume to avoid sharpness
 
     if (selectedVoice) {
@@ -124,12 +123,12 @@ function giveCompliment() {
     complimentBox.style.fontSize = '30px';
 
     const utterance = new SpeechSynthesisUtterance(compliment);
-    utterance.rate = 0.8;  // Same slower rate
-    utterance.pitch = 1.1; // Same lowered pitch
-    utterance.volume = 0.9; // Reduced volume for smoother sound
+    utterance.rate = 0.8;  // Slower rate for compliments as well
+    utterance.pitch = 1.1; // Lower pitch for more pleasant tone
+    utterance.volume = 0.9; // Reduced volume to avoid sharpness
 
     if (selectedVoice) {
-        utterance.voice = selectedVoice;  // Consistent female voice
+        utterance.voice = selectedVoice;  // Use the same female voice for compliments
     }
 
     window.speechSynthesis.speak(utterance);
