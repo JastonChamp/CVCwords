@@ -101,7 +101,7 @@ function revealWord(word) {
                 }, 1000); // Delay before compliment
             }, 1500); // Delay before speaking word
         }
-    }, 1000);  // Adjust this number to control the delay between each letter (in milliseconds)
+    }, 1500);  // Adjust this number to control the delay between each letter (in milliseconds)
 }
 
 function isVowel(letter) {
