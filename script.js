@@ -25,6 +25,9 @@ const words = [
     'mud', 'bud', 'rud', 'dug', 'lug', 'pug', 'mug', 'hug', 'bud', 'gum'
 ];
 
+// Set path to your audio files
+const audioPath = 'path_to_audio_files/';  // Update with your correct folder path
+
 let revealedWords = 0;
 
 const spinButton = document.getElementById('spinButton');
@@ -80,7 +83,11 @@ function revealWord(word) {
             }
 
             wordBox.appendChild(span);
-            revealSound.play();  // Play reveal sound for each letter
+
+            // Play corresponding letter sound
+            let letterSound = new Audio(`${audioPath}${word[index].toLowerCase()}.mp3`);
+            letterSound.play();
+
             index++;
         } else {
             clearInterval(revealInterval);
