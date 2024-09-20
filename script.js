@@ -62,12 +62,15 @@ function setFemaleVoice() {
 }
 
 // Detect when voices are changed or loaded, and then set the voice
-if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = setFemaleVoice;
+if ('speechSynthesis' in window) {
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = setFemaleVoice;
+    } else {
+        setFemaleVoice(); // Fallback for older browsers or initial load
+    }
 } else {
-    setFemaleVoice(); // Fallback for older browsers or initial load
+    alert('Speech Synthesis API is not supported on this browser. Please try a different browser.');
 }
-
 // Event listener for spin button
 spinButton.addEventListener('click', spin);
 
