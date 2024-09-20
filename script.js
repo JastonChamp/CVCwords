@@ -42,48 +42,38 @@ let revealSound = new Audio('reveal-sound.mp3');
 // Add voice selection
 let selectedVoice;
 
-// Function to set voice, prioritizing female voice but falling back to the first available voice
+// Function to set the female voice or fallback if not available
 function setFemaleVoice() {
     const voices = window.speechSynthesis.getVoices();
 
-    // Try to find a female voice, and fallback to the first available one if none is found
-    selectedVoice = voices.find(voice => voice.name.includes('female')) || voices[0];
+    // Try to find a female voice
+    selectedVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
 
-    // Log for debugging
-    console.log("Selected Voice: ", selectedVoice ? selectedVoice.name : "No voice available");
+    // If no female voice is found, fallback to the first available voice
+    if (!selectedVoice && voices.length > 0) {
+        selectedVoice = voices[0]; // Fallback to first available voice
+    }
+
+    // Safari-specific fallback: retry loading voices if none are found
+    if (voices.length === 0) {
+        console.log("No voices found, retrying...");
+        setTimeout(setFemaleVoice, 500); // Retry after a brief delay
+    }
 }
 
-// Detect when voices are loaded or changed
+// Detect when voices are changed or loaded, and then set the preferred voice
 if ('speechSynthesis' in window) {
-    if (typeof speechSynthesis.onvoiceschanged !== 'undefined') {
+    if (speechSynthesis.onvoiceschanged !== undefined) {
         speechSynthesis.onvoiceschanged = setFemaleVoice;
     } else {
-        setFemaleVoice(); // Fallback for browsers that don't support onvoiceschanged
+        setFemaleVoice(); // Fallback for older browsers or initial load
     }
 } else {
-    alert('Your browser does not support Speech Synthesis API.');
+    alert('Speech Synthesis API is not supported on this browser. Please try a different browser.');
 }
 
-// Function to speak a given word with the selected female voice or fallback voice
-function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate = 0.9;  // Adjust the rate as per your preference
-    utterance.pitch = 1.1; // Set a pleasant pitch for the voice
-    utterance.volume = 1;  // Ensure full volume
-
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;
-    }
-
-    window.speechSynthesis.speak(utterance);
-}
-
-// Test the speech synthesis with the female voice
-spinButton.addEventListener('click', function() {
-    const word = 'test';  // Replace with actual word logic
-    speakWord(word);
-});
-
+// Event listener for spin button
+spinButton.addEventListener('click', spin);
 
 function spin() {
     spinSound.play();  // Play spin sound
