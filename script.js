@@ -72,7 +72,8 @@ function spin() {
 
 function revealWord(word) {
     let index = 0;
-    let revealInterval = setInterval(() => {
+
+    function revealNextLetter() {
         if (index < word.length) {
             let span = document.createElement('span');
             span.textContent = word[index];
@@ -84,24 +85,28 @@ function revealWord(word) {
 
             wordBox.appendChild(span);
 
-            // Play the sound for the current letter after each reveal with delay
+            // Play the sound for the current letter
             let letterSound = new Audio(audioPath + word[index] + '.mp3');
             letterSound.play();
 
-            index++;
+            // Wait for the sound to finish before revealing the next letter
+            letterSound.onended = () => {
+                index++;
+                revealNextLetter();  // Call the function again to reveal the next letter
+            };
         } else {
-            clearInterval(revealInterval);
-
-            // Speak the whole word 1.5 seconds after all letters are revealed
+            // Once all letters are revealed, speak the word and give a compliment
             setTimeout(() => {
-                speakWord(word); 
+                speakWord(word);
                 setTimeout(() => {
-                    giveCompliment();  // Compliment after word is spoken
+                    giveCompliment();
                     updateProgress();
                 }, 1000); // Delay before compliment
             }, 1500); // Delay before speaking word
         }
-    }, 1500);  // Adjust this number to control the delay between each letter (in milliseconds)
+    }
+
+    revealNextLetter();  // Start revealing the first letter
 }
 
 function isVowel(letter) {
