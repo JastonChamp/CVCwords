@@ -42,17 +42,33 @@ let revealSound = new Audio('reveal-sound.mp3');
 // Add voice selection
 let selectedVoice;
 
+// Function to set the female voice or fallback if not available
 function setFemaleVoice() {
     const voices = window.speechSynthesis.getVoices();
+    
+    // Try to find a female voice
     selectedVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
+    
+    // If no female voice, select any available voice
+    if (!selectedVoice && voices.length > 0) {
+        selectedVoice = voices[0]; // Fallback to first available voice
+    }
+
+    // Safari fallback: check if no voices were loaded and trigger manual reload
+    if (voices.length === 0) {
+        console.log("No voices found, retrying...");
+        setTimeout(setFemaleVoice, 500); // Retry after a brief delay
+    }
 }
 
+// Detect when voices are changed or loaded, and then set the voice
 if (speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = setFemaleVoice;
 } else {
-    setFemaleVoice(); // Fallback for older browsers
+    setFemaleVoice(); // Fallback for older browsers or initial load
 }
 
+// Event listener for spin button
 spinButton.addEventListener('click', spin);
 
 function spin() {
