@@ -26,7 +26,7 @@ const words = [
 ];
 
 // Set path to your audio files
-const audioPath = './';  // Update with your correct folder path
+const audioPath = './';  // Path to folder containing letter sound audio files (a.mp3, b.mp3, etc.)
 
 let revealedWords = 0;
 
@@ -105,7 +105,7 @@ function revealWord(word) {
             wordBox.appendChild(span);
 
             // Play the sound for the current letter after each reveal with delay
-            let letterSound = new Audio(audioPath + word[index] + '.mp3');
+            let letterSound = new Audio(audioPath + word[index].toLowerCase() + '.mp3');
             letterSound.play();
 
             index++;
@@ -123,7 +123,6 @@ function revealWord(word) {
         }
     }, 1500);  // Adjust this number to control the delay between each letter (in milliseconds)
 }
-
 
 function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
