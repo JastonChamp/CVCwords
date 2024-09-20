@@ -26,7 +26,7 @@ const words = [
 ];
 
 // Set path to your audio files
-const audioPath = 'path_to_audio_files/';  // Update with your correct folder path
+const audioPath = './';  // Update with your correct folder path
 
 let revealedWords = 0;
 
