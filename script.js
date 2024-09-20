@@ -84,24 +84,24 @@ function revealWord(word) {
 
             wordBox.appendChild(span);
 
-            // Play corresponding letter sound
-            let letterSound = new Audio(`${audioPath}${word[index].toLowerCase()}.mp3`);
+            // Play the sound for the current letter after each reveal with delay
+            let letterSound = new Audio(audioPath + word[index] + '.mp3');
             letterSound.play();
 
             index++;
         } else {
             clearInterval(revealInterval);
 
-            // Speak the word 1.5 seconds after all letters are revealed
+            // Speak the whole word 1.5 seconds after all letters are revealed
             setTimeout(() => {
-                speakWord(word);
+                speakWord(word); 
                 setTimeout(() => {
                     giveCompliment();  // Compliment after word is spoken
                     updateProgress();
                 }, 1000); // Delay before compliment
             }, 1500); // Delay before speaking word
         }
-    }, 400);  // Reveal a letter every 400ms
+    }, 1000);  // Adjust this number to control the delay between each letter (in milliseconds)
 }
 
 function isVowel(letter) {
