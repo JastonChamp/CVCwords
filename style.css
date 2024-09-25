@@ -71,6 +71,7 @@ body {
     animation-delay: 1.5s;
 }
 
+/* Animation for revealing letters */
 @keyframes reveal {
     to {
         opacity: 1;
@@ -78,6 +79,7 @@ body {
     }
 }
 
+/* Highlighted vowel styling */
 .wheel span.highlight {
     background-color: yellow;
     border-radius: 5px;
@@ -183,4 +185,30 @@ body {
     #progressBar {
         height: 15px;
     }
+
+    .wheel {
+        font-size: 12vw; /* Increase font size for smaller screens */
+    }
+}
+
+/* Additional styles for vowel highlighting */
+.wheel span {
+    color: black;
+}
+
+.wheel span.vowel {
+    color: red;
+}
+
+/* Style for the vowel selection dropdown */
+#vowelSelector {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style for the instruction box (if any) */
+#instructionBox {
+    font-size: 18px;
+    margin-top: 20px;
+    color: #333;
 }
