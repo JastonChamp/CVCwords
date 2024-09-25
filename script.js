@@ -142,8 +142,11 @@ function updateScore() {
 // Update progress indicators
 function updateProgress() {
     revealedWords = usedWords.length;
-    const totalWords = getAvailableWords().length;
-    const progressPercentage = (revealedWords / totalWords) * 100;
+    const availableWords = getAvailableWords();
+    const totalWords = availableWords.length;
+
+    // Ensure totalWords is not zero to avoid division by zero
+    const progressPercentage = totalWords > 0 ? (revealedWords / totalWords) * 100 : 0;
     progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
 
     progressFill.style.width = `${progressPercentage}%`;
