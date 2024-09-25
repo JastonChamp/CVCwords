@@ -30,7 +30,8 @@ const wordGroups = {
 // Merge all words into one array for 'all' selection
 const allWords = Object.values(wordGroups).flat();
 
-const audioPath = './audio/'; // Path to folder containing letter sound audio files
+// Adjusted audio path to main directory
+const audioPath = './'; // Since audio files are in the main directory
 
 let revealedWords = 0;
 let usedWords = [];
@@ -42,7 +43,7 @@ const progressBar = document.getElementById('progressBar');
 const complimentBox = document.getElementById('complimentBox');
 const vowelSelector = document.getElementById('vowelSelector');
 
-const spinSound = new Audio('spin-sound.mp3');
+const spinSound = new Audio(`${audioPath}spin-sound.mp3`);
 
 // Preload letter sounds
 const letterSounds = {};
