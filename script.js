@@ -30,106 +30,59 @@ const wordGroups = {
 // Merge all words into one array for 'all' selection
 const allWords = Object.values(wordGroups).flat();
 
-// Adjusted audio path to main directory
-const audioPath = './'; // Since audio files are in the main directory
-
 let revealedWords = 0;
 let usedWords = [];
+let score = 0;
 
 const spinButton = document.getElementById('spinButton');
 const wordBox = document.getElementById('wordBox');
 const progressText = document.getElementById('progressText');
-const progressBar = document.getElementById('progressBar');
+const progressFill = document.getElementById('progressFill');
 const complimentBox = document.getElementById('complimentBox');
 const vowelSelector = document.getElementById('vowelSelector');
+const scoreText = document.getElementById('scoreText');
 
-const spinSound = new Audio(`${audioPath}spin-sound.mp3`);
-
-// Preload letter sounds
-const letterSounds = {};
-'abcdefghijklmnopqrstuvwxyz'.split('').forEach(letter => {
-    const audio = new Audio(`${audioPath}${letter}.mp3`);
-    letterSounds[letter] = audio;
-});
-
-// Preload compliments
+// Compliments
 const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
 
-// Voice selection
-let selectedVoice = null;
-
-function loadVoices() {
-    return new Promise((resolve) => {
-        let voices = speechSynthesis.getVoices();
-        if (voices.length) {
-            resolve(voices);
-            return;
-        }
-        speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
-            resolve(voices);
-        };
-    });
-}
-
-async function setVoice() {
-    if ('speechSynthesis' in window) {
-        const voices = await loadVoices();
-        // Try to find a female voice
-        selectedVoice = voices.find(voice => /female/i.test(voice.name));
-        // If no female voice, fallback to default voice
-        if (!selectedVoice) {
-            selectedVoice = voices[0];
-        }
-    } else {
-        alert('Speech Synthesis API is not supported on this browser.');
-    }
-}
-
-function speak(text) {
-    return new Promise((resolve) => {
-        if (selectedVoice) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.voice = selectedVoice;
-            utterance.rate = 0.8;
-            utterance.pitch = 1.1;
-            utterance.volume = 0.9;
-            utterance.onend = resolve;
-            speechSynthesis.speak(utterance);
-        } else {
-            resolve();
-        }
-    });
-}
-
+// Function to check if a letter is a vowel
 function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
 }
 
+// Update the score
+function updateScore() {
+    score += 10; // Add points per word
+    scoreText.textContent = `Score: ${score}`;
+}
+
+// Update progress indicators
 function updateProgress() {
     revealedWords = usedWords.length;
     const totalWords = getAvailableWords().length;
+    const progressPercentage = (revealedWords / totalWords) * 100;
     progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
-    progressBar.value = (revealedWords / totalWords) * 100;
+
+    progressFill.style.width = `${progressPercentage}%`;
 }
 
+// Give a compliment (visual only)
 function giveCompliment() {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
     complimentBox.textContent = compliment;
     complimentBox.style.color = 'green';
     complimentBox.style.fontSize = '30px';
     complimentBox.style.opacity = '1'; // Fade in
-    return speak(compliment).then(() => {
-        // Fade out after a delay
-        setTimeout(() => {
-            complimentBox.style.opacity = '0';
-        }, 2000);
-    });
+
+    // Fade out after a delay
+    setTimeout(() => {
+        complimentBox.style.opacity = '0';
+    }, 2000);
 }
 
+// Reveal the word with animations
 async function revealWord(word) {
     wordBox.innerHTML = ''; // Clear previous word
-    const letterSpans = [];
 
     for (const letter of word) {
         const span = document.createElement('span');
@@ -137,71 +90,23 @@ async function revealWord(word) {
         if (isVowel(letter)) {
             span.style.color = 'red';
         }
-        span.style.opacity = '0'; // Start hidden
         wordBox.appendChild(span);
-        letterSpans.push(span);
     }
 
-    // Reveal letters one by one with highlighting and play individual letter sounds
-    for (let i = 0; i < letterSpans.length; i++) {
-        const span = letterSpans[i];
-
-        // Reveal the letter with a fade-in effect
-        span.style.opacity = '1';
-
-        // Highlight the letter
-        span.classList.add('highlight');
-
-        // Play the sound for the current letter
-        const letter = span.textContent.toLowerCase();
-        const letterSound = letterSounds[letter];
-
-        if (letterSound) {
-            try {
-                letterSound.currentTime = 0;
-                await playAudio(letterSound);
-            } catch (error) {
-                console.error(`Error playing sound for letter "${letter}":`, error);
-                // If there's an error, proceed after a short delay
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-        } else {
-            // If no sound, proceed after a short delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-
-        // Remove highlight after sound plays
-        span.classList.remove('highlight');
-
-        // Short delay before revealing the next letter
-        await new Promise(resolve => setTimeout(resolve, 500));
-    }
-
-    // Wait before speaking the whole word
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Speak the whole word
-    await speak(word);
+    // Wait for letter animations to complete
+    await new Promise(resolve => setTimeout(resolve, 2500));
 
     // Give a compliment
-    await giveCompliment();
+    giveCompliment();
+
+    // Update score
+    updateScore();
 
     // Update progress
     updateProgress();
 }
 
-function playAudio(audioElement) {
-    return new Promise((resolve, reject) => {
-        audioElement.play().then(() => {
-            audioElement.onended = () => {
-                resolve();
-            };
-        }).catch(error => {
-            reject(error);
-        });
-    });
-}
-
+// Get available words based on selected vowel
 function getAvailableWords() {
     const selectedVowel = vowelSelector.value;
     if (selectedVowel === 'all') {
@@ -210,6 +115,7 @@ function getAvailableWords() {
     return wordGroups[selectedVowel];
 }
 
+// Get a random word from available words
 function getRandomWord() {
     const availableWords = getAvailableWords();
 
@@ -225,14 +131,9 @@ function getRandomWord() {
     return word;
 }
 
+// Spin function to start the word reveal process
 async function spin() {
     spinButton.disabled = true; // Prevent multiple clicks
-    spinSound.currentTime = 0;
-    try {
-        await spinSound.play();
-    } catch (error) {
-        console.error('Error playing spin sound:', error);
-    }
     wordBox.classList.add('shake');
     setTimeout(() => {
         wordBox.classList.remove('shake');
@@ -256,5 +157,10 @@ vowelSelector.addEventListener('change', () => {
 });
 
 // Initialize
-setVoice();
 spinButton.addEventListener('click', spin);
+
+// Initial progress update
+updateProgress();
+
+// Initial score update
+scoreText.textContent = `Score: ${score}`;
