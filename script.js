@@ -33,7 +33,7 @@ const allWords = Object.values(wordGroups).flat();
 // Audio path set to main directory
 const audioPath = './'; // Audio files are in the main directory
 
-let revealedWords = 0;
+let revealedWords = 0; // Total words revealed for the current vowel selection
 let usedWords = [];
 let score = 0;
 
@@ -240,14 +240,20 @@ function getAvailableWords() {
 function getRandomWord() {
     const availableWords = getAvailableWords();
 
-    if (usedWords.length >= availableWords.length) {
+    // Filter out used words to get the list of remaining words
+    const remainingWords = availableWords.filter(word => !usedWords.includes(word));
+
+    // If all words have been used, inform the user and reset the usedWords array
+    if (remainingWords.length === 0) {
+        alert('You have gone through all the words! The list will reset.');
         usedWords = [];
+        revealedWords = 0;
+        updateProgress();
+        return getRandomWord();
     }
 
-    let word;
-    do {
-        word = availableWords[Math.floor(Math.random() * availableWords.length)];
-    } while (usedWords.includes(word));
+    // Select a random word from the remaining words
+    const word = remainingWords[Math.floor(Math.random() * remainingWords.length)];
     usedWords.push(word);
     return word;
 }
