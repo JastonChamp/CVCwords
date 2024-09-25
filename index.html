@@ -2,20 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVC Word Spinner</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="complimentBox"></div> <!-- Compliment box -->
-
+    <div id="complimentBox" aria-live="polite"></div>
     <div class="spinner">
-        <div class="wheel"></div> <!-- Word display area -->
+        <div class="wheel" id="wordBox" role="status" aria-live="polite"></div>
     </div>
-    <button id="spinButton">Spin</button> <!-- Spin button -->
-    <progress id="progressBar" value="0" max="100"></progress> <!-- Progress bar -->
-    <p id="progressText">0 / 99 Words Revealed</p> <!-- Progress text -->
-
+    <button id="spinButton">Spin</button>
+    <progress id="progressBar" value="0" max="100"></progress>
+    <p id="progressText">0 / 99 Words Revealed</p>
     <script src="script.js"></script>
 </body>
 </html>
