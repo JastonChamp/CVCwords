@@ -1,3 +1,4 @@
+// List of CVC words
 const words = [
     // Short 'A' sound
     'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
@@ -7,7 +8,7 @@ const words = [
     // Short 'E' sound
     'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
     'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
-    'jet', 'vet', 'wet', 'get', 'net',
+    'jet', 'vet', 'get',
 
     // Short 'I' sound
     'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
@@ -20,152 +21,147 @@ const words = [
     'bob', 'rob', 'sob', 'job', 'nod', 'pod', 'rod', 'cod', 'fox', 'box',
 
     // Short 'U' sound
-    'but', 'cut', 'hut', 'nut', 'put', 'rug', 'bug', 'jug', 'mug', 'hug',
-    'bun', 'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
-    'mud', 'bud', 'rud', 'dug', 'lug', 'pug', 'mug', 'hug', 'bud', 'gum'
+    'but', 'cut', 'hut', 'nut', 'rug', 'bug', 'jug', 'mug', 'hug', 'bun',
+    'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
+    'mud', 'bud', 'dug', 'lug', 'pug', 'gum'
 ];
 
-// Set path to your audio files
-const audioPath = './';  // Path to folder containing letter sound audio files (a.mp3, b.mp3, etc.)
+const audioPath = './audio/'; // Path to folder containing letter sound audio files
 
 let revealedWords = 0;
+let usedWords = [];
 
 const spinButton = document.getElementById('spinButton');
-const wordBox = document.querySelector('.wheel');
+const wordBox = document.getElementById('wordBox');
 const progressText = document.getElementById('progressText');
 const progressBar = document.getElementById('progressBar');
 const complimentBox = document.getElementById('complimentBox');
 
 const spinSound = new Audio('spin-sound.mp3');
-let revealSound = new Audio('reveal-sound.mp3');
 
-// Add voice selection
-let selectedVoice;
+// Preload letter sounds
+const letterSounds = {};
+'abcdefghijklmnopqrstuvwxyz'.split('').forEach(letter => {
+    letterSounds[letter] = new Audio(`${audioPath}${letter}.mp3`);
+});
 
-// Function to set the female voice or fallback if not available
-function setFemaleVoice() {
-    const voices = window.speechSynthesis.getVoices();
+// Preload compliments
+const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
 
-    // Try to find a female voice
-    selectedVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('female'));
+// Voice selection
+let selectedVoice = null;
 
-    // If no female voice is found, fallback to the first available voice
-    if (!selectedVoice && voices.length > 0) {
-        selectedVoice = voices[0]; // Fallback to first available voice
-    }
-
-    // Safari-specific fallback: retry loading voices if none are found
-    if (voices.length === 0) {
-        console.log("No voices found, retrying...");
-        setTimeout(setFemaleVoice, 500); // Retry after a brief delay
-    }
-}
-
-// Detect when voices are changed or loaded, and then set the preferred voice
-if ('speechSynthesis' in window) {
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = setFemaleVoice;
-    } else {
-        setFemaleVoice(); // Fallback for older browsers or initial load
-    }
-} else {
-    alert('Speech Synthesis API is not supported on this browser. Please try a different browser.');
-}
-
-// Event listener for spin button
-spinButton.addEventListener('click', spin);
-
-function spin() {
-    spinSound.play();  // Play spin sound
-
-    // Add shake effect
-    wordBox.classList.add('shake');
-    setTimeout(() => {
-        wordBox.classList.remove('shake'); // Remove shake effect after animation
-    }, 500);
-
-    wordBox.innerHTML = ''; // Clear previous word
-    complimentBox.innerHTML = ''; // Clear previous compliment
-    const word = words[Math.floor(Math.random() * words.length)];
-    revealWord(word);
-}
-
-function revealWord(word) {
-    let index = 0;
-    let revealInterval = setInterval(() => {
-        if (index < word.length) {
-            let span = document.createElement('span');
-            span.textContent = word[index];
-
-            // Color vowels red
-            if (isVowel(word[index])) {
-                span.style.color = 'red';
-            }
-
-            wordBox.appendChild(span);
-
-            // Play the sound for the current letter after each reveal with delay
-            let letterSound = new Audio(audioPath + word[index].toLowerCase() + '.mp3');
-            letterSound.play();
-
-            index++;
-        } else {
-            clearInterval(revealInterval);
-
-            // Speak the whole word 1.5 seconds after all letters are revealed
-            setTimeout(() => {
-                speakWord(word); 
-                setTimeout(() => {
-                    giveCompliment();  // Compliment after word is spoken
-                    updateProgress();
-                }, 1000); // Delay before compliment
-            }, 1500); // Delay before speaking word
+function loadVoices() {
+    return new Promise((resolve) => {
+        let voices = speechSynthesis.getVoices();
+        if (voices.length) {
+            resolve(voices);
+            return;
         }
-    }, 1500);  // Adjust this number to control the delay between each letter (in milliseconds)
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            resolve(voices);
+        };
+    });
+}
+
+async function setVoice() {
+    if ('speechSynthesis' in window) {
+        const voices = await loadVoices();
+        // Try to find a female voice
+        selectedVoice = voices.find(voice => /female/i.test(voice.name));
+        // If no female voice, fallback to default voice
+        if (!selectedVoice) {
+            selectedVoice = voices[0];
+        }
+    } else {
+        alert('Speech Synthesis API is not supported on this browser.');
+    }
+}
+
+function speak(text) {
+    return new Promise((resolve) => {
+        if (selectedVoice) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = selectedVoice;
+            utterance.rate = 0.8;
+            utterance.pitch = 1.1;
+            utterance.volume = 0.9;
+            utterance.onend = resolve;
+            speechSynthesis.speak(utterance);
+        } else {
+            resolve();
+        }
+    });
 }
 
 function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
 }
 
-// Speak the word with a female voice
-function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate = 0.8;  // Slowed down for smoother delivery
-    utterance.pitch = 1.1; // Lower pitch for pleasant tone
-    utterance.volume = 0.9; // Reduced volume to avoid sharpness
-
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;  // Use selected female voice
-    }
-
-    window.speechSynthesis.speak(utterance);
-}
-
-function giveCompliment() {
-    const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
-    const compliment = compliments[Math.floor(Math.random() * compliments.length)];
-    complimentBox.textContent = compliment;
-    complimentBox.style.color = 'green';
-    complimentBox.style.fontSize = '30px';
-
-    const utterance = new SpeechSynthesisUtterance(compliment);
-    utterance.rate = 0.8;  // Slower rate for compliments as well
-    utterance.pitch = 1.1; // Lower pitch for more pleasant tone
-    utterance.volume = 0.9; // Reduced volume to avoid sharpness
-
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;  // Use the same female voice for compliments
-    }
-
-    window.speechSynthesis.speak(utterance);
-}
-
 function updateProgress() {
-    revealedWords++;
+    revealedWords = usedWords.length;
     progressText.textContent = `${revealedWords} / ${words.length} Words Revealed`;
     progressBar.value = (revealedWords / words.length) * 100;
 }
 
-// Initialize progress bar width (if needed)
-progressBar.value = 0;
+function giveCompliment() {
+    const compliment = compliments[Math.floor(Math.random() * compliments.length)];
+    complimentBox.textContent = compliment;
+    complimentBox.style.color = 'green';
+    complimentBox.style.fontSize = '30px';
+    return speak(compliment);
+}
+
+async function revealWord(word) {
+    wordBox.innerHTML = ''; // Clear previous word
+    for (const letter of word) {
+        const span = document.createElement('span');
+        span.textContent = letter;
+        if (isVowel(letter)) {
+            span.style.color = 'red';
+        }
+        wordBox.appendChild(span);
+        // Play letter sound
+        const letterSound = letterSounds[letter.toLowerCase()];
+        if (letterSound) {
+            letterSound.currentTime = 0;
+            letterSound.play();
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait before next letter
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait before speaking the word
+    await speak(word);
+    await giveCompliment();
+    updateProgress();
+}
+
+function getRandomWord() {
+    if (usedWords.length === words.length) {
+        usedWords = []; // Reset if all words have been used
+    }
+    let word;
+    do {
+        word = words[Math.floor(Math.random() * words.length)];
+    } while (usedWords.includes(word));
+    usedWords.push(word);
+    return word;
+}
+
+async function spin() {
+    spinButton.disabled = true; // Prevent multiple clicks
+    spinSound.currentTime = 0;
+    spinSound.play();
+    wordBox.classList.add('shake');
+    setTimeout(() => {
+        wordBox.classList.remove('shake');
+    }, 500);
+    complimentBox.textContent = ''; // Clear compliment
+    const word = getRandomWord();
+    await revealWord(word);
+    spinButton.disabled = false;
+}
+
+// Initialize
+setVoice();
+spinButton.addEventListener('click', spin);
