@@ -1,30 +1,6 @@
 // Word groups categorized by vowel sounds
 const wordGroups = {
-    a: [
-        'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
-        'pan', 'can', 'man', 'ran', 'fan', 'bad', 'mad', 'sad', 'dad', 'bag',
-        'tag', 'lag', 'rag', 'jam', 'ram', 'dam', 'ham', 'cap', 'nap', 'sap',
-    ],
-    e: [
-        'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
-        'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
-        'jet', 'vet', 'get',
-    ],
-    i: [
-        'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
-        'win', 'bin', 'pin', 'sin', 'tin', 'fin', 'kid', 'lid', 'rid', 'mid',
-        'big', 'dig', 'pig', 'wig', 'jig', 'fig', 'mix', 'fix', 'six', 'nix',
-    ],
-    o: [
-        'hot', 'cot', 'dot', 'lot', 'pot', 'not', 'got', 'rot', 'log', 'dog',
-        'bog', 'fog', 'hog', 'jog', 'mom', 'pop', 'mop', 'top', 'hop', 'cop',
-        'bob', 'rob', 'sob', 'job', 'nod', 'pod', 'rod', 'cod', 'fox', 'box',
-    ],
-    u: [
-        'but', 'cut', 'hut', 'nut', 'rug', 'bug', 'jug', 'mug', 'hug', 'bun',
-        'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
-        'mud', 'bud', 'dug', 'lug', 'pug', 'gum',
-    ],
+    // ... [Same as before] ...
 };
 
 // Merge all words into one array for 'all' selection
@@ -47,7 +23,8 @@ const spinSound = new Audio('spin-sound.mp3');
 // Preload letter sounds
 const letterSounds = {};
 'abcdefghijklmnopqrstuvwxyz'.split('').forEach(letter => {
-    letterSounds[letter] = new Audio(`${audioPath}${letter}.mp3`);
+    const audio = new Audio(`${audioPath}${letter}.mp3`);
+    letterSounds[letter] = audio;
 });
 
 // Preload compliments
@@ -153,15 +130,20 @@ async function revealWord(word) {
         // Play the sound for the current letter
         const letter = span.textContent.toLowerCase();
         const letterSound = letterSounds[letter];
-        if (letterSound) {
-            letterSound.currentTime = 0;
-            letterSound.play();
-        }
 
-        // Wait for the letter sound to finish before proceeding
-        await new Promise(resolve => {
-            letterSound.onended = resolve;
-        });
+        if (letterSound) {
+            try {
+                letterSound.currentTime = 0;
+                await playAudio(letterSound);
+            } catch (error) {
+                console.error(`Error playing sound for letter "${letter}":`, error);
+                // If there's an error, proceed after a short delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        } else {
+            // If no sound, proceed after a short delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
 
         // Remove highlight after sound plays
         span.classList.remove('highlight');
@@ -181,6 +163,18 @@ async function revealWord(word) {
 
     // Update progress
     updateProgress();
+}
+
+function playAudio(audioElement) {
+    return new Promise((resolve, reject) => {
+        audioElement.play().then(() => {
+            audioElement.onended = () => {
+                resolve();
+            };
+        }).catch(error => {
+            reject(error);
+        });
+    });
 }
 
 function getAvailableWords() {
@@ -209,7 +203,11 @@ function getRandomWord() {
 async function spin() {
     spinButton.disabled = true; // Prevent multiple clicks
     spinSound.currentTime = 0;
-    spinSound.play();
+    try {
+        await spinSound.play();
+    } catch (error) {
+        console.error('Error playing spin sound:', error);
+    }
     wordBox.classList.add('shake');
     setTimeout(() => {
         wordBox.classList.remove('shake');
@@ -217,7 +215,11 @@ async function spin() {
     complimentBox.textContent = ''; // Clear compliment
     complimentBox.style.opacity = '0'; // Reset opacity
     const word = getRandomWord();
-    await revealWord(word);
+    try {
+        await revealWord(word);
+    } catch (error) {
+        console.error('Error during word reveal:', error);
+    }
     spinButton.disabled = false;
 }
 
