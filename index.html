@@ -3,38 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>CVC Word Spinner</title>
+    <!-- Link to the CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Score Display -->
+    <p id="scoreText">Score: 0</p>
+
     <!-- Vowel Selection -->
     <div id="vowelSelection">
-        <label for="vowelSelector">Select Vowel Sound:</label>
+        <label for="vowelSelector">Select Vowel:</label>
         <select id="vowelSelector">
-            <option value="all">All</option>
-            <option value="a">Short 'A'</option>
-            <option value="e">Short 'E'</option>
-            <option value="i">Short 'I'</option>
-            <option value="o">Short 'O'</option>
-            <option value="u">Short 'U'</option>
+            <option value="all">All Vowels</option>
+            <option value="a">Short A</option>
+            <option value="e">Short E</option>
+            <option value="i">Short I</option>
+            <option value="o">Short O</option>
+            <option value="u">Short U</option>
         </select>
     </div>
 
-    <!-- Compliment Box -->
-    <div id="complimentBox" aria-live="polite"></div>
-
-    <!-- Spinner/Wheel -->
+    <!-- Word Display Box -->
     <div class="spinner">
-        <div class="wheel" id="wordBox" role="status" aria-live="polite"></div>
+        <div class="wheel" id="wordBox">
+            <!-- Letters will be displayed here -->
+        </div>
     </div>
 
     <!-- Spin Button -->
     <button id="spinButton">Spin</button>
 
-    <!-- Progress Bar and Text -->
-    <progress id="progressBar" value="0" max="100"></progress>
-    <p id="progressText">0 / 99 Words Revealed</p>
+    <!-- Compliment Box -->
+    <div id="complimentBox"></div>
 
-    <!-- Script -->
+    <!-- Progress Bar -->
+    <div id="progressBar">
+        <div id="progressFill"></div>
+    </div>
+    <p id="progressText">0 / 0 Words Revealed</p>
+
+    <!-- Include the JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
