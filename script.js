@@ -1,30 +1,34 @@
-// List of CVC words
-const words = [
-    // Short 'A' sound
-    'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
-    'pan', 'can', 'man', 'ran', 'fan', 'bad', 'mad', 'sad', 'dad', 'bag',
-    'tag', 'lag', 'rag', 'jam', 'ram', 'dam', 'ham', 'cap', 'nap', 'sap',
+// Word groups categorized by vowel sounds
+const wordGroups = {
+    a: [
+        'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
+        'pan', 'can', 'man', 'ran', 'fan', 'bad', 'mad', 'sad', 'dad', 'bag',
+        'tag', 'lag', 'rag', 'jam', 'ram', 'dam', 'ham', 'cap', 'nap', 'sap',
+    ],
+    e: [
+        'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
+        'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
+        'jet', 'vet', 'get',
+    ],
+    i: [
+        'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
+        'win', 'bin', 'pin', 'sin', 'tin', 'fin', 'kid', 'lid', 'rid', 'mid',
+        'big', 'dig', 'pig', 'wig', 'jig', 'fig', 'mix', 'fix', 'six', 'nix',
+    ],
+    o: [
+        'hot', 'cot', 'dot', 'lot', 'pot', 'not', 'got', 'rot', 'log', 'dog',
+        'bog', 'fog', 'hog', 'jog', 'mom', 'pop', 'mop', 'top', 'hop', 'cop',
+        'bob', 'rob', 'sob', 'job', 'nod', 'pod', 'rod', 'cod', 'fox', 'box',
+    ],
+    u: [
+        'but', 'cut', 'hut', 'nut', 'rug', 'bug', 'jug', 'mug', 'hug', 'bun',
+        'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
+        'mud', 'bud', 'dug', 'lug', 'pug', 'gum',
+    ],
+};
 
-    // Short 'E' sound
-    'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
-    'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
-    'jet', 'vet', 'get',
-
-    // Short 'I' sound
-    'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
-    'win', 'bin', 'pin', 'sin', 'tin', 'fin', 'kid', 'lid', 'rid', 'mid',
-    'big', 'dig', 'pig', 'wig', 'jig', 'fig', 'mix', 'fix', 'six', 'nix',
-
-    // Short 'O' sound
-    'hot', 'cot', 'dot', 'lot', 'pot', 'not', 'got', 'rot', 'log', 'dog',
-    'bog', 'fog', 'hog', 'jog', 'mom', 'pop', 'mop', 'top', 'hop', 'cop',
-    'bob', 'rob', 'sob', 'job', 'nod', 'pod', 'rod', 'cod', 'fox', 'box',
-
-    // Short 'U' sound
-    'but', 'cut', 'hut', 'nut', 'rug', 'bug', 'jug', 'mug', 'hug', 'bun',
-    'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
-    'mud', 'bud', 'dug', 'lug', 'pug', 'gum'
-];
+// Merge all words into one array for 'all' selection
+const allWords = Object.values(wordGroups).flat();
 
 const audioPath = './audio/'; // Path to folder containing letter sound audio files
 
@@ -36,6 +40,7 @@ const wordBox = document.getElementById('wordBox');
 const progressText = document.getElementById('progressText');
 const progressBar = document.getElementById('progressBar');
 const complimentBox = document.getElementById('complimentBox');
+const vowelSelector = document.getElementById('vowelSelector');
 
 const spinSound = new Audio('spin-sound.mp3');
 
@@ -101,8 +106,9 @@ function isVowel(letter) {
 
 function updateProgress() {
     revealedWords = usedWords.length;
-    progressText.textContent = `${revealedWords} / ${words.length} Words Revealed`;
-    progressBar.value = (revealedWords / words.length) * 100;
+    const totalWords = getAvailableWords().length;
+    progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
+    progressBar.value = (revealedWords / totalWords) * 100;
 }
 
 function giveCompliment() {
@@ -110,39 +116,91 @@ function giveCompliment() {
     complimentBox.textContent = compliment;
     complimentBox.style.color = 'green';
     complimentBox.style.fontSize = '30px';
-    return speak(compliment);
+    complimentBox.style.opacity = '1'; // Fade in
+    return speak(compliment).then(() => {
+        // Fade out after a delay
+        setTimeout(() => {
+            complimentBox.style.opacity = '0';
+        }, 2000);
+    });
 }
 
 async function revealWord(word) {
     wordBox.innerHTML = ''; // Clear previous word
+    const letterSpans = [];
+
     for (const letter of word) {
         const span = document.createElement('span');
         span.textContent = letter;
         if (isVowel(letter)) {
             span.style.color = 'red';
         }
+        span.style.opacity = '0'; // Start hidden
         wordBox.appendChild(span);
-        // Play letter sound
-        const letterSound = letterSounds[letter.toLowerCase()];
+        letterSpans.push(span);
+    }
+
+    // Reveal letters one by one with highlighting and play individual letter sounds
+    for (let i = 0; i < letterSpans.length; i++) {
+        const span = letterSpans[i];
+
+        // Reveal the letter with a fade-in effect
+        span.style.opacity = '1';
+
+        // Highlight the letter
+        span.classList.add('highlight');
+
+        // Play the sound for the current letter
+        const letter = span.textContent.toLowerCase();
+        const letterSound = letterSounds[letter];
         if (letterSound) {
             letterSound.currentTime = 0;
             letterSound.play();
         }
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait before next letter
+
+        // Wait for the letter sound to finish before proceeding
+        await new Promise(resolve => {
+            letterSound.onended = resolve;
+        });
+
+        // Remove highlight after sound plays
+        span.classList.remove('highlight');
+
+        // Short delay before revealing the next letter
+        await new Promise(resolve => setTimeout(resolve, 500));
     }
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait before speaking the word
+
+    // Wait before speaking the whole word
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Speak the whole word
     await speak(word);
+
+    // Give a compliment
     await giveCompliment();
+
+    // Update progress
     updateProgress();
 }
 
-function getRandomWord() {
-    if (usedWords.length === words.length) {
-        usedWords = []; // Reset if all words have been used
+function getAvailableWords() {
+    const selectedVowel = vowelSelector.value;
+    if (selectedVowel === 'all') {
+        return allWords;
     }
+    return wordGroups[selectedVowel];
+}
+
+function getRandomWord() {
+    const availableWords = getAvailableWords();
+
+    if (usedWords.length >= availableWords.length) {
+        usedWords = [];
+    }
+
     let word;
     do {
-        word = words[Math.floor(Math.random() * words.length)];
+        word = availableWords[Math.floor(Math.random() * availableWords.length)];
     } while (usedWords.includes(word));
     usedWords.push(word);
     return word;
@@ -157,10 +215,18 @@ async function spin() {
         wordBox.classList.remove('shake');
     }, 500);
     complimentBox.textContent = ''; // Clear compliment
+    complimentBox.style.opacity = '0'; // Reset opacity
     const word = getRandomWord();
     await revealWord(word);
     spinButton.disabled = false;
 }
+
+// Event listener for vowel selection change
+vowelSelector.addEventListener('change', () => {
+    usedWords = [];
+    revealedWords = 0;
+    updateProgress();
+});
 
 // Initialize
 setVoice();
