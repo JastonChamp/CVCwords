@@ -6,13 +6,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Vowel Selection -->
+    <div id="vowelSelection">
+        <label for="vowelSelector">Select Vowel Sound:</label>
+        <select id="vowelSelector">
+            <option value="all">All</option>
+            <option value="a">Short 'A'</option>
+            <option value="e">Short 'E'</option>
+            <option value="i">Short 'I'</option>
+            <option value="o">Short 'O'</option>
+            <option value="u">Short 'U'</option>
+        </select>
+    </div>
+
+    <!-- Compliment Box -->
     <div id="complimentBox" aria-live="polite"></div>
+
+    <!-- Spinner/Wheel -->
     <div class="spinner">
         <div class="wheel" id="wordBox" role="status" aria-live="polite"></div>
     </div>
+
+    <!-- Spin Button -->
     <button id="spinButton">Spin</button>
+
+    <!-- Progress Bar and Text -->
     <progress id="progressBar" value="0" max="100"></progress>
     <p id="progressText">0 / 99 Words Revealed</p>
+
+    <!-- Script -->
     <script src="script.js"></script>
 </body>
 </html>
