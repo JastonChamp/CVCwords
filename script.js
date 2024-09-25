@@ -30,8 +30,8 @@ const wordGroups = {
 // Merge all words into one array for 'all' selection
 const allWords = Object.values(wordGroups).flat();
 
-// Adjusted audio path to main directory
-const audioPath = './'; // Since audio files are in the main directory
+// Audio path set to main directory
+const audioPath = './'; // Audio files are in the main directory
 
 let revealedWords = 0;
 let usedWords = [];
@@ -65,21 +65,45 @@ function loadVoices() {
             resolve(voices);
             return;
         }
+        let voicesChanged = false;
         speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
-            resolve(voices);
+            if (!voicesChanged) {
+                voicesChanged = true;
+                voices = speechSynthesis.getVoices();
+                resolve(voices);
+            }
         };
+        // Fallback if onvoiceschanged doesn't fire
+        setTimeout(() => {
+            if (!voicesChanged) {
+                voices = speechSynthesis.getVoices();
+                resolve(voices);
+            }
+        }, 1000);
     });
 }
 
 async function setVoice() {
     if ('speechSynthesis' in window) {
-        const voices = await loadVoices();
-        // Try to find a female voice
-        selectedVoice = voices.find(voice => /female/i.test(voice.name));
-        // If no female voice, fallback to default voice
-        if (!selectedVoice) {
-            selectedVoice = voices[0];
+        let voices = await loadVoices();
+        if (voices.length === 0) {
+            // Retry loading voices after a delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            voices = speechSynthesis.getVoices();
+        }
+        if (voices.length > 0) {
+            // Try to find a female voice speaking English
+            selectedVoice = voices.find(voice => voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female'));
+            // If no female voice, use any English voice
+            if (!selectedVoice) {
+                selectedVoice = voices.find(voice => voice.lang.startsWith('en'));
+            }
+            // If no English voice, use the first available voice
+            if (!selectedVoice) {
+                selectedVoice = voices[0];
+            }
+        } else {
+            alert('No speech synthesis voices available.');
         }
     } else {
         alert('Speech Synthesis API is not supported on this browser.');
@@ -97,6 +121,8 @@ function speak(text) {
             utterance.onend = resolve;
             speechSynthesis.speak(utterance);
         } else {
+            // Fallback: Display the text visually
+            alert(`The word is: ${text}`);
             resolve();
         }
     });
