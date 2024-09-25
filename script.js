@@ -30,6 +30,9 @@ const wordGroups = {
 // Merge all words into one array for 'all' selection
 const allWords = Object.values(wordGroups).flat();
 
+// Adjusted audio path to main directory
+const audioPath = './'; // Since audio files are in the main directory
+
 let revealedWords = 0;
 let usedWords = [];
 let score = 0;
@@ -42,8 +45,62 @@ const complimentBox = document.getElementById('complimentBox');
 const vowelSelector = document.getElementById('vowelSelector');
 const scoreText = document.getElementById('scoreText');
 
-// Compliments
+// Preload letter sounds
+const letterSounds = {};
+'abcdefghijklmnopqrstuvwxyz'.split('').forEach(letter => {
+    const audio = new Audio(`${audioPath}${letter}.mp3`);
+    letterSounds[letter] = audio;
+});
+
+// Preload compliments
 const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
+
+// Voice selection for word pronunciation
+let selectedVoice = null;
+
+function loadVoices() {
+    return new Promise((resolve) => {
+        let voices = speechSynthesis.getVoices();
+        if (voices.length) {
+            resolve(voices);
+            return;
+        }
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            resolve(voices);
+        };
+    });
+}
+
+async function setVoice() {
+    if ('speechSynthesis' in window) {
+        const voices = await loadVoices();
+        // Try to find a female voice
+        selectedVoice = voices.find(voice => /female/i.test(voice.name));
+        // If no female voice, fallback to default voice
+        if (!selectedVoice) {
+            selectedVoice = voices[0];
+        }
+    } else {
+        alert('Speech Synthesis API is not supported on this browser.');
+    }
+}
+
+function speak(text) {
+    return new Promise((resolve) => {
+        if (selectedVoice) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = selectedVoice;
+            utterance.rate = 0.8;
+            utterance.pitch = 1.1;
+            utterance.volume = 0.9;
+            utterance.onend = resolve;
+            speechSynthesis.speak(utterance);
+        } else {
+            resolve();
+        }
+    });
+}
 
 // Function to check if a letter is a vowel
 function isVowel(letter) {
@@ -66,7 +123,7 @@ function updateProgress() {
     progressFill.style.width = `${progressPercentage}%`;
 }
 
-// Give a compliment (visual only)
+// Give a compliment
 function giveCompliment() {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
     complimentBox.textContent = compliment;
@@ -78,11 +135,35 @@ function giveCompliment() {
     setTimeout(() => {
         complimentBox.style.opacity = '0';
     }, 2000);
+
+    // Optionally, speak the compliment
+    // speak(compliment);
 }
 
-// Reveal the word with animations
+// Play audio for a letter
+function playLetterSound(letter) {
+    return new Promise((resolve) => {
+        const letterSound = letterSounds[letter.toLowerCase()];
+        if (letterSound) {
+            letterSound.currentTime = 0;
+            letterSound.play().then(() => {
+                letterSound.onended = resolve;
+            }).catch((error) => {
+                console.error(`Error playing sound for letter "${letter}":`, error);
+                resolve();
+            });
+        } else {
+            resolve();
+        }
+    });
+}
+
+// Reveal the word with animations and audio
 async function revealWord(word) {
     wordBox.innerHTML = ''; // Clear previous word
+    const letterSpans = [];
+
+    let delay = 500; // Initial delay
 
     for (const letter of word) {
         const span = document.createElement('span');
@@ -91,10 +172,21 @@ async function revealWord(word) {
             span.style.color = 'red';
         }
         wordBox.appendChild(span);
+        letterSpans.push(span);
     }
 
-    // Wait for letter animations to complete
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    // Play letter sounds with delays matching the CSS animation
+    for (let i = 0; i < letterSpans.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+        await playLetterSound(letterSpans[i].textContent);
+        delay = 500; // Set delay between letters
+    }
+
+    // Wait for the last letter animation to complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Speak the whole word
+    await speak(word);
 
     // Give a compliment
     giveCompliment();
@@ -158,6 +250,7 @@ vowelSelector.addEventListener('change', () => {
 
 // Initialize
 spinButton.addEventListener('click', spin);
+setVoice();
 
 // Initial progress update
 updateProgress();
