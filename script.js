@@ -2,46 +2,110 @@
 const wordGroups = {
     cvc: {
         a: [
-            'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
-            'pan', 'can', 'man', 'ran', 'fan', 'bad', 'mad', 'sad', 'dad', 'bag',
-            'tag', 'lag', 'rag', 'jam', 'ram', 'dam', 'ham', 'cap', 'nap', 'sap',
+            'bat', 'cat', 'dad', 'fan', 'fat', 'gap', 'gas', 'ham', 'hat', 'jam',
+            'lap', 'mad', 'man', 'map', 'nap', 'pan', 'pat', 'rag', 'ram', 'ran',
+            'rat', 'sap', 'sat', 'tap', 'van', 'wag', 'yam', 'zap', 'bag', 'cap',
         ],
         e: [
-            'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
-            'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
-            'jet', 'vet', 'get',
+            'bed', 'beg', 'bet', 'den', 'fed', 'gel', 'gem', 'get', 'hem', 'hen',
+            'jet', 'keg', 'led', 'leg', 'let', 'men', 'met', 'net', 'pen', 'pet',
+            'red', 'set', 'ten', 'vet', 'wed', 'wet', 'web', 'yes', 'zep', 'pep',
         ],
         i: [
-            'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
-            'win', 'bin', 'pin', 'sin', 'tin', 'fin', 'kid', 'lid', 'rid', 'mid',
-            'big', 'dig', 'pig', 'wig', 'jig', 'fig', 'mix', 'fix', 'six', 'nix',
+            'bib', 'bid', 'big', 'bin', 'bit', 'dip', 'dig', 'fin', 'fig', 'fit',
+            'gig', 'him', 'hip', 'hit', 'jib', 'kid', 'kit', 'lip', 'lit', 'mix',
+            'nip', 'pit', 'pin', 'pig', 'rim', 'rip', 'sit', 'tin', 'tip', 'win',
         ],
         o: [
-            'hot', 'cot', 'dot', 'lot', 'pot', 'not', 'got', 'rot', 'log', 'dog',
-            'bog', 'fog', 'hog', 'jog', 'mom', 'pop', 'mop', 'top', 'hop', 'cop',
-            'bob', 'rob', 'sob', 'job', 'nod', 'pod', 'rod', 'cod', 'fox', 'box',
+            'bob', 'bog', 'box', 'cob', 'cod', 'con', 'cop', 'cot', 'dog', 'dot',
+            'fog', 'got', 'hog', 'hot', 'job', 'jot', 'log', 'lot', 'mob', 'mop',
+            'nod', 'not', 'pod', 'pot', 'rod', 'rob', 'rot', 'sob', 'tom', 'top',
         ],
         u: [
-            'but', 'cut', 'hut', 'nut', 'rug', 'bug', 'jug', 'mug', 'hug', 'bun',
-            'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
-            'mud', 'bud', 'dug', 'lug', 'pug', 'gum',
+            'bud', 'bun', 'bus', 'but', 'cub', 'cup', 'cut', 'dug', 'fun', 'gum',
+            'gun', 'gut', 'hug', 'hum', 'hut', 'jug', 'mud', 'mug', 'nun', 'nut',
+            'pup', 'pun', 'rug', 'run', 'sun', 'tub', 'tug', 'yum', 'yup', 'sum',
         ],
     },
     ccvc: {
         a: [
-            'blab', 'brag', 'clad', 'clam', 'clap', 'crab', 'flag', 'flap', 'grab', 'plan', 'slab', 'slap', 'snap', 'trap',
+            'brag', 'bran', 'clad', 'clam', 'clap', 'crab', 'cram', 'drag', 'drab', 'flag',
+            'flat', 'glad', 'grab', 'gram', 'gran', 'plan', 'pram', 'scam', 'scan', 'scat',
+            'slam', 'slap', 'slat', 'span', 'stab', 'stag', 'strap', 'swam', 'swab', 'trap',
         ],
         e: [
-            'bled', 'bred', 'fled', 'sled', 'step',
+            'bled', 'bred', 'drek', 'fret', 'glen', 'grep', 'spend', 'speck', 'spell', 'step',
+            'stem', 'trem', 'tress', 'bless', 'smell', 'spelt', 'swept', 'swell', 'fret', 'fled',
+            'dwell', 'dress', 'press', 'slept', 'stent', 'swept', 'swept', 'swept', 'meld', 'kemp',
         ],
         i: [
-            'blip', 'brim', 'clip', 'drip', 'flip', 'flit', 'grip', 'slim', 'slip', 'slit', 'spin', 'trip', 'twig', 'twit', 'grit', 'skim',
+            'blip', 'brim', 'clip', 'crim', 'crip', 'drip', 'flip', 'glim', 'grin', 'grim',
+            'grip', 'grid', 'grit', 'skim', 'skip', 'slim', 'slip', 'slit', 'spin', 'spit',
+            'swim', 'twin', 'twig', 'twit', 'whip', 'whim', 'whiz', 'grit', 'skid', 'slid',
         ],
         o: [
-            'bloc', 'blob', 'clod', 'clog', 'clop', 'crop', 'drop', 'flog', 'flop', 'frog', 'plot', 'prod', 'slot', 'trot',
+            'bloc', 'blog', 'blot', 'clog', 'crop', 'cron', 'drop', 'flog', 'flop', 'frog',
+            'glob', 'plot', 'plod', 'prod', 'prom', 'prop', 'scot', 'scop', 'slot', 'smog',
+            'snob', 'spot', 'stop', 'swop', 'trod', 'trom', 'trop', 'trot', 'clop', 'plop',
         ],
         u: [
-            'blub', 'drub', 'drum', 'drug', 'glum', 'plug', 'slug', 'slum', 'smug', 'snug',
+            'blub', 'brut', 'club', 'crub', 'drub', 'drug', 'drum', 'flub', 'glum', 'glut',
+            'grub', 'grum', 'plug', 'plum', 'pluck', 'slum', 'smug', 'snub', 'snug', 'spud',
+            'stud', 'stun', 'stum', 'swum', 'truck', 'crux', 'blunt', 'brunt', 'grunt', 'slump',
+        ],
+    },
+    cvcc: {
+        a: [
+            'band', 'bank', 'bask', 'camp', 'damp', 'fast', 'gasp', 'hand', 'land', 'lamp',
+            'last', 'mask', 'pant', 'past', 'rant', 'rank', 'sand', 'task', 'vast', 'wand',
+            'want', 'wasp', 'yank', 'bang', 'sang', 'fang', 'gang', 'sank', 'sand', 'sank',
+        ],
+        e: [
+            'bent', 'desk', 'felt', 'help', 'kept', 'lend', 'meld', 'melt', 'nest',
+            'pest', 'rest', 'send', 'self', 'tend', 'tent', 'test', 'vest', 'went', 'west',
+            'welt', 'wept', 'zest', 'kemp', 'pelt', 'delt', 'kelt', 'lent', 'pest', 'belt',
+        ],
+        i: [
+            'belt', 'dint', 'film', 'fist', 'gild', 'gimp', 'hilt', 'hint', 'kilt', 'lint',
+            'list', 'mint', 'mist', 'mild', 'pink', 'pint', 'sift', 'silk', 'silt', 'tilt',
+            'tint', 'wilt', 'wind', 'milk', 'king', 'ring', 'wing', 'wink', 'link', 'sink',
+        ],
+        o: [
+            'bond', 'fond', 'font', 'gong', 'golf', 'holt', 'jolt', 'long', 'lost',
+            'most', 'mold', 'pond', 'post', 'soft', 'sold', 'told', 'tomb', 'volt',
+            'wold', 'wolf', 'wont', 'colt', 'dolt', 'fold', 'holt', 'molt', 'bolt', 'cost',
+        ],
+        u: [
+            'bump', 'bunt', 'bunk', 'bust', 'dunk', 'dump', 'fund', 'funk', 'gust', 'gush',
+            'husk', 'just', 'junk', 'lump', 'must', 'musk', 'pulp', 'punk', 'punt', 'rusk',
+            'sunk', 'tusk', 'bunk', 'cusp', 'dusk', 'hump', 'hunt', 'hunk', 'lung', 'bust',
+        ],
+    },
+    ccvcc: {
+        a: [
+            'brand', 'bland', 'clamp', 'clank', 'cramp', 'crank', 'draft', 'drank', 'flank', 'frank',
+            'grand', 'grant', 'grass', 'grasp', 'plant', 'plank', 'prank', 'scamp', 'slant', 'spank',
+            'stand', 'stank', 'stamp', 'strap', 'swamp', 'track', 'tramp', 'bland', 'clasp', 'clast',
+        ],
+        e: [
+            'blend', 'bless', 'dreck', 'dress', 'fret', 'press', 'sketch', 'slept', 'smelt', 'spent',
+            'swept', 'trend', 'tress', 'blent', 'dwell', 'smell', 'spell', 'strep', 'stend', 'svelt',
+            'trest', 'twelf', 'crest', 'fled', 'swept', 'stress', 'swept', 'swept', 'flesh', 'fresh',
+        ],
+        i: [
+            'blink', 'brink', 'clink', 'crisp', 'drink', 'drift', 'flint', 'frisk', 'grind', 'grist',
+            'print', 'prism', 'skimp', 'skirt', 'slink', 'split', 'sprint', 'stick', 'sting', 'stink',
+            'swift', 'swing', 'twist', 'twink', 'wrist', 'wring', 'frisk', 'skink', 'grind', 'blink',
+        ],
+        o: [
+            'block', 'clock', 'clomp', 'clonk', 'croft', 'cross', 'flock', 'front', 'frost', 'gloss',
+            'plonk', 'prompt', 'scold', 'scoff', 'scoot', 'sloth', 'smock', 'smolt', 'snort', 'spock',
+            'stock', 'stomp', 'stork', 'strong', 'tromp', 'clost', 'plump', 'plunk', 'prong', 'clomp',
+        ],
+        u: [
+            'blunt', 'brunt', 'clump', 'clunk', 'crust', 'crump', 'drunk', 'flung', 'frump', 'grunt',
+            'plump', 'plunk', 'skunk', 'slump', 'slung', 'spunk', 'stuck', 'stump', 'stung', 'strut',
+            'strum', 'stunt', 'swung', 'trunk', 'trust', 'truss', 'clump', 'plush', 'crust', 'grunt',
         ],
     },
 };
@@ -49,6 +113,8 @@ const wordGroups = {
 // Merge all words into one array for 'all' selection
 const allCvcWords = Object.values(wordGroups.cvc).flat();
 const allCcvcWords = Object.values(wordGroups.ccvc).flat();
+const allCvccWords = Object.values(wordGroups.cvcc).flat();
+const allCcvccWords = Object.values(wordGroups.ccvcc).flat();
 
 const audioPath = './'; // Audio files are in the main directory
 
@@ -62,7 +128,7 @@ const progressText = document.getElementById('progressText');
 const progressFill = document.getElementById('progressFill');
 const complimentBox = document.getElementById('complimentBox');
 const vowelSelector = document.getElementById('vowelSelector');
-const vowelSelection = document.getElementById('vowelSelection'); // Reference to the vowel selection div
+const vowelSelection = document.getElementById('vowelSelection');
 const wordTypeSelector = document.getElementById('wordTypeSelector');
 const scoreText = document.getElementById('scoreText');
 
@@ -257,18 +323,18 @@ function getAvailableWords() {
     const selectedWordType = wordTypeSelector.value;
     const selectedVowel = vowelSelector.value;
 
-    if (selectedWordType === 'cvc') {
-        if (selectedVowel === 'all') {
-            return allCvcWords;
-        }
-        return wordGroups.cvc[selectedVowel] || [];
-    } else if (selectedWordType === 'ccvc') {
-        if (selectedVowel === 'all') {
-            return allCcvcWords;
-        }
-        return wordGroups.ccvc[selectedVowel] || [];
+    switch (selectedWordType) {
+        case 'cvc':
+            return selectedVowel === 'all' ? allCvcWords : wordGroups.cvc[selectedVowel] || [];
+        case 'ccvc':
+            return selectedVowel === 'all' ? allCcvcWords : wordGroups.ccvc[selectedVowel] || [];
+        case 'cvcc':
+            return selectedVowel === 'all' ? allCvccWords : wordGroups.cvcc[selectedVowel] || [];
+        case 'ccvcc':
+            return selectedVowel === 'all' ? allCcvccWords : wordGroups.ccvcc[selectedVowel] || [];
+        default:
+            return [];
     }
-    return [];
 }
 
 // Get a random word from available words
@@ -324,8 +390,8 @@ wordTypeSelector.addEventListener('change', () => {
     revealedWords = 0;
     updateProgress();
 
-    // Ensure the vowel selector is always visible
-    vowelSelection.style.visibility = 'visible';
+    // Always show the vowel selector
+    vowelSelection.style.display = 'block';
 });
 
 // Initialize
