@@ -103,10 +103,10 @@ async function setVoice() {
                 selectedVoice = voices[0];
             }
         } else {
-            alert('No speech synthesis voices available.');
+            console.warn('No speech synthesis voices available.');
         }
     } else {
-        alert('Speech Synthesis API is not supported on this browser.');
+        console.warn('Speech Synthesis API is not supported on this browser.');
     }
 }
 
@@ -121,8 +121,8 @@ function speak(text) {
             utterance.onend = resolve;
             speechSynthesis.speak(utterance);
         } else {
-            // Fallback: Display the text visually
-            alert(`The word is: ${text}`);
+            // Fallback: Do nothing or log to console
+            console.warn(`Speech synthesis not available. Text: ${text}`);
             resolve();
         }
     });
@@ -160,13 +160,13 @@ function giveCompliment() {
     complimentBox.style.fontSize = '30px';
     complimentBox.style.opacity = '1'; // Fade in
 
+    // Speak the compliment
+    speak(compliment);
+
     // Fade out after a delay
     setTimeout(() => {
         complimentBox.style.opacity = '0';
     }, 2000);
-
-    // Optionally, speak the compliment
-    // speak(compliment);
 }
 
 // Play audio for a letter
