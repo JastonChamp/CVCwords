@@ -324,7 +324,6 @@ wordTypeSelector.addEventListener('change', () => {
     revealedWords = 0;
     updateProgress();
 
-    // Remove any code that hides the vowel selector
     // Ensure the vowel selector is always visible
     vowelSelection.style.visibility = 'visible';
 });
