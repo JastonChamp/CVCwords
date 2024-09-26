@@ -23,10 +23,23 @@ body {
     margin-top: 20px;
 }
 
+/* Word Type Selection Styling */
+#wordTypeSelection {
+    margin: 20px auto;
+    font-size: 18px;
+}
+
+#wordTypeSelector {
+    padding: 5px;
+    font-size: 16px;
+}
+
 /* Vowel Selection Styling */
 #vowelSelection {
     margin: 20px auto;
     font-size: 18px;
+    /* Add min-height to maintain layout when hidden */
+    min-height: 50px;
 }
 
 #vowelSelector {
@@ -59,19 +72,9 @@ body {
     opacity: 0;
     transform: translateY(20px);
     animation: reveal 0.5s forwards;
+    animation-delay: calc(0.5s * var(--animation-order));
 }
 
-.wheel span:nth-child(1) {
-    animation-delay: 0.5s;
-}
-.wheel span:nth-child(2) {
-    animation-delay: 1s;
-}
-.wheel span:nth-child(3) {
-    animation-delay: 1.5s;
-}
-
-/* Animation for revealing letters */
 @keyframes reveal {
     to {
         opacity: 1;
@@ -79,10 +82,9 @@ body {
     }
 }
 
-/* Highlighted vowel styling */
-.wheel span.highlight {
-    background-color: yellow;
-    border-radius: 5px;
+/* Vowel styling */
+.wheel span.vowel {
+    color: red;
 }
 
 /* Shake animation keyframes */
@@ -189,26 +191,4 @@ body {
     .wheel {
         font-size: 12vw; /* Increase font size for smaller screens */
     }
-}
-
-/* Additional styles for vowel highlighting */
-.wheel span {
-    color: black;
-}
-
-.wheel span.vowel {
-    color: red;
-}
-
-/* Style for the vowel selection dropdown */
-#vowelSelector {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Style for the instruction box (if any) */
-#instructionBox {
-    font-size: 18px;
-    margin-top: 20px;
-    color: #333;
 }
