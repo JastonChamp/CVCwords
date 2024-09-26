@@ -38,8 +38,6 @@ body {
 #vowelSelection {
     margin: 20px auto;
     font-size: 18px;
-    /* Add min-height to maintain layout when hidden */
-    min-height: 50px;
 }
 
 #vowelSelector {
@@ -50,7 +48,7 @@ body {
 /* Styling for the word display box */
 .wheel {
     width: 80%;
-    max-width: 300px;
+    max-width: 400px; /* Increased max-width to accommodate longer words */
     height: auto;
     min-height: 150px;
     margin: 20px auto;
@@ -189,6 +187,6 @@ body {
     }
 
     .wheel {
-        font-size: 12vw; /* Increase font size for smaller screens */
+        font-size: 12vw; /* Adjust font size for longer words on small screens */
     }
 }
