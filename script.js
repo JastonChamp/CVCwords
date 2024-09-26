@@ -1,39 +1,58 @@
-// Word groups categorized by vowel sounds
+// Word groups categorized by vowel sounds and word types
 const wordGroups = {
-    a: [
-        'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
-        'pan', 'can', 'man', 'ran', 'fan', 'bad', 'mad', 'sad', 'dad', 'bag',
-        'tag', 'lag', 'rag', 'jam', 'ram', 'dam', 'ham', 'cap', 'nap', 'sap',
-    ],
-    e: [
-        'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
-        'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
-        'jet', 'vet', 'get',
-    ],
-    i: [
-        'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
-        'win', 'bin', 'pin', 'sin', 'tin', 'fin', 'kid', 'lid', 'rid', 'mid',
-        'big', 'dig', 'pig', 'wig', 'jig', 'fig', 'mix', 'fix', 'six', 'nix',
-    ],
-    o: [
-        'hot', 'cot', 'dot', 'lot', 'pot', 'not', 'got', 'rot', 'log', 'dog',
-        'bog', 'fog', 'hog', 'jog', 'mom', 'pop', 'mop', 'top', 'hop', 'cop',
-        'bob', 'rob', 'sob', 'job', 'nod', 'pod', 'rod', 'cod', 'fox', 'box',
-    ],
-    u: [
-        'but', 'cut', 'hut', 'nut', 'rug', 'bug', 'jug', 'mug', 'hug', 'bun',
-        'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
-        'mud', 'bud', 'dug', 'lug', 'pug', 'gum',
-    ],
+    cvc: {
+        a: [
+            'cat', 'bat', 'rat', 'hat', 'mat', 'sat', 'pat', 'fat', 'lap', 'tap',
+            'pan', 'can', 'man', 'ran', 'fan', 'bad', 'mad', 'sad', 'dad', 'bag',
+            'tag', 'lag', 'rag', 'jam', 'ram', 'dam', 'ham', 'cap', 'nap', 'sap',
+        ],
+        e: [
+            'bet', 'met', 'let', 'pet', 'net', 'set', 'wet', 'pen', 'den', 'men',
+            'red', 'led', 'fed', 'bed', 'beg', 'peg', 'leg', 'ten', 'hen', 'ben',
+            'jet', 'vet', 'get',
+        ],
+        i: [
+            'bit', 'fit', 'kit', 'sit', 'lit', 'hit', 'pit', 'tip', 'rip', 'zip',
+            'win', 'bin', 'pin', 'sin', 'tin', 'fin', 'kid', 'lid', 'rid', 'mid',
+            'big', 'dig', 'pig', 'wig', 'jig', 'fig', 'mix', 'fix', 'six', 'nix',
+        ],
+        o: [
+            'hot', 'cot', 'dot', 'lot', 'pot', 'not', 'got', 'rot', 'log', 'dog',
+            'bog', 'fog', 'hog', 'jog', 'mom', 'pop', 'mop', 'top', 'hop', 'cop',
+            'bob', 'rob', 'sob', 'job', 'nod', 'pod', 'rod', 'cod', 'fox', 'box',
+        ],
+        u: [
+            'but', 'cut', 'hut', 'nut', 'rug', 'bug', 'jug', 'mug', 'hug', 'bun',
+            'fun', 'run', 'sun', 'gun', 'pun', 'cub', 'tub', 'sub', 'rub',
+            'mud', 'bud', 'dug', 'lug', 'pug', 'gum',
+        ],
+    },
+    ccvc: {
+        a: [
+            'blab', 'brag', 'clad', 'clam', 'clap', 'crab', 'flag', 'flap', 'grab', 'plan', 'slab', 'slap', 'snap', 'trap',
+        ],
+        e: [
+            'bled', 'bred', 'fled', 'sled', 'step',
+        ],
+        i: [
+            'blip', 'brim', 'clip', 'drip', 'flip', 'flit', 'grip', 'slim', 'slip', 'slit', 'spin', 'trip', 'twig', 'twit', 'grit', 'skim',
+        ],
+        o: [
+            'bloc', 'blob', 'clod', 'clog', 'clop', 'crop', 'drop', 'flog', 'flop', 'frog', 'plot', 'prod', 'slot', 'trot',
+        ],
+        u: [
+            'blub', 'drub', 'drum', 'drug', 'glum', 'plug', 'slug', 'slum', 'smug', 'snug',
+        ],
+    },
 };
 
 // Merge all words into one array for 'all' selection
-const allWords = Object.values(wordGroups).flat();
+const allCvcWords = Object.values(wordGroups.cvc).flat();
+const allCcvcWords = Object.values(wordGroups.ccvc).flat();
 
-// Audio path set to main directory
 const audioPath = './'; // Audio files are in the main directory
 
-let revealedWords = 0; // Total words revealed for the current vowel selection
+let revealedWords = 0;
 let usedWords = [];
 let score = 0;
 
@@ -43,6 +62,8 @@ const progressText = document.getElementById('progressText');
 const progressFill = document.getElementById('progressFill');
 const complimentBox = document.getElementById('complimentBox');
 const vowelSelector = document.getElementById('vowelSelector');
+const vowelSelection = document.getElementById('vowelSelection'); // Reference to the vowel selection div
+const wordTypeSelector = document.getElementById('wordTypeSelector');
 const scoreText = document.getElementById('scoreText');
 
 // Preload letter sounds
@@ -194,14 +215,18 @@ async function revealWord(word) {
 
     let delay = 500; // Initial delay
 
-    for (const letter of word) {
+    for (let i = 0; i < word.length; i++) {
+        const letter = word[i];
         const span = document.createElement('span');
         span.textContent = letter;
         if (isVowel(letter)) {
-            span.style.color = 'red';
+            span.classList.add('vowel');
         }
         wordBox.appendChild(span);
         letterSpans.push(span);
+
+        // Set animation order for CSS
+        span.style.setProperty('--animation-order', i + 1);
     }
 
     // Play letter sounds with delays matching the CSS animation
@@ -227,13 +252,23 @@ async function revealWord(word) {
     updateProgress();
 }
 
-// Get available words based on selected vowel
+// Get available words based on selected word type and vowel
 function getAvailableWords() {
+    const selectedWordType = wordTypeSelector.value;
     const selectedVowel = vowelSelector.value;
-    if (selectedVowel === 'all') {
-        return allWords;
+
+    if (selectedWordType === 'cvc') {
+        if (selectedVowel === 'all') {
+            return allCvcWords;
+        }
+        return wordGroups.cvc[selectedVowel] || [];
+    } else if (selectedWordType === 'ccvc') {
+        if (selectedVowel === 'all') {
+            return allCcvcWords;
+        }
+        return wordGroups.ccvc[selectedVowel] || [];
     }
-    return wordGroups[selectedVowel];
+    return [];
 }
 
 // Get a random word from available words
@@ -281,6 +316,17 @@ vowelSelector.addEventListener('change', () => {
     usedWords = [];
     revealedWords = 0;
     updateProgress();
+});
+
+// Event listener for word type selection change
+wordTypeSelector.addEventListener('change', () => {
+    usedWords = [];
+    revealedWords = 0;
+    updateProgress();
+
+    // Remove any code that hides the vowel selector
+    // Ensure the vowel selector is always visible
+    vowelSelection.style.visibility = 'visible';
 });
 
 // Initialize
