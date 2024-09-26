@@ -2,13 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CVC Word Spinner</title>
+    <title>CVC and CCVC Word Spinner</title>
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Score Display -->
     <p id="scoreText">Score: 0</p>
+
+    <!-- Word Type Selection -->
+    <div id="wordTypeSelection">
+        <label for="wordTypeSelector">Select Word Type:</label>
+        <select id="wordTypeSelector">
+            <option value="cvc">CVC Words</option>
+            <option value="ccvc">CCVC Words</option>
+        </select>
+    </div>
 
     <!-- Vowel Selection -->
     <div id="vowelSelection">
@@ -26,6 +35,26 @@
     <!-- Word Display Box -->
     <div class="spinner">
         <div class="wheel" id="wordBox">
+            <!-- Letters will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Spin Button -->
+    <button id="spinButton">Spin</button>
+
+    <!-- Compliment Box -->
+    <div id="complimentBox"></div>
+
+    <!-- Progress Bar -->
+    <div id="progressBar">
+        <div id="progressFill"></div>
+    </div>
+    <p id="progressText">0 / 0 Words Revealed</p>
+
+    <!-- Include the JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
             <!-- Letters will be displayed here -->
         </div>
     </div>
