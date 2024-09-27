@@ -44,13 +44,13 @@ const wordGroups = {
         ],
         e: [
             'bled', 'bred', 'fled', 'fret', 'glen', 'grep', 'sped', 'stem', 'trem',
-            'dress', 'press', 'smell', 'spell', 'spend', 'spelt', 'dwelt', 'kemp',
-            'dwell', 'fled', 'trend', 'tress', 'meld', 'bless', 'blend', 'blent', 'brest', 'drest',
+             'spend', 'spelt', 'dwelt', 'kemp',
+            'fled',   'meld',  
         ],
         i: [
             'brig', 'brim', 'clip', 'crib', 'drip', 'flip', 'glib', 'grim', 'grip',
             'grid', 'grin', 'grit', 'prim', 'skim', 'skin', 'skip', 'slim', 'slip', 'snip',
-            'spin', 'spit', 'swim', 'twig', 'twin', 'twit', 'whim', 'whip', 'whiz', 'skid',
+            'spin', 'spit', 'swim', 'twig', 'twin', 'twit',  'skid',
         ],
         o: [
             'bloc', 'blob', 'blog', 'clog', 'crop', 'drop', 'frog', 'glob', 'plot',
@@ -66,8 +66,8 @@ const wordGroups = {
     cvcc: {
         a: [
             'band', 'bank', 'damp', 'fang', 'gang', 'hand', 'hang', 'land', 'lamp',
-            'mask', 'pant', 'sand', 'sang', 'tank', 'tang', 'task', 'wand', 'want', 'yank',
-            'bask', 'last', 'past', 'raft', 'rant', 'rang', 'rash', 'bang', 'clamp', 'stamp',
+            'mask', 'pant', 'sand', 'sang', 'tank', 'tang', 'yank',
+            'bask', 'last', 'past', 'raft', 'rant', 'rang', 'rash', 'bang', 
         ],
         e: [
             'bend', 'desk', 'felt', 'fend', 'help', 'jest', 'kept', 'lend', 'mend',
@@ -80,9 +80,9 @@ const wordGroups = {
             'silk', 'sink', 'sift', 'tint', 'tilt', 'wink', 'wind', 'wilt', 'wild', 'wimp',
         ],
         o: [
-            'bond', 'bold', 'colt', 'comb', 'cold', 'fond', 'fold', 'gold', 'gong',
-            'hold', 'holt', 'jolt', 'mold', 'most', 'pond', 'post', 'told', 'volt', 'wold',
-            'wolf', 'wont', 'cost', 'lost', 'host', 'fond', 'dolt', 'bolt', 'tomb', 'trod',
+            'bond',  'colt', 'comb', 'cold', 'fond', 'fold', 'gold', 'gong',
+             'holt', 'jolt', 'mold', 'most', 'pond', 'post', 'told', 'volt', 
+             'wont', 'cost', 'lost', 'host', 'fond', 'dolt', 'bolt', 'tomb', 'trod',
         ],
         u: [
             'bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk',
@@ -101,11 +101,11 @@ const wordGroups = {
             'blend', 'blent', 'dreck', 'dress', 'press', 'slept', 'smelt', 'spent',
             'swept', 'trend', 'tress', 'dwell', 'smell', 'spell', 'spend', 'spelt',
             'strep', 'stress', 'stretch', 'fret', 'crest', 'dwelt', 'fled', 'kemp',
-            'tremp', 'skelp', 'swept', 'bless', 'blent', 'meld',
+            'tremp', 'skelp', 'swept',  'blent', 'meld',
         ],
         i: [
             'blink', 'brink', 'clink', 'clint', 'crimp', 'crisp', 'drink', 'drift',
-            'flint', 'frisk', 'grind', 'grist', 'print', 'prism', 'skimp', 'skirt',
+            'flint', 'frisk', 'grind', 'grist', 'print', 'prism', 'skimp', 
             'slink', 'split', 'sprint', 'stink', 'sting', 'swift', 'swing', 'twist',
             'twink', 'frisk', 'skink', 'flint', 'blink', 'twist',
         ],
@@ -127,7 +127,7 @@ const wordGroups = {
             'ship', 'fish', 'shop', 'wish', 'bash', 'dash', 'gush', 'mash', 'rash'
         ],
         th: [
-            'this', 'that', 'math', 'with', 'then', 'both'
+            'this', 'that', 'math', 'with', 'then', 
         ],
         ch: [
             'chip', 'chat', 'chop'
