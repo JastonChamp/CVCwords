@@ -1,4 +1,11 @@
-// Word groups categorized by vowel sounds and word types
+// =====================
+// Word Spinner Script
+// =====================
+
+// =====================
+// Word Groups Configuration
+// =====================
+
 const wordGroups = {
     cvc: {
         a: [
@@ -115,19 +122,61 @@ const wordGroups = {
             'plump', 'grunt', 'strut', 'trump', 'blurb', 'blush',
         ],
     },
+    digraphs: {
+        sh: [
+            'ship', 'fish', 'shop', 'wish', 'bash', 'dash', 'gush', 'mash', 'rash'
+        ],
+        th: [
+            'this', 'that', 'math', 'with', 'then', 'both'
+        ],
+        ch: [
+            'chip', 'chat', 'chop'
+        ],
+        ng: [
+            'sing', 'ring', 'king', 'long', 'song', 'hung', 'strong', 'bang', 'wing', 'swing'
+        ],
+    },
 };
 
-// Merge all words into one array for 'all' selection
-const allCvcWords = Object.values(wordGroups.cvc).flat();
-const allCcvcWords = Object.values(wordGroups.ccvc).flat();
-const allCvccWords = Object.values(wordGroups.cvcc).flat();
-const allCcvccWords = Object.values(wordGroups.ccvcc).flat();
+// =====================
+// Preload All Digraph Words
+// =====================
 
-const audioPath = './'; // Audio files are in the main directory
+const allDigraphWords = Object.values(wordGroups.digraphs).flat();
+
+// =====================
+// Audio Configuration
+// =====================
+
+// Path to audio files in the root folder
+const audioPath = './'; // './' refers to the root directory
+
+// Object to hold all letter and digraph sounds
+const letterSounds = {};
+
+// Load individual letter sounds
+'abcdefghijklmnopqrstuvwxyz'.split('').forEach(letter => {
+    const audio = new Audio(`${audioPath}${letter}.mp3`);
+    letterSounds[letter] = audio;
+});
+
+// Load digraph sounds
+['sh', 'th', 'ch', 'ng'].forEach(digraph => {
+    const audio = new Audio(`${audioPath}${digraph}.mp3`);
+    letterSounds[digraph] = audio;
+});
+
+// =====================
+// Application State Variables
+// =====================
 
 let revealedWords = 0;
 let usedWords = [];
 let score = 0;
+
+// =====================
+// DOM Elements
+// =====================
 
 const spinButton = document.getElementById('spinButton');
 const wordBox = document.getElementById('wordBox');
@@ -139,19 +188,19 @@ const vowelSelection = document.getElementById('vowelSelection');
 const wordTypeSelector = document.getElementById('wordTypeSelector');
 const scoreText = document.getElementById('scoreText');
 
-// Preload letter sounds
-const letterSounds = {};
-'abcdefghijklmnopqrstuvwxyz'.split('').forEach(letter => {
-    const audio = new Audio(`${audioPath}${letter}.mp3`);
-    letterSounds[letter] = audio;
-});
+// =====================
+// Predefined Compliments
+// =====================
 
-// Preload compliments
 const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
 
-// Voice selection for word pronunciation
+// =====================
+// Speech Synthesis Configuration
+// =====================
+
 let selectedVoice = null;
 
+// Function to load voices and select a female voice
 function loadVoices() {
     return new Promise((resolve) => {
         let voices = speechSynthesis.getVoices();
@@ -204,6 +253,7 @@ async function setVoice() {
     }
 }
 
+// Function to speak text
 function speak(text) {
     return new Promise((resolve) => {
         if (selectedVoice) {
@@ -215,25 +265,29 @@ function speak(text) {
             utterance.onend = resolve;
             speechSynthesis.speak(utterance);
         } else {
-            // Fallback: Do nothing or log to console
+            // Fallback: Log to console if speech synthesis isn't available
             console.warn(`Speech synthesis not available. Text: ${text}`);
             resolve();
         }
     });
 }
 
+// =====================
+// Utility Functions
+// =====================
+
 // Function to check if a letter is a vowel
 function isVowel(letter) {
     return 'aeiou'.includes(letter.toLowerCase());
 }
 
-// Update the score
+// Function to update the score
 function updateScore() {
     score += 10; // Add points per word
     scoreText.textContent = `Score: ${score}`;
 }
 
-// Update progress indicators
+// Function to update progress indicators
 function updateProgress() {
     revealedWords = usedWords.length;
     const availableWords = getAvailableWords();
@@ -246,7 +300,7 @@ function updateProgress() {
     progressFill.style.width = `${progressPercentage}%`;
 }
 
-// Give a compliment
+// Function to give a random compliment
 function giveCompliment() {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
     complimentBox.textContent = compliment;
@@ -263,50 +317,101 @@ function giveCompliment() {
     }, 2000);
 }
 
-// Play audio for a letter
-function playLetterSound(letter) {
+// Function to play audio for a letter or digraph
+function playLetterSound(unit) {
     return new Promise((resolve) => {
-        const letterSound = letterSounds[letter.toLowerCase()];
-        if (letterSound) {
-            letterSound.currentTime = 0;
-            letterSound.play().then(() => {
-                letterSound.onended = resolve;
+        const sound = letterSounds[unit.toLowerCase()];
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().then(() => {
+                sound.onended = resolve;
             }).catch((error) => {
-                console.error(`Error playing sound for letter "${letter}":`, error);
+                console.error(`Error playing sound for "${unit}":`, error);
                 resolve();
             });
         } else {
+            console.warn(`No sound found for "${unit}"`);
             resolve();
         }
     });
 }
 
-// Reveal the word with animations and audio
+// Function to parse word into units (letters or digraphs)
+function parseWord(word) {
+    const digraphs = ['sh', 'th', 'ch', 'ng'];
+    const units = [];
+    let i = 0;
+
+    while (i < word.length) {
+        // Check for digraphs
+        if (i < word.length - 1) {
+            const twoLetters = word.substring(i, i + 2).toLowerCase();
+            if (digraphs.includes(twoLetters)) {
+                units.push({
+                    text: twoLetters,
+                    isVowel: false,
+                    isDigraph: true,
+                    isSilent: false // Adjust if you have silent digraphs
+                });
+                i += 2;
+                continue;
+            }
+        }
+
+        // Single letter
+        const singleLetter = word[i].toLowerCase();
+        units.push({
+            text: singleLetter,
+            isVowel: isVowel(singleLetter),
+            isDigraph: false,
+            isSilent: false // Adjust if you have silent letters
+        });
+        i += 1;
+    }
+
+    return units;
+}
+
+// =====================
+// Core Functions
+// =====================
+
+// Function to reveal the word with animations and audio
 async function revealWord(word) {
     wordBox.innerHTML = ''; // Clear previous word
+    const units = parseWord(word);
     const letterSpans = [];
 
-    let delay = 500; // Initial delay
-
-    for (let i = 0; i < word.length; i++) {
-        const letter = word[i];
+    // Create span elements for each unit
+    for (let i = 0; i < units.length; i++) {
+        const unit = units[i];
         const span = document.createElement('span');
-        span.textContent = letter;
-        if (isVowel(letter)) {
+        span.textContent = unit.text;
+
+        // Apply CSS classes based on unit type
+        if (unit.isVowel && !unit.isDigraph) {
             span.classList.add('vowel');
         }
+
+        if (unit.isDigraph) {
+            span.classList.add('digraph');
+        }
+
+        // Append the span to the word box
         wordBox.appendChild(span);
-        letterSpans.push(span);
+        letterSpans.push(unit.text);
 
         // Set animation order for CSS
         span.style.setProperty('--animation-order', i + 1);
     }
 
-    // Play letter sounds with delays matching the CSS animation
-    for (let i = 0; i < letterSpans.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, delay));
-        await playLetterSound(letterSpans[i].textContent);
-        delay = 500; // Set delay between letters
+    // Play sounds for each unit with delays matching the CSS animation
+    for (let i = 0; i < units.length; i++) {
+        const unit = units[i];
+        await new Promise(resolve => setTimeout(resolve, 500)); // Initial delay
+        if (!unit.isSilent) { // Play sound only if the unit is not silent
+            await playLetterSound(unit.text);
+        }
     }
 
     // Wait for the last letter animation to complete
@@ -325,37 +430,56 @@ async function revealWord(word) {
     updateProgress();
 }
 
-// Get available words based on selected word type and vowel
+// Function to get available words based on selected word type and vowel
 function getAvailableWords() {
     const selectedWordType = wordTypeSelector.value;
     const selectedVowel = vowelSelector.value;
 
     switch (selectedWordType) {
         case 'cvc':
-            return selectedVowel === 'all' ? allCvcWords : wordGroups.cvc[selectedVowel] || [];
+            return selectedVowel === 'all' ? 
+                wordGroups.cvc.a.concat(wordGroups.cvc.e, wordGroups.cvc.i, wordGroups.cvc.o, wordGroups.cvc.u) : 
+                wordGroups.cvc[selectedVowel] || [];
         case 'ccvc':
-            return selectedVowel === 'all' ? allCcvcWords : wordGroups.ccvc[selectedVowel] || [];
+            return selectedVowel === 'all' ? 
+                wordGroups.ccvc.a.concat(wordGroups.ccvc.e, wordGroups.ccvc.i, wordGroups.ccvc.o, wordGroups.ccvc.u) : 
+                wordGroups.ccvc[selectedVowel] || [];
         case 'cvcc':
-            return selectedVowel === 'all' ? allCvccWords : wordGroups.cvcc[selectedVowel] || [];
+            return selectedVowel === 'all' ? 
+                wordGroups.cvcc.a.concat(wordGroups.cvcc.e, wordGroups.cvcc.i, wordGroups.cvcc.o, wordGroups.cvcc.u) : 
+                wordGroups.cvcc[selectedVowel] || [];
         case 'ccvcc':
-            return selectedVowel === 'all' ? allCcvccWords : wordGroups.ccvcc[selectedVowel] || [];
+            return selectedVowel === 'all' ? 
+                wordGroups.ccvcc.a.concat(wordGroups.ccvcc.e, wordGroups.ccvcc.i, wordGroups.ccvcc.o, wordGroups.ccvcc.u) : 
+                wordGroups.ccvcc[selectedVowel] || [];
+        case 'digraphs':
+            return allDigraphWords;
         default:
             return [];
     }
 }
 
-// Get a random word from available words
+// Function to get a random word from available words
 function getRandomWord() {
-    const availableWords = getAvailableWords();
+    const selectedWordType = wordTypeSelector.value;
+    let availableWords = [];
+
+    if (selectedWordType === 'digraphs') {
+        availableWords = allDigraphWords;
+    } else {
+        availableWords = getAvailableWords();
+    }
 
     // Filter out used words to get the list of remaining words
     const remainingWords = availableWords.filter(word => !usedWords.includes(word));
 
-    // If all words have been used, inform the user and reset the usedWords array
+    // If all words have been used, inform the user and reset the usedWords array and score
     if (remainingWords.length === 0) {
         alert('You have gone through all the words! The list will reset.');
         usedWords = [];
         revealedWords = 0;
+        score = 0;
+        scoreText.textContent = `Score: ${score}`;
         updateProgress();
         return getRandomWord();
     }
@@ -366,28 +490,34 @@ function getRandomWord() {
     return word;
 }
 
-// Spin function to start the word reveal process
+// =====================
+// Event Handlers
+// =====================
+
+// Function to handle the Spin button click
 async function spin() {
     spinButton.disabled = true; // Prevent multiple clicks
-    wordBox.classList.add('shake');
+    wordBox.classList.add('shake'); // Add shake animation
     setTimeout(() => {
-        wordBox.classList.remove('shake');
+        wordBox.classList.remove('shake'); // Remove shake animation after delay
     }, 500);
-    complimentBox.textContent = ''; // Clear compliment
-    complimentBox.style.opacity = '0'; // Reset opacity
-    const word = getRandomWord();
+    complimentBox.textContent = ''; // Clear previous compliment
+    complimentBox.style.opacity = '0'; // Reset compliment opacity
+    const word = getRandomWord(); // Get a random word based on current selections
     try {
-        await revealWord(word);
+        await revealWord(word); // Reveal the word with animations and audio
     } catch (error) {
         console.error('Error during word reveal:', error);
     }
-    spinButton.disabled = false;
+    spinButton.disabled = false; // Re-enable the Spin button
 }
 
 // Event listener for vowel selection change
 vowelSelector.addEventListener('change', () => {
     usedWords = [];
     revealedWords = 0;
+    score = 0;
+    scoreText.textContent = `Score: ${score}`;
     updateProgress();
 });
 
@@ -395,18 +525,37 @@ vowelSelector.addEventListener('change', () => {
 wordTypeSelector.addEventListener('change', () => {
     usedWords = [];
     revealedWords = 0;
+    score = 0;
+    scoreText.textContent = `Score: ${score}`;
     updateProgress();
 
-    // Always show the vowel selector
-    vowelSelection.style.display = 'block';
+    if (wordTypeSelector.value === 'digraphs') {
+        vowelSelection.style.display = 'none'; // Hide vowel selector for digraphs
+    } else {
+        vowelSelection.style.display = 'block'; // Show vowel selector for other word types
+    }
 });
 
-// Initialize
+// =====================
+// Initialization
+// =====================
+
+// Add event listener to the Spin button
 spinButton.addEventListener('click', spin);
+
+// Initialize speech synthesis voice
 setVoice();
 
-// Initial progress update
+// Update progress and score on initial load
 updateProgress();
-
-// Initial score update
 scoreText.textContent = `Score: ${score}`;
+
+// Function to preload all audio files for better performance
+function preloadAudio() {
+    for (let key in letterSounds) {
+        letterSounds[key].load();
+    }
+}
+
+// Call preloadAudio on window load
+window.onload = preloadAudio;
