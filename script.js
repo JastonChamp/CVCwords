@@ -15,7 +15,7 @@ const wordGroups = {
             'rat', 'sad', 'sap', 'sat', 'tab', 'tag', 'tan', 'tap', 'van', 'wag',
         ],
         e: [
-            'bed', 'beg', 'ben', 'bet', 'den', 'fed', 'gem', 'get', 'hen', 'jet',
+            'bed', 'beg', 'ben', 'bet', 'den', 'fed', 'get', 'hen', 'jet',
             'keg', 'led', 'leg', 'let', 'men', 'met', 'net', 'pen', 'pep', 'pet',
             'red', 'rep', 'set', 'ten', 'vet', 'web', 'wed', 'wet', 'yet', 'zed',
         ],
