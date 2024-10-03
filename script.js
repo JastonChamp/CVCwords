@@ -1,157 +1,52 @@
 // =====================
-// Word Spinner Script
-// =====================
-
-// =====================
 // Word Groups Configuration
 // =====================
-
 const wordGroups = {
     cvc: {
-        a: [
-            'bat', 'bag', 'bad', 'cab', 'cap', 'cat', 'dad', 'dam', 'fad', 'fan',
-            'gap', 'gas', 'had', 'ham', 'hat', 'jam', 'jab', 'lad', 'lag', 'lap',
-            'mad', 'man', 'map', 'nap', 'pad', 'pan', 'pat', 'rag', 'ram', 'ran',
-            'rat', 'sad', 'sap', 'sat', 'tab', 'tag', 'tan', 'tap', 'van', 'wag',
-        ],
-        e: [
-            'bed', 'beg', 'ben', 'bet', 'den', 'fed', 'get', 'hen', 'jet',
-            'keg', 'led', 'leg', 'let', 'men', 'met', 'net', 'pen', 'pep', 'pet',
-            'red', 'rep', 'set', 'ten', 'vet', 'web', 'wed', 'wet', 'yet', 'zed',
-        ],
-        i: [
-            'bib', 'bid', 'big', 'bin', 'bit', 'dig', 'dip', 'fig', 'fin', 'fit',
-            'gig', 'gin', 'hid', 'him', 'hip', 'hit', 'jig', 'kid', 'kin', 'kit',
-            'lid', 'lip', 'lit', 'mix', 'nip', 'pin', 'pig', 'pip', 'rib', 'rid',
-            'rig', 'rim', 'rip', 'sip', 'sit', 'tin', 'tip', 'wig', 'win', 'zip',
-        ],
-        o: [
-            'bob', 'bog', 'cod', 'cob', 'cop', 'cot', 'dog', 'dot', 'fog', 'god',
-            'got', 'hog', 'hot', 'jog', 'job', 'log', 'lob', 'lot', 'mop', 'mob',
-            'nod', 'not', 'pod', 'pop', 'pot', 'rod', 'rot', 'sob', 'sod', 'tom',
-        ],
-        u: [
-            'bun', 'bud', 'bug', 'bus', 'but', 'cub', 'cud', 'cup', 'cut', 'dug',
-            'fun', 'gum', 'gun', 'gut', 'hum', 'hug', 'hut', 'jug', 'mud', 'mug',
-            'nut', 'nun', 'pun', 'pug', 'rug', 'run', 'sun', 'tub', 'tug', 'yum',
-        ],
+        a: ['bat', 'bag', 'bad', 'cab', 'cap', 'cat', 'dad', 'dam', 'fad', 'fan'],
+        e: ['bed', 'beg', 'ben', 'bet', 'den', 'fed', 'get', 'hen', 'jet'],
+        i: ['bib', 'bid', 'big', 'bin', 'bit', 'dig', 'dip', 'fig', 'fin', 'fit'],
+        o: ['bob', 'bog', 'cod', 'cob', 'cop', 'cot', 'dog', 'dot', 'fog', 'god'],
+        u: ['bun', 'bud', 'bug', 'bus', 'but', 'cub', 'cud', 'cup', 'cut', 'dug']
     },
     ccvc: {
-        a: [
-            'brag', 'clap', 'crab', 'drag', 'flag', 'flap', 'glad', 'grab', 'plan',
-            'slam', 'slap', 'snap', 'span', 'stab', 'swam', 'trap', 'tram', 'scan',
-            'bran', 'brat', 'clan', 'drab', 'frat', 'gran', 'scat', 'scam', 'slat', 'snag',
-        ],
-        e: [
-            'bled', 'bred', 'fled', 'fret', 'glen', 'grep', 'sped', 'stem', 'trem',
-             'spend', 'spelt', 'dwelt', 'kemp',
-            'fled',   'meld',  
-        ],
-        i: [
-            'brig', 'brim', 'clip', 'crib', 'drip', 'flip', 'glib', 'grim', 'grip',
-            'grid', 'grin', 'grit', 'prim', 'skim', 'skin', 'skip', 'slim', 'slip', 'snip',
-            'spin', 'spit', 'swim', 'twig', 'twin', 'twit',  'skid',
-        ],
-        o: [
-            'bloc', 'blob', 'blog', 'clog', 'crop', 'drop', 'frog', 'glob', 'plot',
-            'plod', 'prod', 'prop', 'scot', 'slot', 'smog', 'snob', 'spot', 'stop', 'swop',
-            'trod', 'trot', 'trop', 'clop', 'plop', 'crop', 'frog', 'clod', 'slog', 'frog',
-        ],
-        u: [
-            'blub', 'club', 'crub', 'drub', 'drum', 'flub', 'glum', 'grub', 'plug',
-            'plum', 'slum', 'smug', 'snub', 'snug', 'spud', 'stud', 'stun', 'swum', 'trug',
-            'trum', 'trun', 'brum', 'slum', 'drug', 'grub', 'brut', 'drum', 'slub', 'stub',
-        ],
+        a: ['brag', 'clap', 'crab', 'drag', 'flag', 'flap', 'glad', 'grab', 'plan', 'slam'],
+        e: ['bled', 'bred', 'fled', 'fret', 'glen', 'grep', 'sped', 'stem', 'trem'],
+        i: ['brig', 'brim', 'clip', 'crib', 'drip', 'flip', 'glib', 'grim', 'grip'],
+        o: ['bloc', 'blob', 'blog', 'clog', 'crop', 'drop', 'frog', 'glob', 'plot'],
+        u: ['blub', 'club', 'crub', 'drub', 'drum', 'flub', 'glum', 'grub', 'plug']
     },
     cvcc: {
-        a: [
-            'band', 'bank', 'damp', 'fang', 'gang', 'hand', 'hang', 'land', 'lamp',
-            'mask', 'pant', 'sand', 'sang', 'tank', 'tang', 'yank',
-            'bask', 'last', 'past', 'raft', 'rant', 'rang', 'rash', 'bang', 
-        ],
-        e: [
-            'bend', 'desk', 'felt', 'fend', 'help', 'jest', 'kept', 'lend', 'mend',
-            'meld', 'melt', 'nest', 'pest', 'rest', 'send', 'tend', 'tent', 'vend', 'vest',
-            'went', 'welt', 'west', 'zest', 'pelt', 'kemp', 'rend', 'test', 'fend', 'meld',
-        ],
-        i: [
-            'dink', 'find', 'film', 'gild', 'gimp', 'hind', 'hilt', 'hint', 'jilt',
-            'kind', 'king', 'link', 'lint', 'mint', 'milk', 'pink', 'rink', 'ring', 'silt',
-            'silk', 'sink', 'sift', 'tint', 'tilt', 'wink', 'wind', 'wilt', 'wild', 'wimp',
-        ],
-        o: [
-            'bond',  'colt', 'comb', 'cold', 'fond', 'fold', 'gold', 'gong',
-             'holt', 'jolt', 'mold', 'most', 'pond', 'post', 'told', 'volt', 
-             'wont', 'cost', 'lost', 'host', 'fond', 'dolt', 'bolt', 'tomb', 'trod',
-        ],
-        u: [
-            'bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk',
-            'hulk', 'hunt', 'hung', 'junk', 'just', 'jump', 'lump', 'lunk', 'lung', 'must',
-            'musk', 'punk', 'pulp', 'punt', 'rung', 'sunk', 'tusk', 'tump', 'bust', 'cusp',
-        ],
+        a: ['band', 'bank', 'damp', 'fang', 'gang', 'hand', 'hang', 'land', 'lamp'],
+        e: ['bend', 'desk', 'felt', 'fend', 'help', 'jest', 'kept', 'lend', 'mend'],
+        i: ['dink', 'find', 'film', 'gild', 'gimp', 'hind', 'hilt', 'hint', 'jilt'],
+        o: ['bond', 'colt', 'comb', 'cold', 'fond', 'fold', 'gold', 'gong', 'holt'],
+        u: ['bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk']
     },
     ccvcc: {
-        a: [
-            'brand', 'blank', 'clamp', 'cramp', 'crank', 'draft', 'drank', 'flank',
-            'frank', 'grand', 'grant', 'grasp', 'plant', 'plank', 'prank', 'scamp',
-            'slant', 'spank', 'stand', 'stamp', 'stack', 'stank', 'strap', 'track',
-            'tramp', 'clamp', 'scalp', 'scant', 'splat', 'clamp',
-        ],
-        e: [
-            'blend', 'blent', 'dreck', 'dress', 'press', 'slept', 'smelt', 'spent',
-            'swept', 'trend', 'tress', 'dwell', 'smell', 'spell', 'spend', 'spelt',
-            'strep', 'stress', 'stretch', 'fret', 'crest', 'dwelt', 'fled', 'kemp',
-            'tremp', 'skelp', 'swept',  'blent', 'meld',
-        ],
-        i: [
-            'blink', 'brink', 'clink', 'clint', 'crimp', 'crisp', 'drink', 'drift',
-            'flint', 'frisk', 'grind', 'grist', 'print', 'prism', 'skimp', 
-            'slink', 'split', 'sprint', 'stink', 'sting', 'swift', 'swing', 'twist',
-            'twink', 'frisk', 'skink', 'flint', 'blink', 'twist',
-        ],
-        o: [
-            'block', 'clomp', 'clonk', 'croft', 'cross', 'flock', 'front', 'frost',
-            'gloss', 'plonk', 'prompt', 'smock', 'smolt', 'stock', 'stomp', 'stork',
-            'strong', 'tromp', 'trock', 'clomp', 'clost', 'floss', 'frock', 'prong',
-            'plomb', 'brock', 'tromp', 'frost', 'plonk', 'clomp',
-        ],
-        u: [
-            'blunt', 'brunt', 'clump', 'clunk', 'crust', 'drunk', 'flung', 'frump',
-            'grunt', 'plump', 'plunk', 'skunk', 'slump', 'slung', 'spunk', 'stuck',
-            'stump', 'strut', 'strum', 'stunt', 'swung', 'trunk', 'trust', 'truss',
-            'plump', 'grunt', 'strut', 'trump', 'blurb', 'blush',
-        ],
+        a: ['brand', 'blank', 'clamp', 'cramp', 'crank', 'draft', 'drank', 'flank'],
+        e: ['blend', 'blent', 'dreck', 'dress', 'press', 'slept', 'smelt', 'spent'],
+        i: ['blink', 'brink', 'clink', 'clint', 'crimp', 'crisp', 'drink', 'drift'],
+        o: ['block', 'clomp', 'clonk', 'croft', 'cross', 'flock', 'front', 'frost'],
+        u: ['blunt', 'brunt', 'clump', 'clunk', 'crust', 'drunk', 'flung', 'frump']
     },
     digraphs: {
-        sh: [
-            'ship', 'fish', 'shop', 'wish', 'bash', 'dash', 'gush', 'mash', 'rash'
-        ],
-        th: [
-            'this', 'that', 'math', 'with', 'then', 
-        ],
-        ch: [
-            'chip', 'chat', 'chop'
-        ],
-        ng: [
-            'sing', 'ring', 'king', 'long', 'song', 'hung', 'strong', 'bang', 'wing', 'swing'
-        ],
-    },
+        sh: ['ship', 'fish', 'shop', 'wish', 'bash', 'dash', 'gush', 'mash', 'rash'],
+        th: ['this', 'that', 'math', 'with', 'then'],
+        ch: ['chip', 'chat', 'chop'],
+        ng: ['sing', 'ring', 'king', 'long', 'song', 'hung', 'bang', 'wing', 'swing']
+    }
 };
 
 // =====================
 // Preload All Digraph Words
 // =====================
-
 const allDigraphWords = Object.values(wordGroups.digraphs).flat();
 
 // =====================
 // Audio Configuration
 // =====================
-
-// Path to audio files in the root folder
-const audioPath = './'; // './' refers to the root directory
-
-// Object to hold all letter and digraph sounds
+const audioPath = './'; // Path to audio files
 const letterSounds = {};
 
 // Load individual letter sounds
@@ -169,15 +64,14 @@ const letterSounds = {};
 // =====================
 // Application State Variables
 // =====================
-
 let revealedWords = 0;
 let usedWords = [];
 let score = 0;
+let audioEnabled = true; // Audio enabled by default
 
 // =====================
 // DOM Elements
 // =====================
-
 const spinButton = document.getElementById('spinButton');
 const wordBox = document.getElementById('wordBox');
 const progressText = document.getElementById('progressText');
@@ -187,67 +81,33 @@ const vowelSelector = document.getElementById('vowelSelector');
 const vowelSelection = document.getElementById('vowelSelection');
 const wordTypeSelector = document.getElementById('wordTypeSelector');
 const scoreText = document.getElementById('scoreText');
+const toggleAudioButton = document.getElementById('toggleAudioButton');
 
 // =====================
 // Predefined Compliments
 // =====================
-
 const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
 
 // =====================
 // Speech Synthesis Configuration
 // =====================
-
 let selectedVoice = null;
 
-// Function to load voices and select a female voice
-function loadVoices() {
-    return new Promise((resolve) => {
-        let voices = speechSynthesis.getVoices();
-        if (voices.length) {
-            resolve(voices);
-            return;
-        }
-        let voicesChanged = false;
-        speechSynthesis.onvoiceschanged = () => {
-            if (!voicesChanged) {
-                voicesChanged = true;
-                voices = speechSynthesis.getVoices();
-                resolve(voices);
-            }
-        };
-        // Fallback if onvoiceschanged doesn't fire
-        setTimeout(() => {
-            if (!voicesChanged) {
-                voices = speechSynthesis.getVoices();
-                resolve(voices);
-            }
-        }, 1000);
-    });
-}
-
-async function setVoice() {
+function setVoice() {
     if ('speechSynthesis' in window) {
-        let voices = await loadVoices();
-        if (voices.length === 0) {
-            // Retry loading voices after a delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            voices = speechSynthesis.getVoices();
-        }
-        if (voices.length > 0) {
-            // Try to find a female voice speaking English
-            selectedVoice = voices.find(voice => voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female'));
-            // If no female voice, use any English voice
-            if (!selectedVoice) {
-                selectedVoice = voices.find(voice => voice.lang.startsWith('en'));
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                selectedVoice =
+                    voices.find(voice => voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female')) ||
+                    voices.find(voice => voice.lang.startsWith('en')) ||
+                    voices[0];
+            } else {
+                console.warn('No speech synthesis voices available.');
             }
-            // If no English voice, use the first available voice
-            if (!selectedVoice) {
-                selectedVoice = voices[0];
-            }
-        } else {
-            console.warn('No speech synthesis voices available.');
         }
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
     } else {
         console.warn('Speech Synthesis API is not supported on this browser.');
     }
@@ -265,7 +125,6 @@ function speak(text) {
             utterance.onend = resolve;
             speechSynthesis.speak(utterance);
         } else {
-            // Fallback: Log to console if speech synthesis isn't available
             console.warn(`Speech synthesis not available. Text: ${text}`);
             resolve();
         }
@@ -277,9 +136,7 @@ function speak(text) {
 // =====================
 
 // Function to check if a letter is a vowel
-function isVowel(letter) {
-    return 'aeiou'.includes(letter.toLowerCase());
-}
+const isVowel = (letter) => 'aeiou'.includes(letter.toLowerCase());
 
 // Function to update the score
 function updateScore() {
@@ -292,11 +149,8 @@ function updateProgress() {
     revealedWords = usedWords.length;
     const availableWords = getAvailableWords();
     const totalWords = availableWords.length;
-
-    // Ensure totalWords is not zero to avoid division by zero
     const progressPercentage = totalWords > 0 ? (revealedWords / totalWords) * 100 : 0;
     progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
-
     progressFill.style.width = `${progressPercentage}%`;
 }
 
@@ -306,12 +160,8 @@ function giveCompliment() {
     complimentBox.textContent = compliment;
     complimentBox.style.color = 'green';
     complimentBox.style.fontSize = '30px';
-    complimentBox.style.opacity = '1'; // Fade in
-
-    // Speak the compliment
+    complimentBox.style.opacity = '1';
     speak(compliment);
-
-    // Fade out after a delay
     setTimeout(() => {
         complimentBox.style.opacity = '0';
     }, 2000);
@@ -320,12 +170,14 @@ function giveCompliment() {
 // Function to play audio for a letter or digraph
 function playLetterSound(unit) {
     return new Promise((resolve) => {
+        if (!audioEnabled) {
+            resolve(); // Skip playing sound if audio is disabled
+            return;
+        }
         const sound = letterSounds[unit.toLowerCase()];
         if (sound) {
             sound.currentTime = 0;
-            sound.play().then(() => {
-                sound.onended = resolve;
-            }).catch((error) => {
+            sound.play().then(resolve).catch((error) => {
                 console.error(`Error playing sound for "${unit}":`, error);
                 resolve();
             });
@@ -341,34 +193,19 @@ function parseWord(word) {
     const digraphs = ['sh', 'th', 'ch', 'ng'];
     const units = [];
     let i = 0;
-
     while (i < word.length) {
-        // Check for digraphs
         if (i < word.length - 1) {
             const twoLetters = word.substring(i, i + 2).toLowerCase();
             if (digraphs.includes(twoLetters)) {
-                units.push({
-                    text: twoLetters,
-                    isVowel: false,
-                    isDigraph: true,
-                    isSilent: false // Adjust if you have silent digraphs
-                });
+                units.push({ text: twoLetters, isVowel: false, isDigraph: true });
                 i += 2;
                 continue;
             }
         }
-
-        // Single letter
         const singleLetter = word[i].toLowerCase();
-        units.push({
-            text: singleLetter,
-            isVowel: isVowel(singleLetter),
-            isDigraph: false,
-            isSilent: false // Adjust if you have silent letters
-        });
+        units.push({ text: singleLetter, isVowel: isVowel(singleLetter), isDigraph: false });
         i += 1;
     }
-
     return units;
 }
 
@@ -378,55 +215,30 @@ function parseWord(word) {
 
 // Function to reveal the word with animations and audio
 async function revealWord(word) {
-    wordBox.innerHTML = ''; // Clear previous word
+    wordBox.innerHTML = '';
     const units = parseWord(word);
-    const letterSpans = [];
-
-    // Create span elements for each unit
-    for (let i = 0; i < units.length; i++) {
-        const unit = units[i];
+    units.forEach((unit, index) => {
         const span = document.createElement('span');
         span.textContent = unit.text;
-
-        // Apply CSS classes based on unit type
         if (unit.isVowel && !unit.isDigraph) {
             span.classList.add('vowel');
         }
-
         if (unit.isDigraph) {
             span.classList.add('digraph');
         }
-
-        // Append the span to the word box
         wordBox.appendChild(span);
-        letterSpans.push(unit.text);
+        span.style.setProperty('--animation-order', index + 1);
+    });
 
-        // Set animation order for CSS
-        span.style.setProperty('--animation-order', i + 1);
-    }
-
-    // Play sounds for each unit with delays matching the CSS animation
     for (let i = 0; i < units.length; i++) {
-        const unit = units[i];
-        await new Promise(resolve => setTimeout(resolve, 500)); // Initial delay
-        if (!unit.isSilent) { // Play sound only if the unit is not silent
-            await playLetterSound(unit.text);
-        }
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await playLetterSound(units[i].text);
     }
 
-    // Wait for the last letter animation to complete
     await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Speak the whole word
     await speak(word);
-
-    // Give a compliment
     giveCompliment();
-
-    // Update score
     updateScore();
-
-    // Update progress
     updateProgress();
 }
 
@@ -434,46 +246,25 @@ async function revealWord(word) {
 function getAvailableWords() {
     const selectedWordType = wordTypeSelector.value;
     const selectedVowel = vowelSelector.value;
+    let words = [];
 
-    switch (selectedWordType) {
-        case 'cvc':
-            return selectedVowel === 'all' ? 
-                wordGroups.cvc.a.concat(wordGroups.cvc.e, wordGroups.cvc.i, wordGroups.cvc.o, wordGroups.cvc.u) : 
-                wordGroups.cvc[selectedVowel] || [];
-        case 'ccvc':
-            return selectedVowel === 'all' ? 
-                wordGroups.ccvc.a.concat(wordGroups.ccvc.e, wordGroups.ccvc.i, wordGroups.ccvc.o, wordGroups.ccvc.u) : 
-                wordGroups.ccvc[selectedVowel] || [];
-        case 'cvcc':
-            return selectedVowel === 'all' ? 
-                wordGroups.cvcc.a.concat(wordGroups.cvcc.e, wordGroups.cvcc.i, wordGroups.cvcc.o, wordGroups.cvcc.u) : 
-                wordGroups.cvcc[selectedVowel] || [];
-        case 'ccvcc':
-            return selectedVowel === 'all' ? 
-                wordGroups.ccvcc.a.concat(wordGroups.ccvcc.e, wordGroups.ccvcc.i, wordGroups.ccvcc.o, wordGroups.ccvcc.u) : 
-                wordGroups.ccvcc[selectedVowel] || [];
-        case 'digraphs':
-            return allDigraphWords;
-        default:
-            return [];
+    if (selectedWordType === 'digraphs') {
+        words = allDigraphWords;
+    } else {
+        const group = wordGroups[selectedWordType];
+        if (selectedVowel === 'all') {
+            words = Object.values(group).flat();
+        } else {
+            words = group[selectedVowel] || [];
+        }
     }
+    return words;
 }
 
 // Function to get a random word from available words
 function getRandomWord() {
-    const selectedWordType = wordTypeSelector.value;
-    let availableWords = [];
-
-    if (selectedWordType === 'digraphs') {
-        availableWords = allDigraphWords;
-    } else {
-        availableWords = getAvailableWords();
-    }
-
-    // Filter out used words to get the list of remaining words
+    const availableWords = getAvailableWords();
     const remainingWords = availableWords.filter(word => !usedWords.includes(word));
-
-    // If all words have been used, inform the user and reset the usedWords array and score
     if (remainingWords.length === 0) {
         alert('You have gone through all the words! The list will reset.');
         usedWords = [];
@@ -483,8 +274,6 @@ function getRandomWord() {
         updateProgress();
         return getRandomWord();
     }
-
-    // Select a random word from the remaining words
     const word = remainingWords[Math.floor(Math.random() * remainingWords.length)];
     usedWords.push(word);
     return word;
@@ -496,45 +285,51 @@ function getRandomWord() {
 
 // Function to handle the Spin button click
 async function spin() {
-    spinButton.disabled = true; // Prevent multiple clicks
-    wordBox.classList.add('shake'); // Add shake animation
+    spinButton.disabled = true;
+    wordBox.classList.add('shake');
     setTimeout(() => {
-        wordBox.classList.remove('shake'); // Remove shake animation after delay
+        wordBox.classList.remove('shake');
     }, 500);
-    complimentBox.textContent = ''; // Clear previous compliment
-    complimentBox.style.opacity = '0'; // Reset compliment opacity
-    const word = getRandomWord(); // Get a random word based on current selections
+    complimentBox.textContent = '';
+    complimentBox.style.opacity = '0';
+    const word = getRandomWord();
     try {
-        await revealWord(word); // Reveal the word with animations and audio
+        await revealWord(word);
     } catch (error) {
         console.error('Error during word reveal:', error);
+    } finally {
+        spinButton.disabled = false;
     }
-    spinButton.disabled = false; // Re-enable the Spin button
 }
 
 // Event listener for vowel selection change
 vowelSelector.addEventListener('change', () => {
-    usedWords = [];
-    revealedWords = 0;
-    score = 0;
-    scoreText.textContent = `Score: ${score}`;
-    updateProgress();
+    resetGame();
 });
 
 // Event listener for word type selection change
 wordTypeSelector.addEventListener('change', () => {
+    resetGame();
+    vowelSelection.style.display = wordTypeSelector.value === 'digraphs' ? 'none' : 'block';
+});
+
+// Function to reset the game state
+function resetGame() {
     usedWords = [];
     revealedWords = 0;
     score = 0;
     scoreText.textContent = `Score: ${score}`;
     updateProgress();
+}
 
-    if (wordTypeSelector.value === 'digraphs') {
-        vowelSelection.style.display = 'none'; // Hide vowel selector for digraphs
-    } else {
-        vowelSelection.style.display = 'block'; // Show vowel selector for other word types
-    }
-});
+// Function to toggle audio on or off
+function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    toggleAudioButton.textContent = audioEnabled ? '🔇 Disable Audio' : '🔊 Enable Audio';
+}
+
+// Add event listener to the toggle audio button
+toggleAudioButton.addEventListener('click', toggleAudio);
 
 // =====================
 // Initialization
@@ -550,12 +345,12 @@ setVoice();
 updateProgress();
 scoreText.textContent = `Score: ${score}`;
 
-// Function to preload all audio files for better performance
+// Preload all audio files
 function preloadAudio() {
-    for (let key in letterSounds) {
+    for (const key in letterSounds) {
         letterSounds[key].load();
     }
 }
 
-// Call preloadAudio on window load
-window.onload = preloadAudio;
+// Preload audio on window load
+window.addEventListener('load', preloadAudio);
