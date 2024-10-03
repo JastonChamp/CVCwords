@@ -13,13 +13,12 @@
     <!-- Word Type Selection -->
     <div id="wordTypeSelection">
         <label for="wordTypeSelector">Select Word Type:</label>
-        <!-- Added Digraphs option -->
         <select id="wordTypeSelector">
             <option value="cvc">CVC Words</option>
             <option value="ccvc">CCVC Words</option>
             <option value="cvcc">CVCC Words</option>
             <option value="ccvcc">CCVCC Words</option>
-            <option value="digraphs">Digraphs</option> <!-- New Digraphs Option -->
+            <option value="digraphs">Digraphs</option>
         </select>
     </div>
 
@@ -45,6 +44,12 @@
 
     <!-- Spin Button -->
     <button id="spinButton">Spin</button>
+
+    <!-- Audio Toggle Button and Note -->
+    <div id="audioControl">
+        <button id="toggleAudioButton">🔇 Disable Audio</button>
+        <p class="note">Disabling the audio allows children to practice sounding out the words on their own, without hearing the correct pronunciation.</p>
+    </div>
 
     <!-- Compliment Box -->
     <div id="complimentBox"></div>
