@@ -37,7 +37,7 @@ const wordGroups = {
         ],
         e: [
             'bled', 'bred', 'fled', 'fret', 'glen', 'sped', 'stem', 'step', 'trek', 'clef',
-            'sled', 'smell', 'spell', 'spend', 'swept', 'shelf', 'spend', 'swept', 'bless', 'blend'
+            'sled', 'smell', 'spell', 'spend', 'swept', 'shelf', 'bless', 'blend', 'spend', 'swept'
         ],
         i: [
             'brim', 'brig', 'clip', 'crib', 'drip', 'flip', 'grin', 'grid', 'grip', 'skip',
@@ -314,9 +314,12 @@ async function revealWord(word) {
     }
 
     // Get blending delay from input
-    let blendingDelay = parseInt(blendingDelayInput.value, 10) * 1000; // Convert seconds to milliseconds
-    if (isNaN(blendingDelay) || blendingDelay < 1000) {
-        blendingDelay = 3000; // Default to 3 seconds if invalid input
+    let blendingDelay = 3000; // Default to 3 seconds
+    if (blendingDelayInput) {
+        const inputDelay = parseInt(blendingDelayInput.value, 10) * 1000; // Convert seconds to milliseconds
+        if (!isNaN(inputDelay) && inputDelay >= 1000) {
+            blendingDelay = inputDelay;
+        }
     }
 
     // Add delay before pronouncing the whole word
