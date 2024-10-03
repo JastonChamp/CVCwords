@@ -3,7 +3,6 @@
 ===================== */
 body {
     font-family: 'Comic Sans MS', sans-serif;
-    /* Background gradient animation */
     animation: gradientBG 10s infinite;
     background: linear-gradient(270deg, #e3f7fc, #a1d3f0, #e3f7fc);
     background-size: 600% 600%;
@@ -26,22 +25,13 @@ body {
 }
 
 /* Word Type Selection Styling */
-#wordTypeSelection {
-    margin: 20px auto;
-    font-size: 18px;
-}
-
-#wordTypeSelector {
-    padding: 5px;
-    font-size: 16px;
-}
-
-/* Vowel Selection Styling */
+#wordTypeSelection,
 #vowelSelection {
     margin: 20px auto;
     font-size: 18px;
 }
 
+#wordTypeSelector,
 #vowelSelector {
     padding: 5px;
     font-size: 16px;
@@ -52,22 +42,21 @@ body {
 ===================== */
 .wheel {
     width: 80%;
-    max-width: 500px; /* Increased max-width from 400px to 500px */
+    max-width: 500px;
     height: auto;
-    /* Removed min-height to allow dynamic height based on content */
     margin: 20px auto;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-wrap: wrap; /* Changed from nowrap to wrap */
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    font-size: 8vw; /* Reduced font-size from 10vw to 8vw */
+    font-size: 8vw;
     border-radius: 15px;
     transition: transform 0.5s ease;
     position: relative;
     padding: 20px;
-    overflow: hidden; /* Ensures content doesn't spill out */
+    overflow: hidden;
 }
 
 .wheel span {
@@ -92,31 +81,21 @@ body {
 
 /* Digraph Styling */
 .wheel span.digraph {
-    text-decoration: underline; /* Underline for digraphs */
-    color: #2980b9; /* Blue color for digraphs */
+    text-decoration: underline;
+    color: #2980b9;
     font-weight: bold;
-    letter-spacing: 2px; /* Added letter-spacing for better readability */
+    letter-spacing: 2px;
 }
 
-/* Shake Animation Keyframes */
+/* Shake Animation */
 @keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
 }
 
-/* Class to Trigger Shaking */
 .shake {
     animation: shake 0.5s;
-    animation-iteration-count: 1;
 }
 
 /* =====================
@@ -126,7 +105,7 @@ body {
     background-color: green;
     color: white;
     padding: 15px 30px;
-    font-size: 5vw; /* Responsive font size */
+    font-size: 5vw;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -180,15 +159,43 @@ body {
     transition: width 0.5s ease;
 }
 
-/* Progress Text Styling */
+/* Progress Text */
 #progressText {
     font-size: 20px;
     margin-top: 10px;
 }
 
 /* =====================
-   Responsive Layout for Mobile Devices
+   Audio Control Styling
 ===================== */
+#audioControl {
+    margin: 20px auto;
+    text-align: center;
+}
+
+#toggleAudioButton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#toggleAudioButton:hover {
+    background-color: #0056b3;
+}
+
+.note {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Responsive Layout for Mobile Devices */
 @media screen and (max-width: 600px) {
     #spinButton {
         padding: 10px 20px;
@@ -208,11 +215,11 @@ body {
     }
 
     .wheel {
-        font-size: 8vw; /* Adjusted font size for better fitting on small screens */
-        max-width: 450px; /* Slightly increased max-width for better fitting */
+        font-size: 10vw;
+        max-width: 90%;
     }
 
     .wheel span.digraph {
-        letter-spacing: 1px; /* Slightly reduced letter-spacing for smaller screens */
+        letter-spacing: 1px;
     }
 }
