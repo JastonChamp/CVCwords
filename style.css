@@ -37,6 +37,20 @@ body {
     font-size: 16px;
 }
 
+/* Blending Delay Control Styling */
+#blendingControl {
+    margin: 20px auto;
+    text-align: center;
+    font-size: 18px;
+}
+
+#blendingDelayInput {
+    width: 60px;
+    padding: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
 /* =====================
    Styling for the Word Display Box (.wheel)
 ===================== */
@@ -221,5 +235,15 @@ body {
 
     .wheel span.digraph {
         letter-spacing: 1px;
+    }
+
+    /* Blending Delay Control Responsive Styling */
+    #blendingDelayInput {
+        width: 50px;
+        font-size: 14px;
+    }
+
+    #blendingControl {
+        font-size: 16px;
     }
 }
