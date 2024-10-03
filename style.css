@@ -24,30 +24,51 @@ body {
     margin-top: 20px;
 }
 
-/* Word Type Selection Styling */
+/* =====================
+   Form Elements Styling
+===================== */
 #wordTypeSelection,
-#vowelSelection {
-    margin: 20px auto;
-    font-size: 18px;
-}
-
-#wordTypeSelector,
-#vowelSelector {
-    padding: 5px;
-    font-size: 16px;
-}
-
-/* Blending Delay Control Styling */
+#vowelSelection,
 #blendingControl {
     margin: 20px auto;
-    text-align: center;
     font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#blendingDelayInput {
-    width: 60px;
-    padding: 5px;
+#wordTypeSelection label,
+#vowelSelection label,
+#blendingControl label {
+    margin-right: 10px;
+}
+
+select,
+input[type="number"] {
+    padding: 8px 12px;
     font-size: 16px;
+    border: 2px solid #2980b9;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+    background-color: #f0faff;
+}
+
+select:focus,
+input[type="number"]:focus {
+    border-color: #1abc9c;
+}
+
+select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg width="14" height="10" xmlns="http://www.w3.org/2000/svg"><polyline points="1 1 7 7 13 1" stroke="%232980b9" stroke-width="2" fill="none" stroke-linecap="round"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 10px;
+}
+
+input[type="number"] {
+    width: 80px;
     text-align: center;
 }
 
@@ -238,8 +259,8 @@ body {
     }
 
     /* Blending Delay Control Responsive Styling */
-    #blendingDelayInput {
-        width: 50px;
+    input[type="number"] {
+        width: 60px;
         font-size: 14px;
     }
 
