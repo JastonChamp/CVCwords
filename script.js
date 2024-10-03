@@ -11,7 +11,7 @@ const wordGroups = {
         e: [
             'bed', 'beg', 'ben', 'bet', 'den', 'fed', 'get', 'hen', 'jet', 'leg',
             'met', 'net', 'pet', 'men', 'pen', 'red', 'set', 'ten', 'wet', 'web',
-            'yet', 'vet', 'hem', 'peg', 'let', 'keg', 'pep', 'Ned', 'Ted', 'Ken'
+            'yet', 'vet', 'hem', 'peg', 'let', 'keg', 'pep', 'ned', 'ted', 'ken'
         ],
         i: [
             'bib', 'bid', 'big', 'bin', 'bit', 'dig', 'dip', 'fig', 'fin', 'fit',
@@ -33,11 +33,11 @@ const wordGroups = {
         a: [
             'brag', 'clap', 'crab', 'drag', 'flag', 'flap', 'glad', 'grab', 'plan', 'slam',
             'snap', 'snag', 'span', 'stab', 'trap', 'scab', 'scam', 'scan', 'scat', 'swam',
-            'chap', 'that', 'chap', 'drab', 'frap', 'gran', 'plat', 'pram', 'slap', 'clan'
+            'chap', 'that', 'drab', 'frap', 'gran', 'plat', 'pram', 'slap', 'clan', 'slab'
         ],
         e: [
             'bled', 'bred', 'fled', 'fret', 'glen', 'sped', 'stem', 'step', 'trek', 'clef',
-            'drek', 'dred', 'fret', 'sled', 'sned', 'smed', 'smell', 'spell', 'spend', 'swept'
+            'sled', 'smell', 'spell', 'spend', 'swept', 'shelf', 'spend', 'swept', 'bless', 'blend'
         ],
         i: [
             'brim', 'brig', 'clip', 'crib', 'drip', 'flip', 'grin', 'grid', 'grip', 'skip',
@@ -88,28 +88,28 @@ const wordGroups = {
         e: [
             'blend', 'blent', 'dreck', 'dress', 'press', 'slept', 'smelt', 'spent', 'trend', 'crest',
             'fresh', 'swept', 'trench', 'stretch', 'thresh', 'stress', 'strep', 'spend', 'shelf', 'wrest',
-            'swept', 'swept', 'stent', 'flesh', 'french', 'stretch', 'strength', 'drench', 'sketch', 'wrench'
+            'stent', 'flesh', 'french', 'stretch', 'strength', 'drench', 'sketch', 'wrench', 'bless', 'fret'
         ],
         i: [
             'blink', 'brink', 'clink', 'clint', 'crimp', 'crisp', 'drink', 'drift', 'print', 'sprint',
             'strip', 'strict', 'shrink', 'script', 'squint', 'twist', 'flint', 'sting', 'swing', 'string',
-            'sphinx', 'squid', 'twist', 'thrift', 'shrimp', 'spring', 'splint', 'swift', 'switch', 'whisk'
+            'shrimp', 'spring', 'splint', 'swift', 'switch', 'whisk', 'twist', 'thrift', 'shrill', 'squish'
         ],
         o: [
             'block', 'clock', 'cloth', 'cross', 'froth', 'frost', 'front', 'smock', 'stock', 'stomp',
-            'strong', 'throb', 'throng', 'swamp', 'swath', 'stomp', 'prong', 'prompt', 'splotch', 'scorch',
-            'stork', 'storm', 'throb', 'squash', 'squad', 'squawk', 'throb', 'throng', 'twonk', 'whomp'
+            'strong', 'throb', 'throng', 'swamp', 'swath', 'prong', 'prompt', 'splotch', 'scorch', 'stork',
+            'storm', 'squash', 'squad', 'squawk', 'twonk', 'whomp', 'clomp', 'chomp', 'clonk', 'throb'
         ],
         u: [
             'blunt', 'brunt', 'clump', 'clunk', 'crust', 'drunk', 'flung', 'frump', 'grunt', 'plump',
             'plunk', 'skunk', 'stump', 'strut', 'trunk', 'trust', 'strum', 'stunt', 'slush', 'brush',
-            'shrug', 'shrunk', 'struck', 'strump', 'thrush', 'thrust', 'skulk', 'skunk', 'spunk', 'slump'
+            'shrug', 'shrunk', 'struck', 'thrush', 'thrust', 'skulk', 'spunk', 'slump', 'fluff', 'crush'
         ]
     },
     digraphs: {
         sh: ['ship', 'fish', 'shop', 'wish', 'bash', 'dash', 'gush', 'mash', 'rash', 'cash', 'lash', 'mesh', 'dish', 'push', 'rush', 'shed', 'shin', 'shut', 'shun', 'shop'],
         th: ['this', 'that', 'math', 'with', 'then', 'thin', 'thick', 'than', 'them', 'thus', 'thank', 'think', 'thump', 'thrust', 'thrift', 'thrush', 'throb', 'throng', 'thumb', 'theme'],
-        ch: ['chip', 'chat', 'chop', 'much', 'such', 'rich', 'chin', 'inch', 'lunch', 'bench', 'punch', 'march', 'match', 'patch', 'catch', 'fetch', 'hatch', 'pitch', 'pitch', 'switch'],
+        ch: ['chip', 'chat', 'chop', 'much', 'such', 'rich', 'chin', 'inch', 'lunch', 'bench', 'punch', 'march', 'match', 'patch', 'catch', 'fetch', 'hatch', 'pitch', 'switch', 'ditch'],
         ng: ['sing', 'ring', 'king', 'long', 'song', 'hung', 'bang', 'wing', 'swing', 'thing', 'bring', 'fling', 'cling', 'sting', 'sling', 'strong', 'string', 'spring', 'wring', 'young']
     }
 };
@@ -158,6 +158,7 @@ const vowelSelection = document.getElementById('vowelSelection');
 const wordTypeSelector = document.getElementById('wordTypeSelector');
 const scoreText = document.getElementById('scoreText');
 const toggleAudioButton = document.getElementById('toggleAudioButton');
+const blendingDelayInput = document.getElementById('blendingDelayInput'); // Added blending delay input
 
 // =====================
 // Predefined Compliments
@@ -306,12 +307,22 @@ async function revealWord(word) {
         span.style.setProperty('--animation-order', index + 1);
     });
 
+    // Play each letter or digraph sound
     for (let i = 0; i < units.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 500));
         await playLetterSound(units[i].text);
     }
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Get blending delay from input
+    let blendingDelay = parseInt(blendingDelayInput.value, 10) * 1000; // Convert seconds to milliseconds
+    if (isNaN(blendingDelay) || blendingDelay < 1000) {
+        blendingDelay = 3000; // Default to 3 seconds if invalid input
+    }
+
+    // Add delay before pronouncing the whole word
+    await new Promise(resolve => setTimeout(resolve, blendingDelay));
+
+    // Pronounce the whole word
     await speak(word);
     giveCompliment();
     updateScore();
