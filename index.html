@@ -35,6 +35,12 @@
         </select>
     </div>
 
+    <!-- Blending Delay Control -->
+    <div id="blendingControl">
+        <label for="blendingDelayInput">Blending Time (seconds):</label>
+        <input type="number" id="blendingDelayInput" min="1" max="10" value="3">
+    </div>
+
     <!-- Word Display Box -->
     <div class="spinner">
         <div class="wheel" id="wordBox">
@@ -43,11 +49,11 @@
     </div>
 
     <!-- Spin Button -->
-    <button id="spinButton">Spin</button>
+    <button id="spinButton" aria-label="Spin the wheel">Spin</button>
 
     <!-- Audio Toggle Button and Note -->
     <div id="audioControl">
-        <button id="toggleAudioButton">🔇 Disable Audio</button>
+        <button id="toggleAudioButton" aria-label="Toggle audio on or off">🔇 Disable Audio</button>
         <p class="note">Disabling the audio allows children to practice sounding out the words on their own, without hearing the correct pronunciation.</p>
     </div>
 
