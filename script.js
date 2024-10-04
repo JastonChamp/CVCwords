@@ -113,7 +113,6 @@
                 ng: ['sing', 'ring', 'king', 'long', 'song', 'hung', 'bang', 'wing', 'swing', 'thing', 'bring', 'fling', 'cling', 'sting', 'sling', 'strong', 'string', 'spring', 'wring', 'young']
             }
         };
-
 // =====================
 // Preload All Digraph Words
 // =====================
@@ -246,7 +245,6 @@ function giveCompliment() {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
     complimentBox.textContent = compliment;
     complimentBox.style.color = 'green';
-    complimentBox.style.fontSize = '2em';
     complimentBox.style.opacity = '1';
     speak(compliment);
     successSound.play();
@@ -305,9 +303,11 @@ function parseWord(word) {
 async function revealWord(word) {
     wordBox.innerHTML = '';
     const units = parseWord(word);
-    units.forEach((unit, index) => {
+
+    units.forEach((unit) => {
         const span = document.createElement('span');
         span.textContent = unit.text;
+        span.classList.add('letter');
         if (unit.isVowel && !unit.isDigraph) {
             span.classList.add('vowel');
         }
@@ -315,7 +315,6 @@ async function revealWord(word) {
             span.classList.add('digraph');
         }
         wordBox.appendChild(span);
-        span.style.setProperty('--animation-order', index + 1);
     });
 
     // Play each letter or digraph sound
@@ -386,10 +385,6 @@ async function spin() {
     setTimeout(() => {
         spinButton.classList.remove('spinning');
     }, 1000);
-    wordBox.classList.add('shake');
-    setTimeout(() => {
-        wordBox.classList.remove('shake');
-    }, 500);
     complimentBox.textContent = '';
     complimentBox.style.opacity = '0';
     const word = getRandomWord();
@@ -517,6 +512,9 @@ function preloadAudio() {
     clickSound.load();
     successSound.load();
 }
+
+// Preload audio on window load
+window.addEventListener('load', preloadAudio);
 
 // Preload audio on window load
 window.addEventListener('load', preloadAudio);
