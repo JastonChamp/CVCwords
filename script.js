@@ -304,7 +304,7 @@ async function revealWord(word) {
     wordBox.innerHTML = '';
     const units = parseWord(word);
 
-    units.forEach((unit) => {
+    units.forEach((unit, index) => {
         const span = document.createElement('span');
         span.textContent = unit.text;
         span.classList.add('letter');
@@ -315,6 +315,8 @@ async function revealWord(word) {
             span.classList.add('digraph');
         }
         wordBox.appendChild(span);
+        // Set animation delay
+        span.style.animationDelay = `${(index + 1) * 0.5}s`;
     });
 
     // Play each letter or digraph sound
@@ -512,9 +514,6 @@ function preloadAudio() {
     clickSound.load();
     successSound.load();
 }
-
-// Preload audio on window load
-window.addEventListener('load', preloadAudio);
 
 // Preload audio on window load
 window.addEventListener('load', preloadAudio);
