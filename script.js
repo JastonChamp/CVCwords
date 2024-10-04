@@ -137,6 +137,10 @@ const letterSounds = {};
     letterSounds[digraph] = audio;
 });
 
+// Load UI sounds
+const clickSound = new Audio(`${audioPath}click.mp3`);
+const successSound = new Audio(`${audioPath}success.mp3`);
+
 // =====================
 // Application State Variables
 // =====================
@@ -144,6 +148,7 @@ let revealedWords = 0;
 let usedWords = [];
 let score = 0;
 let audioEnabled = true; // Audio enabled by default
+let blendingTime = 3000; // Default to 3000ms
 
 // =====================
 // DOM Elements
@@ -158,12 +163,16 @@ const vowelSelection = document.getElementById('vowelSelection');
 const wordTypeSelector = document.getElementById('wordTypeSelector');
 const scoreText = document.getElementById('scoreText');
 const toggleAudioButton = document.getElementById('toggleAudioButton');
-const blendingDelayInput = document.getElementById('blendingDelayInput'); // Added blending delay input
+const increaseBlendingTimeButton = document.getElementById('increaseBlendingTime');
+const decreaseBlendingTimeButton = document.getElementById('decreaseBlendingTime');
+const blendingTimeDisplay = document.getElementById('blendingTimeDisplay');
+const blendingTimerContainer = document.getElementById('blendingTimerContainer');
+const blendingTimer = document.getElementById('blendingTimer');
 
 // =====================
 // Predefined Compliments
 // =====================
-const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!'];
+const compliments = ['Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!', 'Keep it up!', 'Excellent!'];
 
 // =====================
 // Speech Synthesis Configuration
@@ -193,7 +202,7 @@ function setVoice() {
 // Function to speak text
 function speak(text) {
     return new Promise((resolve) => {
-        if (selectedVoice) {
+        if (selectedVoice && audioEnabled) {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.voice = selectedVoice;
             utterance.rate = 0.8;
@@ -202,7 +211,7 @@ function speak(text) {
             utterance.onend = resolve;
             speechSynthesis.speak(utterance);
         } else {
-            console.warn(`Speech synthesis not available. Text: ${text}`);
+            console.warn(`Speech synthesis not available or audio disabled. Text: ${text}`);
             resolve();
         }
     });
@@ -236,9 +245,12 @@ function giveCompliment() {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
     complimentBox.textContent = compliment;
     complimentBox.style.color = 'green';
-    complimentBox.style.fontSize = '30px';
+    complimentBox.style.fontSize = '36px';
     complimentBox.style.opacity = '1';
-    speak(compliment);
+    if (audioEnabled) {
+        speak(compliment);
+        successSound.play();
+    }
     setTimeout(() => {
         complimentBox.style.opacity = '0';
     }, 2000);
@@ -313,17 +325,11 @@ async function revealWord(word) {
         await playLetterSound(units[i].text);
     }
 
-    // Get blending delay from input
-    let blendingDelay = 3000; // Default to 3 seconds
-    if (blendingDelayInput) {
-        const inputDelay = parseInt(blendingDelayInput.value, 10) * 1000; // Convert seconds to milliseconds
-        if (!isNaN(inputDelay) && inputDelay >= 1000) {
-            blendingDelay = inputDelay;
-        }
-    }
+    // Start blending timer
+    startBlendingTimer(blendingTime / 1000);
 
-    // Add delay before pronouncing the whole word
-    await new Promise(resolve => setTimeout(resolve, blendingDelay));
+    // Wait for blending time
+    await new Promise(resolve => setTimeout(resolve, blendingTime));
 
     // Pronounce the whole word
     await speak(word);
@@ -376,6 +382,13 @@ function getRandomWord() {
 // Function to handle the Spin button click
 async function spin() {
     spinButton.disabled = true;
+    spinButton.classList.add('spinning');
+    if (audioEnabled) {
+        clickSound.play();
+    }
+    setTimeout(() => {
+        spinButton.classList.remove('spinning');
+    }, 1000);
     wordBox.classList.add('shake');
     setTimeout(() => {
         wordBox.classList.remove('shake');
@@ -400,7 +413,7 @@ vowelSelector.addEventListener('change', () => {
 // Event listener for word type selection change
 wordTypeSelector.addEventListener('change', () => {
     resetGame();
-    vowelSelection.style.display = wordTypeSelector.value === 'digraphs' ? 'none' : 'block';
+    vowelSelection.style.display = wordTypeSelector.value === 'digraphs' ? 'none' : 'flex';
 });
 
 // Function to reset the game state
@@ -421,6 +434,43 @@ function toggleAudio() {
 // Add event listener to the toggle audio button
 toggleAudioButton.addEventListener('click', toggleAudio);
 
+// Blending Time Control Event Listeners
+increaseBlendingTimeButton.addEventListener('click', () => {
+    if (blendingTime < 7000) {
+        blendingTime += 1000;
+        updateBlendingTimeDisplay();
+    }
+});
+
+decreaseBlendingTimeButton.addEventListener('click', () => {
+    if (blendingTime > 1000) {
+        blendingTime -= 1000;
+        updateBlendingTimeDisplay();
+    }
+});
+
+function updateBlendingTimeDisplay() {
+    blendingTimeDisplay.textContent = blendingTime / 1000;
+}
+
+// Initialize blending time display on load
+updateBlendingTimeDisplay();
+
+// Function to start the blending timer
+function startBlendingTimer(seconds) {
+    blendingTimerContainer.style.display = 'block';
+    blendingTimer.style.width = '100%';
+    let timeLeft = seconds;
+    const interval = setInterval(() => {
+        timeLeft--;
+        blendingTimer.style.width = `${(timeLeft / seconds) * 100}%`;
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            blendingTimerContainer.style.display = 'none';
+        }
+    }, 1000);
+}
+
 // =====================
 // Initialization
 // =====================
@@ -440,6 +490,8 @@ function preloadAudio() {
     for (const key in letterSounds) {
         letterSounds[key].load();
     }
+    clickSound.load();
+    successSound.load();
 }
 
 // Preload audio on window load
