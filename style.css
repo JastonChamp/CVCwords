@@ -8,7 +8,7 @@ html, body {
 }
 
 body {
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', 'Century Gothic', Arial, sans-serif;
     background: linear-gradient(270deg, #e3f7fc, #a1d3f0, #e3f7fc);
     background-size: 600% 600%;
     animation: gradientBG 10s infinite;
@@ -248,6 +248,17 @@ select {
 #spinButton:disabled {
     background-color: gray;
     cursor: not-allowed;
+}
+
+/* Spin Icon Animation */
+@keyframes spinIcon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spin-icon-animate {
+    display: inline-block;
+    animation: spinIcon 1s linear;
 }
 
 /* Blending Timer Styling */
