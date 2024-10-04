@@ -70,6 +70,7 @@ body {
     background-color: #cce0f5; /* Darker shade for better contrast */
     padding: 15px 0;
     border-bottom: 2px solid #2980b9; /* Separator line */
+    margin-bottom: 20px; /* Added margin-bottom to prevent overlap */
 }
 
 .top-controls > div,
@@ -215,12 +216,12 @@ select {
 
 /* Vowel Styling */
 .word-display .vowel {
-    color: #ff4d4d;
+    color: #cc0000; /* Darker red for better contrast */
 }
 
 /* Digraph Styling */
 .word-display .digraph {
-    color: #228B22;
+    color: #006400; /* Darker green for better contrast */
 }
 
 /* Spin Button Styling */
@@ -232,16 +233,17 @@ select {
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out;
+    transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out, box-shadow 0.2s;
     margin-top: 20px;
 }
 
 #spinButton:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 #spinButton:active {
-    transform: scale(0.95);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 100, 0, 0.7);
     background-color: #ff5c1c;
 }
 
@@ -327,7 +329,7 @@ select {
     height: 100%;
     background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
     width: 0;
-    transition: width 0.5s ease-in-out;
+    transition: width 0.7s ease; /* Increased duration for smoother animation */
 }
 
 #progressText {
