@@ -104,7 +104,7 @@ select {
 ===================== */
 .wheel {
     width: 90%;
-    max-width: 500px;
+    max-width: 800px;
     margin: 20px auto;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -112,7 +112,7 @@ select {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    font-size: calc(10px + 5vmin);
+    font-size: calc(16px + 4vmin);
     border-radius: 15px;
     transition: transform 0.5s ease;
     position: relative;
@@ -165,17 +165,23 @@ select {
 #spinButton {
     background-color: #ff5722;
     color: white;
-    padding: 20px;
-    font-size: calc(12px + 2vmin);
+    padding: 0;
+    font-size: calc(30px + 2vmin);
     border: none;
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
     transition: all 0.3s ease;
     margin: 20px auto;
-    display: block;
-    width: 100px;
-    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20vmin;
+    height: 20vmin;
+    max-width: 150px;
+    max-height: 150px;
+    min-width: 80px;
+    min-height: 80px;
 }
 
 #spinButton:hover {
@@ -203,7 +209,7 @@ select {
    Compliment Styling
 ===================== */
 #complimentBox {
-    font-size: 2em;
+    font-size: calc(24px + 2vmin);
     color: green;
     margin-top: 20px;
     opacity: 0;
@@ -215,7 +221,7 @@ select {
 ===================== */
 #progressBar {
     width: 90%;
-    max-width: 400px;
+    max-width: 800px;
     height: 30px;
     background-color: lightgray;
     border-radius: 15px;
@@ -238,7 +244,7 @@ select {
 }
 
 /* =====================
-   Audio Control Styling
+   Audio Control and Fullscreen Button Styling
 ===================== */
 #audioControl {
     margin: 20px auto;
@@ -275,7 +281,7 @@ select {
 ===================== */
 #blendingTimerContainer {
     width: 90%;
-    max-width: 400px;
+    max-width: 800px;
     background-color: #ddd;
     height: 20px;
     margin: 20px auto;
@@ -294,14 +300,17 @@ select {
 /* Responsive Layout for Smaller Screens */
 @media screen and (max-width: 600px) {
     #spinButton {
-        width: 80px;
-        height: 80px;
-        padding: 15px;
-        font-size: 1.5em;
+        width: 25vmin;
+        height: 25vmin;
+        max-width: 120px;
+        max-height: 120px;
+        min-width: 80px;
+        min-height: 80px;
+        font-size: calc(24px + 2vmin);
     }
 
     #complimentBox {
-        font-size: 1.5em;
+        font-size: calc(20px + 2vmin);
     }
 
     #progressText {
@@ -313,7 +322,7 @@ select {
     }
 
     .wheel {
-        font-size: calc(10px + 8vmin);
+        font-size: calc(20px + 4vmin);
     }
 
     /* Adjust form elements */
