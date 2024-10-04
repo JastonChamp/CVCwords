@@ -15,74 +15,90 @@
     <!-- Main Container -->
     <div class="container">
 
-        <!-- Score Display -->
-        <p id="scoreText">Score: 0</p>
+        <!-- Header Section -->
+        <header>
+            <!-- Score Display -->
+            <p id="scoreText">Score: 0</p>
 
-        <!-- Word Type Selection -->
-        <div id="wordTypeSelection">
-            <label for="wordTypeSelector">Select Word Type:</label>
-            <select id="wordTypeSelector">
-                <option value="cvc">CVC Words</option>
-                <option value="ccvc">CCVC Words</option>
-                <option value="cvcc">CVCC Words</option>
-                <option value="ccvcc">CCVCC Words</option>
-                <option value="digraphs">Digraphs</option>
-            </select>
-        </div>
+            <!-- Controls Container -->
+            <div class="controls-container">
+                <!-- Word Type Selection -->
+                <div id="wordTypeSelection">
+                    <label for="wordTypeSelector">Select Word Type:</label>
+                    <select id="wordTypeSelector">
+                        <option value="cvc">CVC Words</option>
+                        <option value="ccvc">CCVC Words</option>
+                        <option value="cvcc">CVCC Words</option>
+                        <option value="ccvcc">CCVCC Words</option>
+                        <option value="digraphs">Digraphs</option>
+                    </select>
+                </div>
 
-        <!-- Vowel Selection -->
-        <div id="vowelSelection">
-            <label for="vowelSelector">Select Vowel:</label>
-            <select id="vowelSelector">
-                <option value="all">All Vowels</option>
-                <option value="a">🅰️ Short A</option>
-                <option value="e">📧 Short E</option>
-                <option value="i">ℹ️ Short I</option>
-                <option value="o">🅾️ Short O</option>
-                <option value="u">⛎ Short U</option>
-            </select>
-        </div>
+                <!-- Vowel Selection -->
+                <div id="vowelSelection">
+                    <label for="vowelSelector">Select Vowel:</label>
+                    <select id="vowelSelector">
+                        <option value="all">All Vowels</option>
+                        <option value="a">🅰️ Short A</option>
+                        <option value="e">📧 Short E</option>
+                        <option value="i">ℹ️ Short I</option>
+                        <option value="o">🅾️ Short O</option>
+                        <option value="u">⛎ Short U</option>
+                    </select>
+                </div>
 
-        <!-- Blending Delay Control -->
-        <div id="blendingControl">
-            <label for="blendingDelayInput">Blending Time (seconds):</label>
-            <button id="decreaseBlendingTime" aria-label="Decrease blending time">-</button>
-            <span id="blendingTimeDisplay">3</span>
-            <button id="increaseBlendingTime" aria-label="Increase blending time">+</button>
-        </div>
+                <!-- Blending Delay Control -->
+                <div id="blendingControl">
+                    <label for="blendingDelayInput">Blending Time (seconds):</label>
+                    <button id="decreaseBlendingTime" aria-label="Decrease blending time">-</button>
+                    <span id="blendingTimeDisplay">3</span>
+                    <button id="increaseBlendingTime" aria-label="Increase blending time">+</button>
+                </div>
 
-        <!-- Word Display Box -->
-        <div class="word-display-container">
-            <div class="word-display" id="wordBox" aria-live="polite">
-                <!-- Letters will be displayed here -->
+                <!-- Audio Toggle Button -->
+                <div id="audioControl">
+                    <button id="toggleAudioButton" aria-label="Toggle letter sounds on or off">🔇 Disable Letter Sounds</button>
+                </div>
+
+                <!-- Fullscreen Toggle Button -->
+                <button id="fullscreenButton" aria-label="Toggle fullscreen mode">⛶ Fullscreen</button>
             </div>
-        </div>
+        </header>
 
-        <!-- Spin Button -->
-        <button id="spinButton" aria-label="Spin the wheel">🎡 Spin</button>
+        <!-- Main Content -->
+        <main>
+            <!-- Word Display and Spin Button -->
+            <div class="word-and-spin">
+                <!-- Word Display Box -->
+                <div class="word-display-container">
+                    <div class="word-display" id="wordBox" aria-live="polite">
+                        <!-- Letters will be displayed here -->
+                    </div>
+                </div>
 
-        <!-- Blending Timer Progress Bar -->
-        <div id="blendingTimerContainer">
-            <div id="blendingTimer"></div>
-        </div>
+                <!-- Spin Button -->
+                <button id="spinButton" aria-label="Spin the wheel">🎡 Spin</button>
+            </div>
 
-        <!-- Audio Toggle Button and Note -->
-        <div id="audioControl">
-            <button id="toggleAudioButton" aria-label="Toggle letter sounds on or off">🔇 Disable Letter Sounds</button>
+            <!-- Blending Timer Progress Bar -->
+            <div id="blendingTimerContainer">
+                <div id="blendingTimer"></div>
+            </div>
+
+            <!-- Compliment Box -->
+            <div id="complimentBox" aria-live="assertive"></div>
+
+            <!-- Progress Bar -->
+            <div id="progressBar">
+                <div id="progressFill"></div>
+            </div>
+            <p id="progressText">0 / 0 Words Revealed</p>
+        </main>
+
+        <!-- Footer Note -->
+        <footer>
             <p class="note">Disabling the letter sounds allows children to practice sounding out the words on their own.</p>
-        </div>
-
-        <!-- Compliment Box -->
-        <div id="complimentBox" aria-live="assertive"></div>
-
-        <!-- Progress Bar -->
-        <div id="progressBar">
-            <div id="progressFill"></div>
-        </div>
-        <p id="progressText">0 / 0 Words Revealed</p>
-
-        <!-- Fullscreen Toggle Button -->
-        <button id="fullscreenButton" aria-label="Toggle fullscreen mode">⛶ Fullscreen</button>
+        </footer>
     </div>
 
     <!-- Include the JavaScript file -->
