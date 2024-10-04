@@ -19,6 +19,7 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
 }
 
 /* Animated Gradient Background */
@@ -28,10 +29,33 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Score Text */
+/* Score Container */
+.score-container {
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+}
+
 #scoreText {
     font-size: 1.5em;
-    margin-top: 10px;
+    margin: 0;
+}
+
+/* Score Increment Animation */
+.score-increment {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2em;
+    color: green;
+    opacity: 0;
+    transition: opacity 0.5s, top 1s;
+}
+
+.score-increment.show {
+    opacity: 1;
+    top: -50px; /* Move upwards */
 }
 
 /* =====================
@@ -69,7 +93,7 @@ select,
     cursor: pointer;
     margin: 5px;
     outline: none;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, background-color 0.3s;
     color: #333; /* Darker text color */
 }
 
@@ -84,6 +108,14 @@ select {
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 10px 10px;
+}
+
+#blendingControl button {
+    position: relative;
+}
+
+#blendingControl button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Settings Buttons Styling */
@@ -113,7 +145,8 @@ select {
 }
 
 /* Tooltip Styles */
-.settings-buttons button[title]:hover::after {
+.settings-buttons button[title]:hover::after,
+#blendingControl button[title]:hover::after {
     content: attr(title);
     position: absolute;
     bottom: -35px;
@@ -127,6 +160,7 @@ select {
     font-size: 0.9em;
     opacity: 0.9;
     pointer-events: none;
+    z-index: 10;
 }
 
 /* =====================
@@ -146,19 +180,21 @@ select {
     max-width: 800px;
     margin-bottom: 20px;
     background-color: #ffffff;
-    padding: 5px; /* Reduced padding */
+    padding: 0; /* Removed padding */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
 }
 
 .word-display {
     display: flex;
-    gap: 0.2em; /* Slight gap for letter spacing */
+    gap: 0.1em; /* Slight gap for letter spacing */
     justify-content: center;
+    align-items: center;
+    padding: 10px 0;
 }
 
 .word-display .letter {
-    font-size: 8em; /* Increased font size */
+    font-size: 9em; /* Increased font size */
     color: #000;
     opacity: 0;
     transform: translateY(20px);
@@ -180,6 +216,11 @@ select {
 /* Vowel Styling */
 .word-display .vowel {
     color: #ff4d4d;
+}
+
+/* Digraph Styling */
+.word-display .digraph {
+    color: #228B22;
 }
 
 /* Spin Button Styling */
@@ -251,6 +292,16 @@ select {
     margin-bottom: 5px;
 }
 
+/* Progress Icon Animation */
+@keyframes starTwinkle {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.star-animate {
+    animation: starTwinkle 1s ease-in-out;
+}
+
 /* Progress Bar Styling */
 #progressBar {
     width: 80%;
@@ -298,7 +349,7 @@ footer {
     }
 
     .word-display .letter {
-        font-size: 6em;
+        font-size: 7em;
     }
 
     #spinButton {
