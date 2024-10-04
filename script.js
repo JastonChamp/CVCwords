@@ -35,11 +35,11 @@ const wordGroups = {
         a: [
             'brag', 'clap', 'crab', 'drag', 'flag', 'flap', 'glad', 'grab', 'plan', 'slam',
             'snap', 'snag', 'span', 'stab', 'trap', 'scab', 'scam', 'scan', 'scat', 'swam',
-            'chap', 'that', 'drab', 'frap', 'gran', 'plat', 'pram', 'slap', 'clan', 'slab'
+            'chap', 'that', 'drab', 'gran', 'plat', 'pram', 'slap', 'clan', 'slab'
         ],
         e: [
             'bled', 'bred', 'fled', 'fret', 'glen', 'sped', 'stem', 'step', 'trek', 'clef',
-            'sled', 'smell', 'spell', 'spend', 'swept', 'shelf', 'bless', 'blend', 'spend', 'swept'
+            'sled', 'smell', 'spell', 'spend', 'swept', 'shelf', 'blend', 'spend'
         ],
         i: [
             'brim', 'brig', 'clip', 'crib', 'drip', 'flip', 'grin', 'grid', 'grip', 'skip',
@@ -73,12 +73,12 @@ const wordGroups = {
         o: [
             'bond', 'colt', 'comb', 'cold', 'fond', 'fold', 'gold', 'gong', 'holt', 'cost',
             'lost', 'loft', 'soft', 'post', 'most', 'moth', 'moss', 'boss', 'toss', 'dock',
-            'rock', 'sock', 'mock', 'flock', 'pond', 'song', 'long', 'tomb', 'toss', 'tomb'
+            'rock', 'sock', 'mock', 'flock', 'pond', 'song', 'long', 'tomb'
         ],
         u: [
             'bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk', 'hunt',
             'junk', 'just', 'lump', 'must', 'punch', 'pump', 'rust', 'runt', 'sunk', 'tuft',
-            'hush', 'lush', 'mush', 'tusk', 'husk', 'bust', 'dust', 'cusp', 'dusk', 'tusk'
+            'hush', 'lush', 'mush', 'tusk', 'husk', 'dust', 'cusp', 'dusk'
         ]
     },
     ccvcc: {
@@ -88,19 +88,18 @@ const wordGroups = {
             'stack', 'slant', 'stalk', 'swamp', 'swank', 'thrash', 'thatch', 'snatch', 'scratch', 'scram'
         ],
         e: [
-            'blend', 'blent', 'dreck', 'dress', 'press', 'slept', 'smelt', 'spent', 'trend', 'crest',
-            'fresh', 'swept', 'trench', 'stretch', 'thresh', 'stress', 'strep', 'spend', 'shelf', 'wrest',
-            'stent', 'flesh', 'french', 'stretch', 'strength', 'drench', 'sketch', 'wrench', 'bless', 'fret'
+            'blend', 'blent', 'drench', 'stretch', 'strength', 'sketch', 'wrench', 'stress', 'french', 'trench',
+            'strep', 'trend', 'swept', 'shelf', 'wrest', 'stent', 'flesh', 'dreck', 'fret'
         ],
         i: [
             'blink', 'brink', 'clink', 'clint', 'crimp', 'crisp', 'drink', 'drift', 'print', 'sprint',
             'strip', 'strict', 'shrink', 'script', 'squint', 'twist', 'flint', 'sting', 'swing', 'string',
-            'shrimp', 'spring', 'splint', 'swift', 'switch', 'whisk', 'twist', 'thrift', 'shrill', 'squish'
+            'shrimp', 'spring', 'splint', 'swift', 'switch', 'whisk', 'thrift', 'shrill', 'squish'
         ],
         o: [
             'block', 'clock', 'cloth', 'cross', 'froth', 'frost', 'front', 'smock', 'stock', 'stomp',
-            'strong', 'throb', 'throng', 'swamp', 'swath', 'prong', 'prompt', 'splotch', 'scorch', 'stork',
-            'storm', 'squash', 'squad', 'squawk', 'twonk', 'whomp', 'clomp', 'chomp', 'clonk', 'throb'
+            'strong', 'throb', 'throng', 'swamp', 'swath', 'prong', 'prompt', 'scorch', 'stork',
+            'storm', 'squash', 'squad', 'squawk', 'whomp', 'clomp', 'chomp', 'clonk'
         ],
         u: [
             'blunt', 'brunt', 'clump', 'clunk', 'crust', 'drunk', 'flung', 'frump', 'grunt', 'plump',
@@ -109,29 +108,28 @@ const wordGroups = {
         ]
     },
     digraphs: {
-        sh: [
-            'ship', 'fish', 'shop', 'wish', 'bash', 'dash', 'gush', 'mash', 'rash', 'cash',
-            'lash', 'mesh', 'dish', 'push', 'rush', 'shed', 'shin', 'shut', 'shun', 'shop'
+        a: [
+            'chat', 'chap', 'than', 'that', 'bath', 'math', 'hang', 'bang', 'rang', 'cash',
+            'dash', 'gnash', 'stash', 'trash', 'patch', 'catch', 'match', 'batch', 'rash', 'sash'
         ],
-        th: [
-            'this', 'that', 'math', 'with', 'then', 'thin', 'thick', 'than', 'them', 'thus',
-            'thank', 'think', 'thump', 'thrust', 'thrift', 'thrush', 'throb', 'throng', 'thumb', 'theme'
+        e: [
+            'shed', 'them', 'then', 'when', 'check', 'fetch', 'bench', 'retch', 'ketch', 'peck',
+            'tech', 'deck', 'wrench', 'stretch', 'sketch', 'drench', 'flesh', 'fresh', 'chess', 'press'
         ],
-        ch: [
-            'chip', 'chat', 'chop', 'much', 'such', 'rich', 'chin', 'inch', 'lunch', 'bench',
-            'punch', 'march', 'match', 'patch', 'catch', 'fetch', 'hatch', 'pitch', 'switch', 'ditch'
+        i: [
+            'chip', 'chin', 'thin', 'thing', 'king', 'ring', 'sing', 'wing', 'sting', 'bring',
+            'cling', 'string', 'swing', 'swim', 'ditch', 'pitch', 'which', 'switch', 'twitch', 'drift'
         ],
-        ng: [
-            'sing', 'ring', 'king', 'long', 'song', 'hung', 'bang', 'wing', 'swing', 'thing',
-            'bring', 'fling', 'cling', 'sting', 'sling', 'strong', 'string', 'spring', 'wring', 'young'
+        o: [
+            'shop', 'shot', 'chop', 'stop', 'slot', 'shock', 'block', 'clock', 'frog', 'clog',
+            'snog', 'smog', 'flock', 'stock', 'strong', 'throb', 'cloth', 'crotch', 'notch', 'botch'
+        ],
+        u: [
+            'shut', 'thud', 'chug', 'chuck', 'chunk', 'shuck', 'thump', 'shrug', 'brush', 'crush',
+            'blush', 'flush', 'crutch', 'clutch', 'crush', 'grudge', 'smudge', 'sludge', 'trudge', 'drum'
         ]
     }
 };
-
-// =====================
-// Preload All Digraph Words
-// =====================
-const allDigraphWords = Object.values(wordGroups.digraphs).flat();
 
 // =====================
 // Audio Configuration
@@ -163,6 +161,7 @@ let usedWords = [];
 let score = 0;
 let letterSoundsEnabled = true; // Letter sounds enabled by default
 let blendingTime = 3000; // Default to 3000ms
+let totalWords = 0; // Total words initialized
 
 // =====================
 // DOM Elements
@@ -261,8 +260,6 @@ function updateScore() {
 // Function to update progress indicators
 function updateProgress() {
     revealedWords = usedWords.length;
-    const availableWords = getAvailableWords();
-    const totalWords = revealedWords + availableWords.length;
     const progressPercentage = totalWords > 0 ? (revealedWords / totalWords) * 100 : 0;
     progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
     progressFill.style.width = `${progressPercentage}%`;
@@ -378,15 +375,11 @@ function getAvailableWords() {
     const selectedVowel = vowelSelector.value;
     let words = [];
 
-    if (selectedWordType === 'digraphs') {
-        words = allDigraphWords;
+    const group = wordGroups[selectedWordType];
+    if (selectedVowel === 'all') {
+        words = Object.values(group).flat();
     } else {
-        const group = wordGroups[selectedWordType];
-        if (selectedVowel === 'all') {
-            words = Object.values(group).flat();
-        } else {
-            words = group[selectedVowel] || [];
-        }
+        words = group[selectedVowel] || [];
     }
     return words;
 }
@@ -397,11 +390,7 @@ function getRandomWord() {
     const remainingWords = availableWords.filter(word => !usedWords.includes(word));
     if (remainingWords.length === 0) {
         alert('You have gone through all the words! The list will reset.');
-        usedWords = [];
-        revealedWords = 0;
-        score = 0;
-        scoreText.textContent = `Score: ${score}`;
-        updateProgress();
+        resetGame(false); // Reset without resetting totalWords
         return getRandomWord();
     }
     const word = remainingWords[Math.floor(Math.random() * remainingWords.length)];
@@ -445,21 +434,25 @@ async function spin() {
 
 // Event listener for vowel selection change
 vowelSelector.addEventListener('change', () => {
-    resetGame();
+    resetGame(true);
 });
 
 // Event listener for word type selection change
 wordTypeSelector.addEventListener('change', () => {
-    resetGame();
-    vowelSelection.style.display = wordTypeSelector.value === 'digraphs' ? 'none' : 'flex';
+    resetGame(true);
+    // Always display the vowel selection
+    vowelSelection.style.display = 'flex';
 });
 
 // Function to reset the game state
-function resetGame() {
+function resetGame(resetTotalWords = true) {
     usedWords = [];
     revealedWords = 0;
     score = 0;
     scoreText.textContent = `Score: ${score}`;
+    if (resetTotalWords) {
+        totalWords = getAvailableWords().length;
+    }
     updateProgress();
 }
 
@@ -545,9 +538,8 @@ spinButton.addEventListener('click', spin);
 // Initialize speech synthesis voice
 setVoice();
 
-// Update progress and score on initial load
-updateProgress();
-scoreText.textContent = `Score: ${score}`;
+// Update totalWords and progress on initial load
+resetGame(true);
 
 // Preload all audio files
 function preloadAudio() {
