@@ -8,7 +8,7 @@ html, body {
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
     background: linear-gradient(270deg, #e3f7fc, #a1d3f0, #e3f7fc);
     background-size: 600% 600%;
     text-align: center;
@@ -117,12 +117,44 @@ select {
 
 .word-display {
     display: flex;
-    gap: 0.1em; /* Reduced gap for natural word appearance */
+    gap: 0.5em; /* Slight gap for letter-by-letter reveal */
 }
 
 .word-display .letter {
     font-size: 5em;
     color: #000;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealLetter 0.5s forwards;
+}
+
+.word-display .letter:nth-child(1) {
+    animation-delay: 0.5s;
+}
+
+.word-display .letter:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.word-display .letter:nth-child(3) {
+    animation-delay: 1.5s;
+}
+
+.word-display .letter:nth-child(4) {
+    animation-delay: 2s;
+}
+
+.word-display .letter:nth-child(5) {
+    animation-delay: 2.5s;
+}
+
+/* Adjust as needed for longer words */
+
+@keyframes revealLetter {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Vowel Styling */
@@ -275,4 +307,48 @@ select {
     }
 
     #spinButton {
-        width: 120
+        width: 120px;
+        height: 120px;
+        font-size: 1.8em;
+    }
+
+    #complimentBox {
+        font-size: 1.8em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    /* Adjust layout for smaller screens */
+    #wordTypeSelection,
+    #vowelSelection,
+    #blendingControl {
+        flex-direction: column;
+        font-size: 1em;
+    }
+
+    #wordTypeSelection label,
+    #vowelSelection label,
+    #blendingControl label {
+        margin-bottom: 5px;
+    }
+
+    select,
+    #blendingControl button,
+    #blendingTimeDisplay {
+        font-size: 0.9em;
+    }
+
+    .word-display .letter {
+        font-size: 3em;
+    }
+
+    #spinButton {
+        width: 100px;
+        height: 100px;
+        font-size: 1.6em;
+    }
+
+    #complimentBox {
+        font-size: 1.6em;
+    }
+}
