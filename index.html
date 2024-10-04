@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CVC, CCVC, CVCC, CCVCC, and Digraph Word Spinner</title>
+    <title>Word Spinner for Early Readers</title>
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="style.css">
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <!-- ARIA roles and meta tags for accessibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <!-- Score Display -->
@@ -27,38 +31,45 @@
         <label for="vowelSelector">Select Vowel:</label>
         <select id="vowelSelector">
             <option value="all">All Vowels</option>
-            <option value="a">Short A</option>
-            <option value="e">Short E</option>
-            <option value="i">Short I</option>
-            <option value="o">Short O</option>
-            <option value="u">Short U</option>
+            <option value="a">🅰️ Short A</option>
+            <option value="e">📧 Short E</option>
+            <option value="i">ℹ️ Short I</option>
+            <option value="o">🅾️ Short O</option>
+            <option value="u">⛎ Short U</option>
         </select>
     </div>
 
     <!-- Blending Delay Control -->
     <div id="blendingControl">
         <label for="blendingDelayInput">Blending Time (seconds):</label>
-        <input type="number" id="blendingDelayInput" min="1" max="7" value="3">
+        <button id="decreaseBlendingTime" aria-label="Decrease blending time">-</button>
+        <span id="blendingTimeDisplay">3</span>
+        <button id="increaseBlendingTime" aria-label="Increase blending time">+</button>
     </div>
 
     <!-- Word Display Box -->
     <div class="spinner">
-        <div class="wheel" id="wordBox">
+        <div class="wheel" id="wordBox" aria-live="polite">
             <!-- Letters will be displayed here -->
         </div>
     </div>
 
     <!-- Spin Button -->
-    <button id="spinButton" aria-label="Spin the wheel">Spin</button>
+    <button id="spinButton" aria-label="Spin the wheel">🎡 Spin</button>
+
+    <!-- Blending Timer Progress Bar -->
+    <div id="blendingTimerContainer">
+        <div id="blendingTimer"></div>
+    </div>
 
     <!-- Audio Toggle Button and Note -->
     <div id="audioControl">
         <button id="toggleAudioButton" aria-label="Toggle audio on or off">🔇 Disable Audio</button>
-        <p class="note">Disabling the audio allows children to practice sounding out the words on their own, without hearing the correct pronunciation.</p>
+        <p class="note">Disabling the audio allows children to practice sounding out the words on their own.</p>
     </div>
 
     <!-- Compliment Box -->
-    <div id="complimentBox"></div>
+    <div id="complimentBox" aria-live="assertive"></div>
 
     <!-- Progress Bar -->
     <div id="progressBar">
