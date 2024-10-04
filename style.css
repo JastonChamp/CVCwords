@@ -11,22 +11,14 @@ body {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
     background: linear-gradient(270deg, #e3f7fc, #a1d3f0, #e3f7fc);
     background-size: 600% 600%;
-    text-align: center;
     animation: gradientBG 10s infinite;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    text-align: center;
 }
 
 .container {
     width: 100%;
     max-width: 1200px;
-    padding: 0 20px;
-    box-sizing: border-box;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 0 auto;
 }
 
 /* Animated Gradient Background */
@@ -39,7 +31,7 @@ body {
 /* Score Text */
 #scoreText {
     font-size: 1.5em;
-    margin: 10px 0;
+    margin-top: 10px;
 }
 
 /* =====================
@@ -98,42 +90,41 @@ select {
    Main Content Styling
 ===================== */
 .main-content {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    overflow: hidden; /* Prevent scrolling */
+    height: 70vh; /* Adjust based on overall page height */
 }
 
 /* Word Display Styling */
 .word-display-container {
     width: 90%;
     max-width: 800px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     background-color: #ffffff;
-    padding: 20px;
+    padding: 10px; /* Reduced padding */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
 }
 
 .word-display {
     display: flex;
-    gap: 0.5em;
+    gap: 0.3em; /* Slight gap for letter spacing */
     justify-content: center;
 }
 
 .word-display .letter {
-    font-size: 6em;
+    font-size: 7em; /* Increased font size */
     color: #000;
     opacity: 0;
     transform: translateY(20px);
     animation: revealLetter 0.5s forwards;
 }
 
+/* Set animation delays dynamically */
 .word-display .letter:nth-child(n) {
-    animation-delay: calc(0.5s * var(--animation-order));
+    animation-delay: calc(0.5s * (n));
 }
 
 @keyframes revealLetter {
@@ -145,59 +136,55 @@ select {
 
 /* Vowel Styling */
 .word-display .vowel {
-    color: #ff4d4d;
+    color: #ff4d4d; /* Red color for vowels */
+}
+
+/* Consonant Styling */
+.word-display .consonant {
+    color: #000; /* Black color for consonants */
+}
+
+/* Blends Styling */
+.word-display .blend {
+    color: #4d94ff; /* Blue color for blends */
 }
 
 /* Digraph Styling */
 .word-display .digraph {
-    color: #4d94ff;
+    color: #228B22; /* Green color for digraphs */
 }
 
 /* Spin Button Styling */
 #spinButton {
     padding: 30px 60px;
     font-size: 2.5em;
-    background-color: #ff5722;
+    background-color: #ff6f3c;
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+    transition: transform 0.3s ease;
 }
 
 #spinButton:hover {
-    background-color: #e64a19;
     transform: scale(1.1);
 }
 
 #spinButton:disabled {
     background-color: gray;
     cursor: not-allowed;
-    box-shadow: none;
-}
-
-/* Spinning Animation */
-.spinning {
-    animation: spin 1s ease-in-out;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 /* Blending Timer Styling */
 #blendingTimerContainer {
-    width: 90%;
-    max-width: 800px;
+    width: 80%;
+    max-width: 600px;
     background-color: #ddd;
     height: 20px;
     margin: 10px auto;
     border-radius: 10px;
     overflow: hidden;
-    display: none;
+    display: none; /* Initially hidden */
 }
 
 #blendingTimer {
@@ -218,8 +205,8 @@ select {
 
 /* Progress Bar Styling */
 #progressBar {
-    width: 90%;
-    max-width: 800px;
+    width: 80%;
+    max-width: 600px;
     height: 20px;
     background-color: lightgray;
     border-radius: 10px;
@@ -269,13 +256,13 @@ footer {
 }
 
 @media screen and (max-width: 600px) {
-    .word-display .letter {
-        font-size: 4em;
-    }
-
     #spinButton {
         padding: 15px 30px;
         font-size: 1.5em;
+    }
+
+    .word-display .letter {
+        font-size: 4em;
     }
 
     select,
@@ -283,8 +270,8 @@ footer {
     #blendingTimeDisplay,
     #toggleAudioButton,
     #fullscreenButton {
-        font-size: 0.9em;
         padding: 6px 10px;
+        font-size: 0.9em;
     }
 
     #complimentBox {
