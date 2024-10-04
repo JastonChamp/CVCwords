@@ -114,7 +114,7 @@
             }
         };
 
-     // =====================
+// =====================
 // Preload All Digraph Words
 // =====================
 const allDigraphWords = Object.values(wordGroups.digraphs).flat();
@@ -520,5 +520,3 @@ function preloadAudio() {
 
 // Preload audio on window load
 window.addEventListener('load', preloadAudio);
-
-   
