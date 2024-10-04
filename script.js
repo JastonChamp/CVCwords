@@ -171,11 +171,13 @@ const spinButton = document.getElementById('spinButton');
 const wordBox = document.getElementById('wordBox');
 const progressText = document.getElementById('progressText');
 const progressFill = document.getElementById('progressFill');
+const progressIcon = document.getElementById('progressIcon');
 const complimentBox = document.getElementById('complimentBox');
 const vowelSelector = document.getElementById('vowelSelector');
 const vowelSelection = document.getElementById('vowelSelection');
 const wordTypeSelector = document.getElementById('wordTypeSelector');
 const scoreText = document.getElementById('scoreText');
+const scoreIncrement = document.getElementById('scoreIncrement');
 const toggleAudioButton = document.getElementById('toggleAudioButton');
 const increaseBlendingTimeButton = document.getElementById('increaseBlendingTime');
 const decreaseBlendingTimeButton = document.getElementById('decreaseBlendingTime');
@@ -245,6 +247,15 @@ const isVowel = (letter) => 'aeiou'.includes(letter.toLowerCase());
 function updateScore() {
     score += 10; // Add points per word
     scoreText.textContent = `Score: ${score}`;
+
+    // Show score increment animation
+    scoreIncrement.textContent = '+10';
+    scoreIncrement.classList.add('show');
+
+    // Remove the animation after it's done
+    setTimeout(() => {
+        scoreIncrement.classList.remove('show');
+    }, 1000); // Duration matches the CSS transition
 }
 
 // Function to update progress indicators
@@ -255,6 +266,12 @@ function updateProgress() {
     const progressPercentage = totalWords > 0 ? (revealedWords / totalWords) * 100 : 0;
     progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
     progressFill.style.width = `${progressPercentage}%`;
+
+    // Animate the progress star
+    progressIcon.classList.add('star-animate');
+    setTimeout(() => {
+        progressIcon.classList.remove('star-animate');
+    }, 1000); // Duration matches the CSS animation duration
 }
 
 // Function to give a random compliment
@@ -399,11 +416,21 @@ function getRandomWord() {
 // Function to handle the Spin button click
 async function spin() {
     spinButton.disabled = true;
-    spinButton.classList.add('spinning');
+
+    // Animate button press effect is already handled by CSS
+
+    // Animate the icon
+    const originalButtonContent = spinButton.innerHTML;
+    spinButton.innerHTML = '<span class="spin-icon-animate">🎡</span>';
+
+    // Play click sound
     clickSound.play();
+
+    // Remove spinning animation after it's done
     setTimeout(() => {
-        spinButton.classList.remove('spinning');
-    }, 1000);
+        spinButton.innerHTML = '🎡 Spin';
+    }, 1000); // Duration matches the icon animation
+
     complimentBox.textContent = '';
     complimentBox.style.opacity = '0';
     const word = getRandomWord();
