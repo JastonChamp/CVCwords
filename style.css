@@ -49,7 +49,7 @@ body {
 #vowelSelection,
 #blendingControl {
     margin: 10px auto;
-    font-size: 1.5em;
+    font-size: 1.2em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -104,7 +104,7 @@ select {
 ===================== */
 .wheel {
     width: 90%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 20px auto;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -112,7 +112,7 @@ select {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    font-size: calc(16px + 4vmin);
+    font-size: 4em;
     border-radius: 15px;
     transition: transform 0.5s ease;
     position: relative;
@@ -121,7 +121,7 @@ select {
 }
 
 .wheel span {
-    margin: 0 5px;
+    margin: 0 10px;
     opacity: 0;
     transform: translateY(20px);
     animation: reveal 0.5s forwards;
@@ -166,7 +166,7 @@ select {
     background-color: #ff5722;
     color: white;
     padding: 0;
-    font-size: calc(30px + 2vmin);
+    font-size: 2em;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -176,12 +176,8 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20vmin;
-    height: 20vmin;
-    max-width: 150px;
-    max-height: 150px;
-    min-width: 80px;
-    min-height: 80px;
+    width: 150px;
+    height: 150px;
 }
 
 #spinButton:hover {
@@ -209,7 +205,7 @@ select {
    Compliment Styling
 ===================== */
 #complimentBox {
-    font-size: calc(24px + 2vmin);
+    font-size: 2em;
     color: green;
     margin-top: 20px;
     opacity: 0;
@@ -221,7 +217,7 @@ select {
 ===================== */
 #progressBar {
     width: 90%;
-    max-width: 800px;
+    max-width: 1000px;
     height: 30px;
     background-color: lightgray;
     border-radius: 15px;
@@ -281,7 +277,7 @@ select {
 ===================== */
 #blendingTimerContainer {
     width: 90%;
-    max-width: 800px;
+    max-width: 1000px;
     background-color: #ddd;
     height: 20px;
     margin: 20px auto;
@@ -297,40 +293,48 @@ select {
     transition: width linear;
 }
 
-/* Responsive Layout for Smaller Screens */
-@media screen and (max-width: 600px) {
+/* =====================
+   Responsive Adjustments
+===================== */
+@media screen and (max-width: 1200px) {
+    .wheel {
+        font-size: 3em;
+    }
+
     #spinButton {
-        width: 25vmin;
-        height: 25vmin;
-        max-width: 120px;
-        max-height: 120px;
-        min-width: 80px;
-        min-height: 80px;
-        font-size: calc(24px + 2vmin);
+        width: 120px;
+        height: 120px;
+        font-size: 1.8em;
     }
 
     #complimentBox {
-        font-size: calc(20px + 2vmin);
+        font-size: 1.8em;
     }
+}
 
-    #progressText {
-        font-size: 1.2em;
-    }
-
-    #progressBar {
-        height: 20px;
-    }
-
+@media screen and (max-width: 800px) {
     .wheel {
-        font-size: calc(20px + 4vmin);
+        font-size: 2.5em;
     }
 
-    /* Adjust form elements */
+    #spinButton {
+        width: 100px;
+        height: 100px;
+        font-size: 1.6em;
+    }
+
+    #complimentBox {
+        font-size: 1.6em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    /* Adjust layout for smaller screens */
     #wordTypeSelection,
     #vowelSelection,
     #blendingControl {
         flex-direction: column;
-        font-size: 1.2em;
+        font-size: 1em;
     }
 
     #wordTypeSelection label,
@@ -342,6 +346,20 @@ select {
     select,
     #blendingControl button,
     #blendingTimeDisplay {
-        font-size: 1em;
+        font-size: 0.9em;
+    }
+
+    .wheel {
+        font-size: 2em;
+    }
+
+    #spinButton {
+        width: 80px;
+        height: 80px;
+        font-size: 1.4em;
+    }
+
+    #complimentBox {
+        font-size: 1.4em;
     }
 }
