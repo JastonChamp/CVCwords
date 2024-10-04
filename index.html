@@ -56,10 +56,10 @@
             <!-- Settings Buttons -->
             <div class="settings-buttons">
                 <!-- Audio Toggle Button -->
-                <button id="toggleAudioButton" aria-label="Toggle letter sounds on or off">🔇 Disable Letter Sounds</button>
+                <button id="toggleAudioButton" aria-label="Toggle letter sounds on or off" title="Toggle letter sounds">🔊 Enable Letter Sounds</button>
 
                 <!-- Fullscreen Toggle Button -->
-                <button id="fullscreenButton" aria-label="Toggle fullscreen mode">⛶ Fullscreen</button>
+                <button id="fullscreenButton" aria-label="Toggle fullscreen mode" title="Enter or exit fullscreen">⛶ Fullscreen</button>
             </div>
         </div>
 
@@ -84,11 +84,14 @@
             <!-- Compliment Box -->
             <div id="complimentBox" aria-live="assertive"></div>
 
-            <!-- Progress Bar -->
-            <div id="progressBar">
-                <div id="progressFill"></div>
+            <!-- Progress Container -->
+            <div class="progress-container">
+                <div class="progress-icon">⭐</div>
+                <div id="progressBar">
+                    <div id="progressFill"></div>
+                </div>
+                <p id="progressText">0 / 0 Words Revealed</p>
             </div>
-            <p id="progressText">0 / 0 Words Revealed</p>
         </div>
 
         <!-- Footer Note -->
