@@ -1,14 +1,32 @@
 /* =====================
-   General Body Styling
+   General Body and Container Styling
 ===================== */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(270deg, #e3f7fc, #a1d3f0, #e3f7fc);
     background-size: 600% 600%;
     text-align: center;
-    margin: 0;
-    padding: 0;
     animation: gradientBG 10s infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Animated Gradient Background */
@@ -20,7 +38,7 @@ body {
 
 /* Score Text */
 #scoreText {
-    font-size: 32px;
+    font-size: 2em;
     margin-top: 20px;
 }
 
@@ -30,31 +48,33 @@ body {
 #wordTypeSelection,
 #vowelSelection,
 #blendingControl {
-    margin: 20px auto;
-    font-size: 24px;
+    margin: 10px auto;
+    font-size: 1.5em;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 #wordTypeSelection label,
 #vowelSelection label,
 #blendingControl label {
     margin-right: 10px;
-    font-size: 24px;
+    font-size: 1em;
 }
 
 select,
 #blendingControl button,
 #blendingTimeDisplay {
-    padding: 12px 16px;
-    font-size: 24px;
+    padding: 10px 14px;
+    font-size: 1em;
     border: 2px solid #2980b9;
     border-radius: 10px;
     outline: none;
     transition: border-color 0.3s;
     background-color: #ffeb99;
     cursor: pointer;
+    margin: 5px;
 }
 
 select:focus,
@@ -83,7 +103,7 @@ select {
    Styling for the Word Display Box (.wheel)
 ===================== */
 .wheel {
-    width: 80%;
+    width: 90%;
     max-width: 500px;
     margin: 20px auto;
     background-color: #ffffff;
@@ -92,7 +112,7 @@ select {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    font-size: 8vw;
+    font-size: calc(10px + 5vmin);
     border-radius: 15px;
     transition: transform 0.5s ease;
     position: relative;
@@ -145,8 +165,8 @@ select {
 #spinButton {
     background-color: #ff5722;
     color: white;
-    padding: 20px 40px;
-    font-size: 6vw;
+    padding: 20px;
+    font-size: calc(12px + 2vmin);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -154,9 +174,8 @@ select {
     transition: all 0.3s ease;
     margin: 20px auto;
     display: block;
-    max-width: 250px;
-    min-width: 100px;
-    min-height: 100px;
+    width: 100px;
+    height: 100px;
 }
 
 #spinButton:hover {
@@ -184,7 +203,7 @@ select {
    Compliment Styling
 ===================== */
 #complimentBox {
-    font-size: 36px;
+    font-size: 2em;
     color: green;
     margin-top: 20px;
     opacity: 0;
@@ -195,7 +214,7 @@ select {
    Progress Bar Styling
 ===================== */
 #progressBar {
-    width: 80%;
+    width: 90%;
     max-width: 400px;
     height: 30px;
     background-color: lightgray;
@@ -214,7 +233,7 @@ select {
 
 /* Progress Text */
 #progressText {
-    font-size: 24px;
+    font-size: 1.5em;
     margin-top: 10px;
 }
 
@@ -222,27 +241,30 @@ select {
    Audio Control Styling
 ===================== */
 #audioControl {
-    margin: 30px auto;
+    margin: 20px auto;
     text-align: center;
 }
 
-#toggleAudioButton {
+#toggleAudioButton,
+#fullscreenButton {
     background-color: #ff9800;
     color: white;
     padding: 12px 24px;
-    font-size: 24px;
+    font-size: 1em;
     border: none;
     border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin: 10px;
 }
 
-#toggleAudioButton:hover {
+#toggleAudioButton:hover,
+#fullscreenButton:hover {
     background-color: #f57c00;
 }
 
 .note {
-    font-size: 18px;
+    font-size: 1em;
     color: #555;
     margin-top: 10px;
     font-style: italic;
@@ -252,7 +274,7 @@ select {
    Blending Timer Styling
 ===================== */
 #blendingTimerContainer {
-    width: 80%;
+    width: 90%;
     max-width: 400px;
     background-color: #ddd;
     height: 20px;
@@ -269,22 +291,21 @@ select {
     transition: width linear;
 }
 
-/* Responsive Layout for Mobile Devices */
+/* Responsive Layout for Smaller Screens */
 @media screen and (max-width: 600px) {
     #spinButton {
-        padding: 15px 30px;
-        font-size: 18px;
-        max-width: 150px;
-        min-width: 80px;
-        min-height: 80px;
+        width: 80px;
+        height: 80px;
+        padding: 15px;
+        font-size: 1.5em;
     }
 
     #complimentBox {
-        font-size: 28px;
+        font-size: 1.5em;
     }
 
     #progressText {
-        font-size: 18px;
+        font-size: 1.2em;
     }
 
     #progressBar {
@@ -292,19 +313,26 @@ select {
     }
 
     .wheel {
-        font-size: 10vw;
-        max-width: 90%;
+        font-size: calc(10px + 8vmin);
     }
 
-    .wheel span.digraph {
-        letter-spacing: 1px;
+    /* Adjust form elements */
+    #wordTypeSelection,
+    #vowelSelection,
+    #blendingControl {
+        flex-direction: column;
+        font-size: 1.2em;
     }
 
-    /* Blending Delay Control Responsive Styling */
-    #blendingControl button,
-    #blendingTimeDisplay,
+    #wordTypeSelection label,
+    #vowelSelection label,
     #blendingControl label {
-        font-size: 18px;
-        padding: 8px 12px;
+        margin-bottom: 5px;
+    }
+
+    select,
+    #blendingControl button,
+    #blendingTimeDisplay {
+        font-size: 1em;
     }
 }
