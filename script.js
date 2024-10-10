@@ -50,13 +50,13 @@ const wordGroups = {
             'plot', 'prod', 'prop', 'slot', 'smog', 'snob', 'spot', 'stop', 'swop', 'trod'
         ],
         u: [
-            'drum', 'grub', 'plug', 'slug', 'slum', 'spun', 'stub', 'stud', 'stun', 'truck'
+            'drum', 'grub', 'plug', 'slug', 'slum', 'spun', 'stub', 'stud', 'stun',
         ]
     },
     cvcc: {
         a: [
             'band', 'bank', 'damp', 'fang', 'hand', 'hang', 'land', 'lamp', 'ramp', 'sand',
-            'pant', 'tank', 'mast', 'camp'
+            'pant', 'tank', 'camp'
         ],
         e: [
             'bent', 'dent', 'felt', 'fend', 'help', 'kept', 'lend', 'mend', 'nest', 'rest',
@@ -70,7 +70,7 @@ const wordGroups = {
         ],
         o: [
             'bond', 'colt', 'comb', 'fond', 'gong', 'cost', 'lost', 'loft', 'soft', 'post',
-            'moth', 'moss', 'boss', 'toss', 'pond'
+            'moth', 'pond'
         ],
         u: [
             'bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk', 'hunt',
@@ -80,12 +80,12 @@ const wordGroups = {
     },
     ccvcc: {
         a: [
-            'brand', 'blank', 'clamp', 'cramp', 'crank', 'draft', 'drank', 'flank', 'frank', 'plank',
-            'prank', 'stamp', 'stand', 'strand', 'track', 'tract', 'clasp', 'grasp', 'scrap', 'graft',
-            'stack', 'slant', 'stalk', 'swamp', 'swank', 'thrash', 'thatch', 'snatch', 'scratch'
+            'brand', 'blank', 'clamp', 'cramp', 'crank', 'drank', 'flank', 'frank', 'plank',
+            'prank', 'stamp', 'stand', 'strand', 'track', 'tract', 'clasp', 'scrap', 
+         'slant', 'swank', 'thrash', 'thatch', 'snatch', 'scratch'
         ],
         e: [
-            'blend', 'blent', 'strep', 'trend', 'swept', 'wrest', 'stent'
+            'blend', 'blent', 'strep', 'trend', 'swept', 'stent'
         ],
         i: [
             'blink', 'brink', 'clink', 'clint', 'crimp', 'crisp', 'drink', 'drift', 'print', 'sprint',
@@ -94,7 +94,7 @@ const wordGroups = {
         ],
         o: [
             'frost', 'stomp', 'strong', 'throb', 'throng', 'swamp', 'swath', 'prong', 'prompt',
-            'whomp', 'clomp', 'chomp', 'clonk'
+             'clomp', 'chomp', 'clonk'
         ],
         u: [
             'blunt', 'brunt', 'clump', 'clunk', 'crust', 'drunk', 'flung', 'frump', 'grunt', 'plump',
@@ -108,19 +108,19 @@ const wordGroups = {
             'dash', 'stash', 'trash', 'patch', 'catch', 'match', 'batch', 'rash', 'sash'
         ],
         e: [
-            'shed', 'them', 'then', 'fetch', 'bench', 'retch', 'ketch', 'peck',
-            'tech', 'stretch', 'sketch', 'drench', 'flesh', 'fresh'
+            'shed', 'them', 'then', 'fetch', 'bench', 'retch', 'ketch', 
+         'stretch', 'sketch', 'drench', 'flesh', 'fresh'
         ],
         i: [
             'chip', 'chin', 'thin', 'thing', 'king', 'ring', 'sing', 'wing', 'sting', 'bring',
-            'cling', 'string', 'swing', 'swim', 'ditch', 'pitch', 'which', 'switch', 'twitch', 'drift'
+            'cling', 'string', 'swing', 'swim', 'ditch', 'pitch', 'switch', 'twitch', 'drift'
         ],
         o: [
-            'shop', 'shot', 'chop', 'stop', 'slot', 'shock', 'block', 'clock', 'frog', 'clog',
-            'snog', 'smog', 'strong', 'throb', 'cloth', 'crotch', 'notch', 'botch'
+            'shop', 'shot', 'chop', 'stop', 'slot', 
+         'strong', 'throb', 'cloth', 'crotch', 'notch', 'botch'
         ],
         u: [
-            'shut', 'thud', 'chug', 'chunk', 'shuck', 'thump', 'shrug', 'brush', 'crush',
+            'shut', 'thud', 'chug', 'chunk', 'thump', 'shrug', 'brush', 'crush',
             'blush', 'flush', 'crutch', 'clutch'
         ]
     }
