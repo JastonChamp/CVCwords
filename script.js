@@ -113,10 +113,10 @@ const wordGroups = {
         ],
         i: [
             'chip', 'chin', 'thin', 'thing', 'king', 'ring', 'sing', 'wing', 'sting', 'bring',
-            'cling', 'string', 'swing', 'swim', 'ditch', 'pitch', 'switch', 'twitch', 'drift'
+            'cling', 'string', 'swing', 'swim', 'ditch', 'pitch', 'switch', 'twitch'
         ],
         o: [
-            'shop', 'shot', 'chop', 'stop', 'slot', 
+            'shop', 'shot', 'chop',  'slot', 
          'strong', 'throb', 'cloth', 'crotch', 'notch', 'botch'
         ],
         u: [
