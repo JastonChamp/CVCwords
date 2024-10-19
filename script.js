@@ -93,7 +93,7 @@ const wordGroups = {
             'shrimp', 'splint', 'swift', 'whisk', 'squish'
         ],
         o: [
-            'frost', 'stomp', 'strong', 'throb', 'throng', 'swamp', 'swath', 'prong', 'prompt',
+            'frost', 'stomp', 'strong', 'throb', 'throng', 'swamp', 'prong', 'prompt',
              'clomp', 'chomp', 'clonk'
         ],
         u: [
@@ -113,10 +113,10 @@ const wordGroups = {
         ],
         i: [
             'chip', 'chin', 'thin', 'thing', 'king', 'ring', 'sing', 'wing', 'sting', 'bring',
-            'cling', 'string', 'swing', 'swim', 'ditch', 'pitch', 'switch', 'twitch'
+            'cling', 'string', 'swing', 'ditch', 'pitch', 'switch', 'twitch'
         ],
         o: [
-            'shop', 'shot', 'chop',  'slot', 
+            'shop', 'shot', 'chop',  
          'strong', 'throb', 'cloth', 'crotch', 'notch', 'botch'
         ],
         u: [
