@@ -55,7 +55,7 @@ const wordGroups = {
     },
     cvcc: {
         a: [
-            'band', 'bank', 'damp', 'fang', 'hand', 'hang', 'land', 'lamp', 'ramp', 'sand',
+            'band', 'bank', 'damp', 'hand', 'land', 'lamp', 'ramp', 'sand',
             'pant', 'tank', 'camp'
         ],
         e: [
@@ -69,28 +69,28 @@ const wordGroups = {
             'rink', 'tint', 'tilt', 'skimp', 'wilt'
         ],
         o: [
-            'bond', 'colt', 'comb', 'fond', 'gong', 'cost', 'lost', 'loft', 'soft', 'post',
-            'moth', 'pond'
+            'bond', 'colt', 'comb', 'fond',  'cost', 'lost', 'loft', 'soft', 'post',
+             'pond'
         ],
         u: [
             'bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk', 'hunt',
             'junk', 'just', 'lump', 'must', 'pump', 'rust', 'runt', 'sunk', 'tuft',
-            'hush', 'lush', 'mush', 'tusk', 'husk', 'dust', 'cusp', 'dusk'
+             'tusk', 'husk', 'dust', 'dusk'
         ]
     },
     ccvcc: {
         a: [
             'brand', 'blank', 'clamp', 'cramp', 'crank', 'drank', 'flank', 'frank', 'plank',
-            'prank', 'stamp', 'stand', 'strand', 'track', 'tract', 'clasp', 'scrap', 
-         'slant', 'swank', 'thrash', 'thatch', 'snatch', 'scratch'
+            'prank', 'stamp', 'stand', 'strand', 'tract',  'scrap', 
+          'swank'
         ],
         e: [
             'blend', 'blent', 'strep', 'trend', 'swept', 'stent'
         ],
         i: [
-            'blink', 'brink', 'clink', 'clint', 'crimp', 'crisp', 'drink', 'drift', 'print', 'sprint',
-            'strip', 'strict', 'shrink', 'script', 'squint', 'twist', 'flint',
-            'shrimp', 'splint', 'swift', 'whisk', 'squish'
+            'blink', 'brink', 'clink', 'clint', 'crimp', 'drink', 'drift', 'print', 'sprint',
+            'strip', 'strict', 'shrink', 'script', 'twist', 'flint',
+            'shrimp', 'splint', 'swift'
         ],
         o: [
             'frost', 'stomp', 'strong', 'throb', 'throng', 'swamp', 'prong', 'prompt',
