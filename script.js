@@ -193,6 +193,8 @@ const compliments = [
 // Speech Synthesis Configuration
 // =====================
 let selectedVoice = null;
+let speechSynthesisAvailable = true; // Flag to check if speech synthesis is available
+let speechSynthesisAlertShown = false; // Flag to prevent multiple alerts
 
 function setVoice() {
     if ('speechSynthesis' in window) {
@@ -205,6 +207,11 @@ function setVoice() {
                     voices[0];
             } else {
                 console.warn('No speech synthesis voices available.');
+                speechSynthesisAvailable = false;
+                if (!speechSynthesisAlertShown) {
+                    alert('Speech synthesis voices are not available. Word pronunciation will be disabled.');
+                    speechSynthesisAlertShown = true;
+                }
             }
         }
         loadVoices();
@@ -214,6 +221,11 @@ function setVoice() {
         }
     } else {
         console.warn('Speech Synthesis API is not supported on this browser.');
+        speechSynthesisAvailable = false;
+        if (!speechSynthesisAlertShown) {
+            alert('Your browser does not support speech synthesis. Word pronunciation will be disabled.');
+            speechSynthesisAlertShown = true;
+        }
     }
 }
 
