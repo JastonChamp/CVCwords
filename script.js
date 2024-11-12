@@ -220,17 +220,21 @@ function setVoice() {
 // Function to speak text
 function speak(text) {
     return new Promise((resolve) => {
-        if (selectedVoice) {
+        if ('speechSynthesis' in window && selectedVoice) {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.voice = selectedVoice;
             utterance.rate = 0.8;
             utterance.pitch = 1.1;
             utterance.volume = 0.9;
             utterance.onend = resolve;
+            utterance.onerror = (event) => {
+                console.error('Speech synthesis error:', event.error);
+                resolve(); // Resolve the promise to prevent freezing
+            };
             speechSynthesis.speak(utterance);
         } else {
             console.warn(`Speech synthesis not available. Text: ${text}`);
-            resolve();
+            resolve(); // Resolve the promise to prevent freezing
         }
     });
 }
@@ -363,7 +367,13 @@ async function revealWord(word, isRepeat = false) {
     await new Promise(resolve => setTimeout(resolve, blendingTime));
 
     // Pronounce the whole word
-    await speak(word);
+    try {
+        await speak(word);
+    } catch (error) {
+        console.error('Error during speech synthesis:', error);
+        // Optionally, display a message to the user
+        // alert('Speech synthesis is not available on your browser.');
+    }
 
     if (!isRepeat) {
         giveCompliment();
