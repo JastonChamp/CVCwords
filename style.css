@@ -224,6 +224,15 @@ select {
     color: #006400; /* Darker green for better contrast */
 }
 
+/* Action Buttons Styling */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
 /* Spin Button Styling */
 #spinButton {
     padding: 30px 60px;
@@ -234,7 +243,6 @@ select {
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out, box-shadow 0.2s;
-    margin-top: 20px;
 }
 
 #spinButton:hover {
@@ -261,6 +269,31 @@ select {
 .spin-icon-animate {
     display: inline-block;
     animation: spinIcon 1s linear;
+}
+
+/* Repeat Button Styling */
+#repeatButton {
+    padding: 20px 40px;
+    font-size: 1.5em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+#repeatButton:hover {
+    transform: scale(1.05);
+}
+
+#repeatButton:active {
+    transform: scale(1);
+}
+
+#repeatButton:disabled {
+    background-color: gray;
+    cursor: not-allowed;
 }
 
 /* Blending Timer Styling */
@@ -369,12 +402,23 @@ footer {
         padding: 20px 40px;
         font-size: 2em;
     }
+
+    /* Adjust repeat button on smaller screens */
+    #repeatButton {
+        padding: 15px 30px;
+        font-size: 1.2em;
+    }
 }
 
 @media screen and (max-width: 600px) {
     #spinButton {
         padding: 15px 30px;
         font-size: 1.5em;
+    }
+
+    #repeatButton {
+        padding: 12px 24px;
+        font-size: 1em;
     }
 
     .word-display .letter {
