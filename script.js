@@ -69,20 +69,20 @@ const wordGroups = {
             'rink', 'tint', 'tilt', 'skimp', 'wilt'
         ],
         o: [
-            'bond', 'colt', 'comb', 'fond',  'cost', 'lost', 'loft', 'soft', 'post',
-             'pond'
+            'bond', 'colt', 'comb', 'fond', 'cost', 'lost', 'loft', 'soft', 'post',
+            'pond'
         ],
         u: [
             'bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk', 'hunt',
             'junk', 'just', 'lump', 'must', 'pump', 'rust', 'runt', 'sunk', 'tuft',
-             'tusk', 'husk', 'dust', 'dusk'
+            'tusk', 'husk', 'dust', 'dusk'
         ]
     },
     ccvcc: {
         a: [
             'brand', 'blank', 'clamp', 'cramp', 'crank', 'drank', 'flank', 'frank', 'plank',
-            'prank', 'stamp', 'stand', 'strand', 'tract',  'scrap', 
-          'swank'
+            'prank', 'stamp', 'stand', 'strand', 'tract', 'scrap',
+            'swank'
         ],
         e: [
             'blend', 'blent', 'strep', 'trend', 'swept', 'stent'
@@ -94,7 +94,7 @@ const wordGroups = {
         ],
         o: [
             'frost', 'stomp', 'strong', 'throb', 'throng', 'swamp', 'prong', 'prompt',
-             'clomp', 'chomp', 'clonk'
+            'clomp', 'chomp', 'clonk'
         ],
         u: [
             'blunt', 'brunt', 'clump', 'clunk', 'crust', 'drunk', 'flung', 'frump', 'grunt', 'plump',
@@ -108,16 +108,16 @@ const wordGroups = {
             'dash', 'stash', 'trash', 'patch', 'catch', 'match', 'batch', 'rash', 'sash'
         ],
         e: [
-            'shed', 'them', 'then', 'fetch', 'bench', 'retch', 'ketch', 
-         'stretch', 'sketch', 'drench', 'flesh', 'fresh'
+            'shed', 'them', 'then', 'fetch', 'bench', 'retch', 'ketch',
+            'stretch', 'sketch', 'drench', 'flesh', 'fresh'
         ],
         i: [
             'chip', 'chin', 'thin', 'thing', 'king', 'ring', 'sing', 'wing', 'sting', 'bring',
             'cling', 'string', 'swing', 'ditch', 'pitch', 'switch', 'twitch'
         ],
         o: [
-            'shop', 'shot', 'chop',  
-         'strong', 'throb', 'cloth', 'crotch', 'notch', 'botch'
+            'shop', 'shot', 'chop',
+            'strong', 'throb', 'cloth', 'crotch', 'notch', 'botch'
         ],
         u: [
             'shut', 'thud', 'chug', 'chunk', 'thump', 'shrug', 'brush', 'crush',
@@ -157,11 +157,13 @@ let score = 0;
 let letterSoundsEnabled = true; // Letter sounds enabled by default
 let blendingTime = 3000; // Default to 3000ms
 let totalWords = 0; // Total words initialized
+let currentWord = ''; // Store the current word for repeat functionality
 
 // =====================
 // DOM Elements
 // =====================
 const spinButton = document.getElementById('spinButton');
+const repeatButton = document.getElementById('repeatButton');
 const wordBox = document.getElementById('wordBox');
 const progressText = document.getElementById('progressText');
 const progressFill = document.getElementById('progressFill');
@@ -205,8 +207,11 @@ function setVoice() {
                 console.warn('No speech synthesis voices available.');
             }
         }
-        speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
     } else {
         console.warn('Speech Synthesis API is not supported on this browser.');
     }
@@ -326,7 +331,7 @@ function parseWord(word) {
 // =====================
 
 // Function to reveal the word with animations and audio
-async function revealWord(word) {
+async function revealWord(word, isRepeat = false) {
     wordBox.innerHTML = '';
     const units = parseWord(word);
 
@@ -359,9 +364,12 @@ async function revealWord(word) {
 
     // Pronounce the whole word
     await speak(word);
-    giveCompliment();
-    updateScore();
-    updateProgress();
+
+    if (!isRepeat) {
+        giveCompliment();
+        updateScore();
+        updateProgress();
+    }
 }
 
 // Function to get available words based on selected word type and vowel
@@ -400,11 +408,7 @@ function getRandomWord() {
 // Function to handle the Spin button click
 async function spin() {
     spinButton.disabled = true;
-
-    // Animate button press effect is already handled by CSS
-
-    // Animate the icon
-    const originalButtonContent = spinButton.innerHTML;
+    repeatButton.disabled = true; // Disable repeat button during spin
     spinButton.innerHTML = '<span class="spin-icon-animate">🎡</span>';
 
     // Play click sound
@@ -418,12 +422,31 @@ async function spin() {
     complimentBox.textContent = '';
     complimentBox.style.opacity = '0';
     const word = getRandomWord();
+    currentWord = word; // Store the current word
+
     try {
         await revealWord(word);
     } catch (error) {
         console.error('Error during word reveal:', error);
     } finally {
         spinButton.disabled = false;
+        repeatButton.disabled = false; // Enable repeat button after spin
+    }
+}
+
+// Function to handle the Repeat button click
+async function repeat() {
+    if (currentWord) {
+        repeatButton.disabled = true; // Prevent multiple clicks
+        try {
+            await revealWord(currentWord, true);
+        } catch (error) {
+            console.error('Error during word repeat:', error);
+        } finally {
+            repeatButton.disabled = false;
+        }
+    } else {
+        alert('No word to repeat. Please spin first.');
     }
 }
 
@@ -445,6 +468,9 @@ function resetGame(resetTotalWords = true) {
     revealedWords = 0;
     score = 0;
     scoreText.textContent = `Score: ${score}`;
+    currentWord = ''; // Reset current word
+    repeatButton.disabled = true; // Disable repeat button
+
     if (resetTotalWords) {
         totalWords = getAvailableWords().length;
     }
@@ -527,8 +553,9 @@ document.addEventListener('fullscreenchange', () => {
 // Initialization
 // =====================
 
-// Add event listener to the Spin button
+// Add event listeners to buttons
 spinButton.addEventListener('click', spin);
+repeatButton.addEventListener('click', repeat);
 
 // Initialize speech synthesis voice
 setVoice();
