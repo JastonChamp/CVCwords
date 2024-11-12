@@ -197,36 +197,60 @@ let speechSynthesisAvailable = true; // Flag to check if speech synthesis is ava
 let speechSynthesisAlertShown = false; // Flag to prevent multiple alerts
 
 function setVoice() {
-    if ('speechSynthesis' in window) {
-        function loadVoices() {
-            const voices = speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                selectedVoice =
-                    voices.find(voice => voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female')) ||
-                    voices.find(voice => voice.lang.startsWith('en')) ||
-                    voices[0];
-            } else {
-                console.warn('No speech synthesis voices available.');
-                speechSynthesisAvailable = false;
-                if (!speechSynthesisAlertShown) {
-                    alert('Speech synthesis voices are not available. Word pronunciation will be disabled.');
-                    speechSynthesisAlertShown = true;
+    return new Promise((resolve) => {
+        if ('speechSynthesis' in window) {
+            function loadVoices() {
+                const voices = speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    selectedVoice =
+                        voices.find(voice => voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female')) ||
+                        voices.find(voice => voice.lang.startsWith('en')) ||
+                        voices[0];
+                    resolve();
+                } else {
+                    console.warn('No speech synthesis voices available.');
+                    speechSynthesisAvailable = false;
+                    if (!speechSynthesisAlertShown) {
+                        alert('Speech synthesis voices are not available. Word pronunciation will be disabled.');
+                        speechSynthesisAlertShown = true;
+                    }
+                    selectedVoice = null;
+                    resolve();
                 }
             }
-        }
-        loadVoices();
 
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = loadVoices;
+            if (speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.onvoiceschanged = () => {
+                    loadVoices();
+                    speechSynthesis.onvoiceschanged = null; // Remove the event listener after loading voices
+                };
+                // In case voices don't load after a certain time, resolve the Promise
+                setTimeout(() => {
+                    if (!selectedVoice) {
+                        console.warn('Voices did not load in time.');
+                        speechSynthesisAvailable = false;
+                        if (!speechSynthesisAlertShown) {
+                            alert('Speech synthesis voices are not available. Word pronunciation will be disabled.');
+                            speechSynthesisAlertShown = true;
+                        }
+                        selectedVoice = null;
+                        resolve();
+                    }
+                }, 2000); // 2-second timeout
+            } else {
+                loadVoices();
+            }
+        } else {
+            console.warn('Speech Synthesis API is not supported on this browser.');
+            speechSynthesisAvailable = false;
+            if (!speechSynthesisAlertShown) {
+                alert('Your browser does not support speech synthesis. Word pronunciation will be disabled.');
+                speechSynthesisAlertShown = true;
+            }
+            selectedVoice = null;
+            resolve();
         }
-    } else {
-        console.warn('Speech Synthesis API is not supported on this browser.');
-        speechSynthesisAvailable = false;
-        if (!speechSynthesisAlertShown) {
-            alert('Your browser does not support speech synthesis. Word pronunciation will be disabled.');
-            speechSynthesisAlertShown = true;
-        }
-    }
+    });
 }
 
 // Function to speak text
@@ -238,14 +262,28 @@ function speak(text) {
             utterance.rate = 0.8;
             utterance.pitch = 1.1;
             utterance.volume = 0.9;
-            utterance.onend = resolve;
+
+            // Timeout to prevent hanging
+            const timeoutId = setTimeout(() => {
+                console.warn('Speech synthesis timeout');
+                speechSynthesis.cancel();
+                resolve();
+            }, 5000); // 5-second timeout
+
+            utterance.onend = () => {
+                clearTimeout(timeoutId);
+                resolve();
+            };
+
             utterance.onerror = (event) => {
                 console.error('Speech synthesis error:', event.error);
-                resolve(); // Resolve the promise to prevent freezing
+                clearTimeout(timeoutId);
+                resolve();
             };
+
             speechSynthesis.speak(utterance);
         } else {
-            console.warn(`Speech synthesis not available. Text: ${text}`);
+            console.warn(`Speech synthesis not available or voice not selected. Text: ${text}`);
             resolve(); // Resolve the promise to prevent freezing
         }
     });
@@ -447,6 +485,7 @@ async function spin() {
     currentWord = word; // Store the current word
 
     try {
+        await setVoice(); // Ensure that the voice is set before revealing the word
         await revealWord(word);
     } catch (error) {
         console.error('Error during word reveal:', error);
@@ -461,6 +500,7 @@ async function repeat() {
     if (currentWord) {
         repeatButton.disabled = true; // Prevent multiple clicks
         try {
+            await setVoice(); // Ensure that the voice is set
             await revealWord(currentWord, true);
         } catch (error) {
             console.error('Error during word repeat:', error);
@@ -580,10 +620,11 @@ spinButton.addEventListener('click', spin);
 repeatButton.addEventListener('click', repeat);
 
 // Initialize speech synthesis voice
-setVoice();
-
-// Update totalWords and progress on initial load
-resetGame(true);
+// Ensure that setVoice is awaited during initialization
+setVoice().then(() => {
+    // Update totalWords and progress on initial load
+    resetGame(true);
+});
 
 // Preload all audio files
 function preloadAudio() {
