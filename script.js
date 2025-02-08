@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
       u: ['shut', 'thud', 'chug', 'chunk', 'thump', 'shrug', 'brush', 'crush', 'blush', 'flush', 'crutch', 'clutch']
     },
     extended: {
-      a: ['fantastic', 'smashing', 'crashing', 'dancing', 'stamping', 'clapping'],
+      a: ['fantastic', 'smashing', 'crashing', 'stamping', 'clapping'],
       e: ['wrecking'],
       i: ['blinking', 'drinking', 'tripping', 'flipping', 'snipping'],
       o: ['blocking', 'rocking'],
