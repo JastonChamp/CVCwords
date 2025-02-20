@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cvcc: {
       a: ['band', 'bank', 'damp', 'hand', 'land', 'lamp', 'ramp', 'sand', 'pant', 'tank', 'camp'],
       e: ['bent', 'dent', 'felt', 'fend', 'help', 'kept', 'lend', 'mend', 'nest', 'rest', 'sent', 'tent', 'vest', 'vent', 'wept', 'weld', 'text', 'next', 'heft', 'jest', 'best', 'pest', 'test', 'west', 'zest', 'desk', 'self', 'meld', 'held', 'belt'],
-      i: ['dink', 'find', 'film', 'gild', 'gimp', 'hind', 'hilt', 'hint', 'jilt', 'mint', 'milk', 'silk', 'fist', 'list', 'risk', 'sink', 'link', 'pink', 'kink', 'rink', 'tint', 'tilt', 'skimp', 'wilt'],
+      i: ['dink', 'film', 'gild', 'gimp', 'hilt', 'hint', 'jilt', 'mint', 'milk', 'silk', 'fist', 'list', 'risk', 'sink', 'link', 'pink', 'kink', 'rink', 'tint', 'tilt', 'skimp', 'wilt'],
       o: ['bond', 'colt', 'comb', 'fond', 'cost', 'lost', 'loft', 'soft', 'post', 'pond'],
       u: ['bunk', 'bump', 'bust', 'dump', 'dunk', 'fund', 'funk', 'gust', 'gunk', 'hunt', 'junk', 'just', 'lump', 'must', 'pump', 'rust', 'runt', 'sunk', 'tuft', 'tusk', 'husk', 'dust', 'dusk']
     },
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
       a: ['brand', 'blank', 'clamp', 'cramp', 'crank', 'drank', 'flank', 'frank', 'plank', 'prank', 'stamp', 'stand', 'strand', 'tract', 'scrap', 'swank'],
       e: ['blend', 'blent', 'strep', 'trend', 'swept', 'stent'],
       i: ['blink', 'brink', 'clink', 'clint', 'crimp', 'drink', 'drift', 'print', 'sprint', 'strip', 'strict', 'shrink', 'script', 'twist', 'flint', 'shrimp', 'splint', 'swift'],
-      o: ['frost', 'stomp', 'strong', 'throb', 'throng', 'swamp', 'prong', 'prompt', 'clomp', 'chomp', 'clonk'],
+      o: ['frost', 'stomp', 'strong', 'throb', 'throng', 'prong', 'prompt', 'clomp', 'chomp', 'clonk'],
       u: ['blunt', 'brunt', 'clump', 'clunk', 'crust', 'drunk', 'flung', 'frump', 'grunt', 'plump', 'plunk', 'skunk', 'stump', 'strut', 'trunk', 'trust', 'strum', 'stunt', 'skulk', 'spunk', 'slump']
     },
     digraphs: {
