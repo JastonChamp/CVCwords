@@ -1,379 +1,667 @@
-/* ------------------------------
-   General Styles & Background
-------------------------------- */
+/* General Styles */
 html, body {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
   height: 100%;
-  font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
-  background: linear-gradient(270deg, #e3f7fc, #a1d3f0, #e3f7fc);
-  background-size: 600% 600%;
-  animation: gradientBG 10s infinite;
+  font-family: 'Fredoka', sans-serif; /* Default font */
+  background: linear-gradient(135deg, #f6d365, #fda085);
   text-align: center;
+  color: #2d3436;
+  overflow-x: hidden;
+  overflow-y: auto; /* Allow vertical scrolling if needed */
 }
 
+body[data-font="comic"] {
+  font-family: 'Comic Neue', sans-serif;
+}
+
+body[data-theme="space"] {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: #e4e4e4;
+}
+
+body[data-theme="forest"] {
+  background: linear-gradient(135deg, #a8e063, #56ab2f);
+  color: #2d3436;
+}
+
+/* App Wrapper */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: inherit; /* Match body background to prevent artifacts */
+}
+
+/* Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Header */
 header {
-  padding: 20px;
-  background-color: #ffeb99;
-  border-bottom: 3px solid #f39c12;
+  background: #ffd32a;
+  padding: 1.5rem;
+  border-bottom: 4px solid #ff9f43;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
-header h1 {
-  font-size: 3em;
+body[data-theme="space"] header {
+  background: #0f3460;
+  border-bottom: 4px solid #e94560;
+}
+
+body[data-theme="forest"] header {
+  background: #78c850;
+  border-bottom: 4px solid #2f9e44;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 3rem;
   margin: 0;
-  color: #333;
+  font-weight: 700;
+  color: #2d3436;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="space"] h1 {
+  color: #e4e4e4;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="forest"] h1 {
+  color: #2d3436;
 }
 
 header p {
-  font-size: 1.2em;
-  margin-top: 5px;
-  color: #555;
+  font-size: 1.2rem;
+  margin: 0.5rem 0 0;
+  color: #636e72;
 }
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ------------------------------
-   Container & Core Controls
-------------------------------- */
+/* Container */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem 1rem 0; /* Reduced bottom padding to prevent extra space */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center content vertically */
 }
 
+/* Core Controls */
 .core-controls {
-  margin-top: 20px;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 1rem; /* Ensure no extra space at bottom */
+  box-sizing: border-box; /* Include padding in width/height calculations */
 }
 
 .score-section {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 }
 
 #scoreText {
-  font-size: 2em;
+  font-size: 2rem;
   margin: 0;
+  background: #dfe6e9;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="space"] #scoreText {
+  background: #2d4373;
+  color: #e4e4e4;
+}
+
+body[data-theme="forest"] #scoreText {
+  background: #c3e6cb;
 }
 
 .score-increment {
   position: absolute;
-  top: -30px;
+  top: -3rem;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 2.5em;
-  color: green;
+  font-size: 2.5rem;
+  color: #ff6b6b;
   opacity: 0;
-  transition: opacity 0.5s, top 1s;
+  transition: opacity 0.5s ease, top 0.8s ease;
+  font-weight: 700;
 }
 
 .score-increment.show {
   opacity: 1;
-  top: -60px;
+  top: -5rem;
 }
 
 .game-area {
-  margin-top: 20px;
+  margin: 2rem 0;
+  width: 100%;
+  max-width: 900px;
 }
 
 .word-display-container {
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border-radius: 15px;
-  margin: 0 auto 20px;
-  padding: 10px 0;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
   width: 90%;
-  max-width: 800px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  border: 3px solid #74b9ff;
+}
+
+body[data-theme="space"] .word-display-container {
+  background: #16213e;
+  border: 3px solid #e94560;
+}
+
+body[data-theme="forest"] .word-display-container {
+  background: #f1f8e9;
+  border: 3px solid #2f9e44;
 }
 
 .word-display {
   display: flex;
-  gap: 0.2em;
   justify-content: center;
-  align-items: center;
-  padding: 10px;
+  gap: 0.5rem;
+  padding: 1rem;
 }
 
 .word-display .letter {
-  font-size: 7em;
-  color: #000;
+  font-size: 6rem;
+  font-weight: 700;
   opacity: 0;
-  transform: translateY(20px);
-  animation: revealLetter 0.5s forwards;
+  transform: scale(0.8);
+  animation: popLetter 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
-@keyframes revealLetter {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes popLetter {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-.word-display .vowel {
-  color: #cc0000;
-}
+.word-display.small .letter { font-size: 4rem; }
+.word-display.medium .letter { font-size: 6rem; }
+.word-display.large .letter { font-size: 8rem; }
 
-.word-display .digraph {
-  color: #006400;
-}
+.word-display .vowel { color: #ff7675; }
+.word-display .digraph { color: #00b894; }
 
 .action-buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-#spinButton, #repeatButton {
-  padding: 20px 30px;
-  font-size: 2em;
+button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   border: none;
-  border-radius: 15px;
+  border-radius: 1rem;
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:focus {
+  outline: 3px solid #0984e3;
+  outline-offset: 3px;
 }
 
 #spinButton {
-  background-color: #ff6f3c;
+  background: #ff9f43;
   color: #fff;
-  border-radius: 50%;
 }
 
 #spinButton:hover {
-  transform: scale(1.1);
+  background: #ff793f;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(255, 159, 67, 0.4);
 }
 
-#spinButton:active {
-  transform: scale(1.05);
-  background-color: #ff5c1c;
-}
-
+#spinButton:active { transform: translateY(1px); }
 #spinButton:disabled {
-  background-color: gray;
+  background: #b2bec3;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 #repeatButton {
-  background-color: #4CAF50;
+  background: #6c757d;
   color: #fff;
-  border-radius: 10px;
 }
 
 #repeatButton:hover {
-  transform: scale(1.05);
+  background: #5a6268;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
 }
 
+#repeatButton:active { transform: translateY(1px); }
 #repeatButton:disabled {
-  background-color: gray;
+  background: #b2bec3;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* Progress Container (overall progress) */
+.button-icon {
+  font-size: 1.8rem;
+}
+
+body[data-theme="space"] #spinButton {
+  background: #e94560;
+}
+
+body[data-theme="space"] #spinButton:hover {
+  background: #d43f52;
+}
+
+body[data-theme="space"] #repeatButton {
+  background: #4a90e2;
+}
+
+body[data-theme="space"] #repeatButton:hover {
+  background: #357abd;
+}
+
+/* Progress */
 .progress-container {
-  margin-top: 20px;
+  margin: 2rem 0;
+  position: relative;
+  width: 100%;
+  max-width: 900px;
 }
 
 .progress-icon {
-  font-size: 2em;
-  margin-bottom: 5px;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  transition: transform 0.5s ease;
+}
+
+.progress-icon.star-animate {
+  transform: scale(1.2) rotate(360deg);
 }
 
 #progressBar {
   width: 80%;
-  max-width: 600px;
-  height: 20px;
-  background-color: lightgray;
-  border-radius: 10px;
+  max-width: 700px;
+  height: 1.5rem;
+  background: #dfe6e9;
+  border-radius: 0.8rem;
   margin: 0 auto;
   overflow: hidden;
+  border: 2px solid #74b9ff;
+}
+
+body[data-theme="space"] #progressBar {
+  background: #2d4373;
+  border: 2px solid #e94560;
+}
+
+body[data-theme="forest"] #progressBar {
+  background: #c3e6cb;
+  border: 2px solid #2f9e44;
 }
 
 #progressFill {
   height: 100%;
-  background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+  background: linear-gradient(90deg, #ff6b6b, #feca57, #00b894);
   width: 0;
-  transition: width 0.7s ease;
+  transition: width 1s ease, background-color 0.5s ease;
+}
+
+#progressFill.progress-update {
+  animation: pulse 1s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scaleX(1); background-color: #00b894; }
+  50% { transform: scaleX(1.1); background-color: #feca57; }
+  100% { transform: scaleX(1); background-color: #00b894; }
 }
 
 #progressText {
-  font-size: 1.5em;
-  margin-top: 5px;
+  font-size: 1.5rem;
+  margin-top: 0.8rem;
+  font-weight: 700;
+  color: #636e72;
 }
 
-/* Compliment Box */
-#complimentBox {
-  font-size: 1.5em;
-  color: green;
-  margin-top: 10px;
+body[data-theme="space"] #progressText {
+  color: #e4e4e4;
+}
+
+#progressBar:hover #progressText {
   opacity: 0;
-  transition: opacity 1s ease;
 }
 
-/* ------------------------------
-   Settings Toggle Button
-------------------------------- */
+#progressBar::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+#progressBar:hover::after {
+  opacity: 1;
+}
+
+/* Compliment */
+.compliment-box {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ff6b6b;
+  margin: 1.5rem 0;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideCompliment 1s ease forwards;
+}
+
+@keyframes slideCompliment {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Settings */
 .settings-toggle {
-  margin-top: 20px;
+  margin-top: 1rem;
 }
 
-#toggleSettingsButton {
-  padding: 10px 15px;
-  font-size: 1.2em;
-  border: 2px solid #2980b9;
-  border-radius: 10px;
-  background-color: #ffeb99;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.settings-toggle button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.2rem;
+  background: #e83e8c;
+  color: #fff;
+  border-radius: 0.8rem;
+  font-weight: 700;
 }
 
-#toggleSettingsButton:hover {
-  background-color: rgba(255, 235, 153, 0.8);
+body[data-theme="space"] .settings-toggle button {
+  background: #e94560;
 }
 
-/* ------------------------------
-   Advanced Settings Panel
-------------------------------- */
+body[data-theme="forest"] .settings-toggle button {
+  background: #2f9e44;
+}
+
+.settings-toggle button:hover {
+  background: #d81e7a;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(232, 62, 140, 0.4);
+}
+
+body[data-theme="space"] .settings-toggle button:hover {
+  background: #d43f52;
+}
+
+body[data-theme="forest"] .settings-toggle button:hover {
+  background: #287f38;
+}
+
+.help-icon {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  cursor: help;
+  transition: color 0.3s ease;
+}
+
+.help-icon:hover {
+  color: #ff9f43;
+}
+
+.help-icon::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.help-icon:hover::after {
+  opacity: 1;
+}
+
 .advanced-settings {
   display: none;
-  margin-top: 20px;
-  background-color: #cce0f5;
-  padding: 15px;
-  border-radius: 10px;
+  margin: 2rem 0;
+  background: #dfe6e9;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body[data-theme="space"] .advanced-settings {
+  background: #2d4373;
+}
+
+body[data-theme="forest"] .advanced-settings {
+  background: #c3e6cb;
 }
 
 .controls-section {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  gap: 1.5rem;
   justify-content: center;
-  align-items: center;
 }
 
 .select-controls, .timer-controls {
   display: flex;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   align-items: center;
-  margin: 5px;
 }
 
-.controls-section label {
-  font-size: 1.2em;
-  margin-right: 5px;
+label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-right: 0.5rem;
 }
 
-select,
-#blendingControl button,
-#blendingTimeDisplay {
-  padding: 10px 15px;
-  font-size: 1.2em;
-  border: 2px solid #2980b9;
-  border-radius: 10px;
-  background-color: #ffeb99;
-  cursor: pointer;
-  margin: 5px;
-  outline: none;
-  transition: border-color 0.3s, background-color 0.3s;
-  color: #333;
+select, .time-adjust button, #blendingTimeDisplay {
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  border: 2px solid #74b9ff;
+  border-radius: 0.5rem;
+  background: #fff;
+  font-weight: 700;
 }
 
-select:focus,
-#blendingControl button:focus {
-  border-color: #1abc9c;
+body[data-theme="space"] select,
+body[data-theme="space"] .time-adjust button,
+body[data-theme="space"] #blendingTimeDisplay {
+  border: 2px solid #e94560;
+  background: #16213e;
+  color: #e4e4e4;
 }
 
-select {
-  appearance: none;
-  background-image: url('data:image/svg+xml;charset=UTF-8,<svg width="14" height="10" xmlns="http://www.w3.org/2000/svg"><polyline points="1 1 7 7 13 1" stroke="%232980b9" stroke-width="2" fill="none" stroke-linecap="round"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 10px 10px;
+body[data-theme="forest"] select,
+body[data-theme="forest"] .time-adjust button,
+body[data-theme="forest"] #blendingTimeDisplay {
+  border: 2px solid #2f9e44;
+  background: #f1f8e9;
+}
+
+select:focus, .time-adjust button:focus {
+  outline: 3px solid #0984e3;
+  outline-offset: 3px;
+}
+
+.time-adjust {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .settings-buttons {
   display: flex;
-  gap: 10px;
-  margin: 5px;
+  gap: 1rem;
 }
 
 .settings-buttons button {
-  padding: 10px 15px;
-  font-size: 1.2em;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background-color: #fff;
-  color: #333;
-  transition: background-color 0.3s;
+  background: #fff;
+  color: #2d3436;
+  padding: 0.8rem 1.5rem;
 }
 
-.settings-buttons button:hover {
-  background-color: rgba(255, 255, 255, 0.5);
+body[data-theme="space"] .settings-buttons button {
+  background: #16213e;
+  color: #e4e4e4;
 }
 
-/* ------------------------------
-   Blending Timer (for word blending)
-------------------------------- */
+body[data-theme="forest"] .settings-buttons button {
+  background: #f1f8e9;
+}
+
+/* Blending Timer */
 #blendingTimerContainer {
   width: 80%;
-  max-width: 600px;
-  background-color: #ddd;
-  height: 20px;
-  margin: 10px auto;
-  border-radius: 10px;
+  max-width: 700px;
+  height: 1.2rem;
+  background: #dfe6e9;
+  margin: 1.5rem auto;
+  border-radius: 0.6rem;
   overflow: hidden;
-  display: none;
+  border: 2px solid #74b9ff;
+}
+
+body[data-theme="space"] #blendingTimerContainer {
+  background: #2d4373;
+  border: 2px solid #e94560;
+}
+
+body[data-theme="forest"] #blendingTimerContainer {
+  background: #c3e6cb;
+  border: 2px solid #2f9e44;
 }
 
 #blendingTimer {
   height: 100%;
-  background-color: #4CAF50;
-  width: 100%;
+  background: #00b894;
+  width: 0;
   transition: width linear;
 }
 
-/* ------------------------------
-   Footer
-------------------------------- */
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  opacity: 0.9;
+  animation: confetti-fall 3s ease forwards;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 0.9; }
+  50% { opacity: 0.9; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Footer */
 footer {
-  margin-top: 20px;
-  padding: 10px;
+  margin-top: 1rem;
+  padding: 0.5rem 0; /* Reduced padding to minimize space */
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  background: transparent; /* Ensure no background causes extra space */
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle divider for visibility */
 }
 
 .note {
-  font-size: 1em;
-  color: #555;
+  font-size: 1rem;
+  color: #636e72;
   font-style: italic;
+  margin: 0;
 }
 
-/* ------------------------------
-   Responsive Adjustments
-------------------------------- */
-@media screen and (max-width: 800px) {
-  .word-display .letter {
-    font-size: 5em;
-  }
-  #spinButton {
-    padding: 20px;
-    font-size: 2em;
-  }
-  #repeatButton {
-    padding: 15px;
-    font-size: 1.5em;
-  }
+/* Welcome Animation */
+.action-buttons button,
+.progress-container {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 0.5s;
 }
 
-@media screen and (max-width: 600px) {
-  select,
-  #blendingControl button,
-  #blendingTimeDisplay,
-  .settings-buttons button {
-    padding: 8px 12px;
-    font-size: 1em;
-  }
-  #complimentBox {
-    font-size: 1.2em;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  h1 { font-size: 2.5rem; }
+  .word-display .letter { font-size: 4rem; }
+  .word-display.small .letter { font-size: 2.5rem; }
+  .word-display.large .letter { font-size: 6rem; }
+  button { padding: 0.8rem 1.5rem; font-size: 1.2rem; }
+  .container { padding: 1rem; }
+  .action-buttons { flex-direction: column; gap: 1rem; }
+  .core-controls { gap: 1rem; }
+  footer { padding: 0.3rem 0; }
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  #scoreText { font-size: 1.5rem; }
+  .progress-icon { font-size: 2rem; }
+  .compliment-box { font-size: 1.4rem; }
+  .word-display-container { width: 100%; padding: 1rem; }
+  #progressBar { width: 90%; }
 }
