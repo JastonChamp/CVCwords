@@ -29,21 +29,32 @@
             <div class="word-display" id="wordBox" aria-live="polite" role="status"></div>
           </div>
           <div class="action-buttons">
-            <button id="spinButton" aria-label="Spin the wheel to get a new word">
-              <span class="button-icon">🎡</span> Spin
+            <button id="spinButton" aria-label="Spin the wheel to get a new word" accesskey="s">
+              <svg class="button-icon" aria-hidden="true" width="24" height="24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2V7zm0 8h2v2h-2v-2z" fill="#e94560"/>
+              </svg> Spin
             </button>
-            <button id="repeatButton" aria-label="Repeat the current word" disabled>
-              <span class="button-icon">🔁</span> Repeat
+            <button id="repeatButton" aria-label="Repeat the current word" disabled accesskey="r">
+              <svg class="button-icon" aria-hidden="true" width="24" height="24">
+                <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" fill="#4a90e2"/>
+              </svg> Repeat
             </button>
           </div>
+          <button id="hintButton" aria-label="Get a hint for the word" hidden accesskey="h">💡 Hint</button>
         </div>
 
         <div class="progress-container">
-          <div class="progress-icon" id="progressIcon" aria-hidden="true">🌟</div>
+          <div class="progress-icon" id="progressIcon" aria-hidden="true">🌍</div>
+          <div id="badges" class="badges" aria-hidden="true"></div>
           <div id="progressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
             <div id="progressFill"></div>
           </div>
           <p id="progressText">0 / 0 Words Revealed</p>
+        </div>
+
+        <div id="blendingTimerContainer" aria-hidden="true" role="timer" aria-label="Blending timer, counting down">
+          <p class="timer-label" aria-live="polite">Blending Time ⏳</p>
+          <div id="blendingTimer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" role="progressbar"></div>
         </div>
 
         <div id="complimentBox" class="compliment-box" aria-live="assertive"></div>
@@ -62,7 +73,7 @@
             <div>
               <label for="wordTypeSelector">Word Type:</label>
               <select id="wordTypeSelector" aria-label="Select word type">
-                <option value="cvc" selected>CVC Words</option> <!-- Default to CVC -->
+                <option value="cvc" selected>CVC Words</option>
                 <option value="ccvc">CCVC Words</option>
                 <option value="cvcc">CVCC Words</option>
                 <option value="ccvcc">CCVCC Words</option>
@@ -85,14 +96,14 @@
               <label for="fontSizeSelector">Font Size:</label>
               <select id="fontSizeSelector" aria-label="Select font size">
                 <option value="small">Small</option>
-                <option value="medium" selected>Medium</option>
-                <option value="large">Large</option>
+                <option value="medium">Medium</option>
+                <option value="large" selected>Large</option> <!-- Default to Large for accessibility -->
               </select>
             </div>
             <div>
               <label for="fontSelector">Font Style:</label>
               <select id="fontSelector" aria-label="Select font style">
-                <option value="fredoka" selected>Fredoka</option> <!-- Default to Fredoka -->
+                <option value="fredoka" selected>Fredoka</option>
                 <option value="comic">Comic Neue</option>
               </select>
             </div>
@@ -102,6 +113,7 @@
                 <option value="default">Default</option>
                 <option value="space">Space Adventure</option>
                 <option value="forest">Enchanted Forest</option>
+                <option value="high-contrast">High Contrast</option>
               </select>
             </div>
           </div>
@@ -110,10 +122,18 @@
               <label for="blendingDelayInput">Blending Time (sec):</label>
               <div class="time-adjust">
                 <button id="decreaseBlendingTime" aria-label="Decrease blending time">➖</button>
-                <span id="blendingTimeDisplay" aria-live="polite">3</span> <!-- Default to 3 seconds -->
+                <span id="blendingTimeDisplay" aria-live="polite">3</span>
                 <button id="increaseBlendingTime" aria-label="Increase blending time">➕</button>
               </div>
             </div>
+          </div>
+          <div class="settings-section">
+            <label>
+              <input type="checkbox" id="quickStart" aria-label="Use quick start mode"> Quick Start Mode
+            </label>
+            <label>
+              <input type="checkbox" id="celebrationMode" aria-label="Enable celebration mode for extra animations"> Celebration Mode
+            </label>
           </div>
           <div class="settings-buttons">
             <button id="toggleAudioButton" aria-label="Toggle letter sounds on or off">🔇 Sounds Off</button>
@@ -122,16 +142,20 @@
         </div>
       </section>
 
-      <div id="blendingTimerContainer" aria-hidden="true">
-        <div id="blendingTimer"></div>
-      </div>
-
       <footer>
         <p class="note">Tip: Blend aloud! Customize your experience for more fun.</p>
       </footer>
     </main>
 
     <div id="confettiContainer" aria-hidden="true"></div>
+    <div id="tutorialModal" class="modal" hidden>
+      <div class="modal-content">
+        <h2>Welcome to Word Spinner!</h2>
+        <p>Let’s get started with a quick tour. Click a button to begin:</p>
+        <button id="startTutorial" aria-label="Start the tutorial">Start Tutorial</button>
+        <button id="skipTutorial" aria-label="Skip the tutorial">Skip</button>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
