@@ -2,115 +2,138 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Word Spinner for All Ages</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Link to external CSS file -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="A fun phonics blending game for all ages!">
+  <title>Word Spinner - Phonics Fun</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Google Font: Comic Neue -->
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>Word Spinner</h1>
-    <p>Spin the wheel and learn to decode!</p>
-  </header>
-  
-  <main class="container">
-    <!-- Core Controls: Always Visible -->
-    <section class="core-controls">
-      <div class="score-section">
-        <p id="scoreText">Score: 0</p>
-        <div id="scoreIncrement" class="score-increment"></div>
+  <div class="app-wrapper">
+    <header>
+      <div class="header-content">
+        <h1>Word Spinner</h1>
+        <p>Spin, Blend, and Shine! 🌟</p>
       </div>
-      
-      <div class="game-area">
-        <div class="word-display-container">
-          <div class="word-display" id="wordBox" aria-live="polite">
-            <!-- Letters will be shown here -->
+    </header>
+
+    <main class="container">
+      <section class="core-controls" role="region" aria-label="Game Controls">
+        <div class="score-section">
+          <p id="scoreText">Score: <span id="scoreValue">0</span></p>
+          <div id="scoreIncrement" class="score-increment" aria-hidden="true"></div>
+        </div>
+
+        <div class="game-area">
+          <div class="word-display-container">
+            <div class="word-display" id="wordBox" aria-live="polite" role="status"></div>
+          </div>
+          <div class="action-buttons">
+            <button id="spinButton" aria-label="Spin the wheel to get a new word">
+              <span class="button-icon">🎡</span> Spin
+            </button>
+            <button id="repeatButton" aria-label="Repeat the current word" disabled>
+              <span class="button-icon">🔁</span> Repeat
+            </button>
           </div>
         </div>
-        <div class="action-buttons">
-          <button id="spinButton" aria-label="Spin the wheel">🎡 Spin</button>
-          <button id="repeatButton" aria-label="Repeat the word" disabled>🔁 Repeat</button>
-        </div>
-      </div>
-      
-      <!-- Progress Container for overall progress -->
-      <div class="progress-container">
-        <div class="progress-icon" id="progressIcon">⭐</div>
-        <div id="progressBar">
-          <div id="progressFill"></div>
-        </div>
-        <p id="progressText">0 / 0 Words Revealed</p>
-      </div>
-      
-      <!-- Compliment Box -->
-      <div id="complimentBox" aria-live="assertive"></div>
-    </section>
-    
-    <!-- Toggle Button for Advanced Settings -->
-    <section class="settings-toggle">
-      <button id="toggleSettingsButton" aria-label="Show advanced settings">Show Advanced Settings</button>
-    </section>
-    
-    <!-- Advanced Settings Panel (hidden by default) -->
-    <section id="advancedSettings" class="advanced-settings">
-      <div class="controls-section">
-        <div class="select-controls">
-          <!-- Word Type Selector -->
-          <div id="wordTypeSelection">
-            <label for="wordTypeSelector">Word Type:</label>
-            <select id="wordTypeSelector">
-              <option value="cvc">CVC Words</option>
-              <option value="ccvc">CCVC Words</option>
-              <option value="cvcc">CVCC Words</option>
-              <option value="ccvcc">CCVCC Words</option>
-              <option value="digraphs">Digraphs</option>
-              <option value="extended">Extended Words</option>
-            </select>
+
+        <div class="progress-container">
+          <div class="progress-icon" id="progressIcon" aria-hidden="true">🌟</div>
+          <div id="progressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div id="progressFill"></div>
           </div>
-          <!-- Vowel Selector -->
-          <div id="vowelSelection">
-            <label for="vowelSelector">Vowel:</label>
-            <select id="vowelSelector">
-              <option value="all">All Vowels</option>
-              <option value="a">🅰️ Short A</option>
-              <option value="e">📧 Short E</option>
-              <option value="i">ℹ️ Short I</option>
-              <option value="o">🅾️ Short O</option>
-              <option value="u">⛎ Short U</option>
-            </select>
+          <p id="progressText">0 / 0 Words Revealed</p>
+        </div>
+
+        <div id="complimentBox" class="compliment-box" aria-live="assertive"></div>
+        <div id="screenReaderAnnounce" class="sr-only" role="status" aria-live="assertive"></div>
+      </section>
+
+      <section class="settings-toggle">
+        <button id="toggleSettingsButton" aria-expanded="false" aria-controls="advancedSettings">
+          ⚙️ Customize <span class="help-icon" aria-label="Click to adjust word types, vowels, and settings">❓</span>
+        </button>
+      </section>
+
+      <section id="advancedSettings" class="advanced-settings" aria-hidden="true">
+        <div class="controls-section">
+          <div class="select-controls">
+            <div>
+              <label for="wordTypeSelector">Word Type:</label>
+              <select id="wordTypeSelector" aria-label="Select word type">
+                <option value="cvc" selected>CVC Words</option> <!-- Default to CVC -->
+                <option value="ccvc">CCVC Words</option>
+                <option value="cvcc">CVCC Words</option>
+                <option value="ccvcc">CCVCC Words</option>
+                <option value="digraphs">Digraphs</option>
+                <option value="extended">Extended Words</option>
+              </select>
+            </div>
+            <div>
+              <label for="vowelSelector">Vowel:</label>
+              <select id="vowelSelector" aria-label="Select vowel focus">
+                <option value="all">All Vowels</option>
+                <option value="a">🅰️ Short A</option>
+                <option value="e">📧 Short E</option>
+                <option value="i">ℹ️ Short I</option>
+                <option value="o">🅾️ Short O</option>
+                <option value="u">⛎ Short U</option>
+              </select>
+            </div>
+            <div>
+              <label for="fontSizeSelector">Font Size:</label>
+              <select id="fontSizeSelector" aria-label="Select font size">
+                <option value="small">Small</option>
+                <option value="medium" selected>Medium</option>
+                <option value="large">Large</option>
+              </select>
+            </div>
+            <div>
+              <label for="fontSelector">Font Style:</label>
+              <select id="fontSelector" aria-label="Select font style">
+                <option value="fredoka" selected>Fredoka</option> <!-- Default to Fredoka -->
+                <option value="comic">Comic Neue</option>
+              </select>
+            </div>
+            <div>
+              <label for="themeSelector">Theme:</label>
+              <select id="themeSelector" aria-label="Select theme">
+                <option value="default">Default</option>
+                <option value="space">Space Adventure</option>
+                <option value="forest">Enchanted Forest</option>
+              </select>
+            </div>
+          </div>
+          <div class="timer-controls">
+            <div>
+              <label for="blendingDelayInput">Blending Time (sec):</label>
+              <div class="time-adjust">
+                <button id="decreaseBlendingTime" aria-label="Decrease blending time">➖</button>
+                <span id="blendingTimeDisplay" aria-live="polite">3</span> <!-- Default to 3 seconds -->
+                <button id="increaseBlendingTime" aria-label="Increase blending time">➕</button>
+              </div>
+            </div>
+          </div>
+          <div class="settings-buttons">
+            <button id="toggleAudioButton" aria-label="Toggle letter sounds on or off">🔇 Sounds Off</button>
+            <button id="fullscreenButton" aria-label="Toggle fullscreen mode">⛶ Fullscreen</button>
           </div>
         </div>
-        <div class="timer-controls">
-          <!-- Blending Time Control -->
-          <div id="blendingControl">
-            <label for="blendingDelayInput">Blending Time (sec):</label>
-            <button id="decreaseBlendingTime" aria-label="Decrease blending time" title="Decrease blending time">➖</button>
-            <span id="blendingTimeDisplay">3</span>
-            <button id="increaseBlendingTime" aria-label="Increase blending time" title="Increase blending time">➕</button>
-          </div>
-        </div>
-        <div class="settings-buttons">
-          <!-- Toggle Letter Sounds -->
-          <button id="toggleAudioButton" aria-label="Toggle letter sounds" title="Toggle letter sounds">🔇 Disable Letter Sounds</button>
-          <!-- Fullscreen Toggle -->
-          <button id="fullscreenButton" aria-label="Toggle fullscreen mode" title="Fullscreen">⛶ Fullscreen</button>
-        </div>
+      </section>
+
+      <div id="blendingTimerContainer" aria-hidden="true">
+        <div id="blendingTimer"></div>
       </div>
-    </section>
-    
-    <!-- Blending Timer (progress for the timer before speaking the word) -->
-    <div id="blendingTimerContainer">
-      <div id="blendingTimer"></div>
-    </div>
-    
-    <footer>
-      <p class="note">Practice sounding out the words! You can disable letter sounds to try on your own.</p>
-    </footer>
-  </main>
-  
-  <!-- Link to external JavaScript file -->
+
+      <footer>
+        <p class="note">Tip: Blend aloud! Customize your experience for more fun.</p>
+      </footer>
+    </main>
+
+    <div id="confettiContainer" aria-hidden="true"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
