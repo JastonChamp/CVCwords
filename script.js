@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("DOM fully loaded. Initializing Word Spinner.");
+  console.log('Word Spinner initialized.');
 
   /* =====================
      Word Spinner for All Ages
@@ -52,422 +52,374 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  /* ---------- Audio Configuration ---------- */
-  const audioPath = './'; // Adjust this path if your audio files are in a subfolder.
+  const audioPath = './';
   const letterSounds = {};
-
-  // Preload individual letter sounds
-  'abcdefghijklmnopqrstuvwxyz'.split('').forEach(letter => {
-    const audio = new Audio(`${audioPath}${letter}.mp3`);
-    letterSounds[letter] = audio;
+  const digraphs = ['sh', 'th', 'ch', 'ng'];
+  'abcdefghijklmnopqrstuvwxyz'.split('').concat(digraphs).forEach(sound => {
+    letterSounds[sound] = new Audio(`${audioPath}${sound}.mp3`);
   });
+  const uiSounds = {
+    click: new Audio(`${audioPath}click.mp3`),
+    success: new Audio(`${audioPath}success.mp3`)
+  };
 
-  // Preload digraph sounds
-  ['sh', 'th', 'ch', 'ng'].forEach(digraph => {
-    const audio = new Audio(`${audioPath}${digraph}.mp3`);
-    letterSounds[digraph] = audio;
-  });
+  /* === State === */
+  let state = {
+    score: 0,
+    revealedWords: 0,
+    totalWords: 0,
+    usedWords: [],
+    currentWord: '',
+    blendingTime: 3000, // Default to 3 seconds
+    soundsEnabled: true,
+    wordPerformance: JSON.parse(localStorage.getItem('wordPerformance')) || {}
+  };
 
-  // UI sounds
-  const clickSound = new Audio(`${audioPath}click.mp3`);
-  const successSound = new Audio(`${audioPath}success.mp3`);
+  /* === DOM Elements === */
+  const els = {
+    spinButton: document.getElementById('spinButton'),
+    repeatButton: document.getElementById('repeatButton'),
+    wordBox: document.getElementById('wordBox'),
+    scoreText: document.getElementById('scoreValue'),
+    scoreIncrement: document.getElementById('scoreIncrement'),
+    progressText: document.getElementById('progressText'),
+    progressFill: document.getElementById('progressFill'),
+    progressBar: document.getElementById('progressBar'),
+    progressIcon: document.getElementById('progressIcon'),
+    complimentBox: document.getElementById('complimentBox'),
+    screenReaderAnnounce: document.getElementById('screenReaderAnnounce'),
+    vowelSelector: document.getElementById('vowelSelector'),
+    wordTypeSelector: document.getElementById('wordTypeSelector'),
+    fontSizeSelector: document.getElementById('fontSizeSelector'),
+    fontSelector: document.getElementById('fontSelector'),
+    themeSelector: document.getElementById('themeSelector'),
+    toggleAudioButton: document.getElementById('toggleAudioButton'),
+    blendingTimeDisplay: document.getElementById('blendingTimeDisplay'),
+    increaseTime: document.getElementById('increaseBlendingTime'),
+    decreaseTime: document.getElementById('decreaseBlendingTime'),
+    blendingTimerContainer: document.getElementById('blendingTimerContainer'),
+    blendingTimer: document.getElementById('blendingTimer'),
+    fullscreenButton: document.getElementById('fullscreenButton'),
+    toggleSettingsButton: document.getElementById('toggleSettingsButton'),
+    advancedSettings: document.getElementById('advancedSettings'),
+    confettiContainer: document.getElementById('confettiContainer')
+  };
 
-  /* ---------- Application State ---------- */
-  let revealedWords = 0;
-  let usedWords = [];
-  let score = 0;
-  let letterSoundsEnabled = true;
-  let blendingTime = 3000; // milliseconds
-  let totalWords = 0;
-  let currentWord = '';
+  const compliments = ['Superb!', 'Brilliant!', 'You’re Amazing!', 'Fantastic!', 'Well Done!'];
 
-  /* ---------- DOM Elements ---------- */
-  const spinButton = document.getElementById('spinButton');
-  const repeatButton = document.getElementById('repeatButton');
-  const wordBox = document.getElementById('wordBox');
-  const progressText = document.getElementById('progressText');
-  const progressFill = document.getElementById('progressFill');
-  const progressIcon = document.getElementById('progressIcon');
-  const complimentBox = document.getElementById('complimentBox');
-  const vowelSelector = document.getElementById('vowelSelector');
-  const wordTypeSelector = document.getElementById('wordTypeSelector');
-  const scoreText = document.getElementById('scoreText');
-  const scoreIncrement = document.getElementById('scoreIncrement');
-  const toggleAudioButton = document.getElementById('toggleAudioButton');
-  const increaseBlendingTimeButton = document.getElementById('increaseBlendingTime');
-  const decreaseBlendingTimeButton = document.getElementById('decreaseBlendingTime');
-  const blendingTimeDisplay = document.getElementById('blendingTimeDisplay');
-  const blendingTimerContainer = document.getElementById('blendingTimerContainer');
-  const blendingTimer = document.getElementById('blendingTimer');
-  const fullscreenButton = document.getElementById('fullscreenButton');
-
-  /* ---------- Predefined Compliments ---------- */
-  const compliments = [
-    'Great job!', 'Fantastic!', 'Well done!', 'You did it!', 'Awesome!', 'Keep it up!', 'Excellent!'
-  ];
-
-  /* ---------- Speech Synthesis Setup ---------- */
-  let selectedVoice = null;
-  let speechSynthesisAvailable = true;
-  let speechSynthesisAlertShown = false;
-
-  function setVoice() {
-    return new Promise(resolve => {
-      if ('speechSynthesis' in window) {
-        function loadVoices() {
-          const voices = speechSynthesis.getVoices();
-          if (voices.length) {
-            selectedVoice = voices.find(voice => voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female'))
-                           || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
-            console.log("Selected voice:", selectedVoice);
-            resolve();
-          } else {
-            speechSynthesisAvailable = false;
-            if (!speechSynthesisAlertShown) {
-              alert('Speech synthesis is not available. Word pronunciation will be disabled.');
-              speechSynthesisAlertShown = true;
-            }
-            selectedVoice = null;
-            resolve();
-          }
-        }
-        if (speechSynthesis.getVoices().length === 0) {
-          speechSynthesis.onvoiceschanged = () => {
-            loadVoices();
-            speechSynthesis.onvoiceschanged = null;
-          };
-          setTimeout(() => {
-            if (!selectedVoice) {
-              speechSynthesisAvailable = false;
-              if (!speechSynthesisAlertShown) {
-                alert('Speech synthesis is not available. Word pronunciation will be disabled.');
-                speechSynthesisAlertShown = true;
-              }
-              selectedVoice = null;
-              resolve();
-            }
-          }, 2000);
-        } else {
-          loadVoices();
-        }
-      } else {
-        speechSynthesisAvailable = false;
-        if (!speechSynthesisAlertShown) {
-          alert('Your browser does not support speech synthesis. Word pronunciation will be disabled.');
-          speechSynthesisAlertShown = true;
-        }
-        selectedVoice = null;
-        resolve();
-      }
+  /* === Speech Synthesis === */
+  let voice = null;
+  async function initSpeech() {
+    const voices = await new Promise(resolve => {
+      const loadVoices = () => {
+        const v = speechSynthesis.getVoices();
+        if (v.length) resolve(v);
+      };
+      if (speechSynthesis.getVoices().length) loadVoices();
+      else speechSynthesis.onvoiceschanged = loadVoices;
     });
+    voice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female')) || voices[0];
   }
 
   function speak(text) {
+    if (!voice || speechSynthesis.speaking) return Promise.resolve();
     return new Promise(resolve => {
-      console.log("Attempting to speak:", text);
-      if ('speechSynthesis' in window && selectedVoice) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.voice = selectedVoice;
-        utterance.rate = 0.8;
-        utterance.pitch = 1.1;
-        utterance.volume = 0.9;
-        const timeoutId = setTimeout(() => {
-          speechSynthesis.cancel();
-          resolve();
-        }, 5000);
-        utterance.onend = () => {
-          clearTimeout(timeoutId);
-          resolve();
-        };
-        utterance.onerror = () => {
-          clearTimeout(timeoutId);
-          resolve();
-        };
-        speechSynthesis.speak(utterance);
-      } else {
-        console.log("Speech synthesis not available or selectedVoice is null.");
-        resolve();
-      }
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = voice;
+      utterance.rate = 0.9;
+      utterance.pitch = 1.2;
+      utterance.onend = resolve;
+      utterance.onerror = resolve;
+      speechSynthesis.speak(utterance);
     });
   }
 
-  /* ---------- Utility Functions ---------- */
-  const isVowel = letter => 'aeiou'.includes(letter.toLowerCase());
+  /* === Utilities === */
+  const isVowel = letter => /[aeiou]/.test(letter);
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  function announce(text) {
+    els.screenReaderAnnounce.textContent = text;
+    setTimeout(() => els.screenReaderAnnounce.textContent = '', 1000);
+  }
 
   function updateScore() {
-    score += 10;
-    document.getElementById('scoreText').textContent = `Score: ${score}`;
-    scoreIncrement.textContent = '+10';
-    scoreIncrement.classList.add('show');
-    setTimeout(() => {
-      scoreIncrement.classList.remove('show');
-    }, 1000);
+    state.score += 10;
+    els.scoreText.textContent = state.score;
+    els.scoreIncrement.textContent = '+10';
+    els.scoreIncrement.classList.add('show');
+    setTimeout(() => els.scoreIncrement.classList.remove('show'), 800);
   }
 
   function updateProgress() {
-    revealedWords = usedWords.length;
-    const progressPercentage = totalWords ? (revealedWords / totalWords) * 100 : 0;
-    console.log("Updating progress:", revealedWords, "/", totalWords, "=>", progressPercentage + "%");
-    progressText.textContent = `${revealedWords} / ${totalWords} Words Revealed`;
-    progressFill.style.width = `${progressPercentage}%`;
-    progressIcon.classList.add('star-animate');
+    state.revealedWords = state.usedWords.length;
+    const percent = (state.revealedWords / state.totalWords) * 100 || 0;
+    els.progressText.textContent = `${state.revealedWords} / ${state.totalWords} Words`;
+    els.progressFill.style.width = `${percent}%`;
+    els.progressBar.setAttribute('aria-valuenow', Math.round(percent));
+    els.progressBar.setAttribute('data-tooltip', `${state.revealedWords} words completed out of ${state.totalWords}`);
+    els.progressFill.classList.add('progress-update');
+    els.progressIcon.classList.add('star-animate');
     setTimeout(() => {
-      progressIcon.classList.remove('star-animate');
+      els.progressFill.classList.remove('progress-update');
+      els.progressIcon.classList.remove('star-animate');
     }, 1000);
   }
 
-  function giveCompliment() {
+  function showCompliment() {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
-    complimentBox.textContent = compliment;
-    complimentBox.style.color = 'green';
-    complimentBox.style.opacity = '1';
+    els.complimentBox.textContent = compliment;
+    els.complimentBox.style.opacity = '1';
     speak(compliment);
-    successSound.play();
-    setTimeout(() => {
-      complimentBox.style.opacity = '0';
-    }, 2000);
+    uiSounds.success.play();
+    launchConfetti();
+    setTimeout(() => els.complimentBox.style.opacity = '0', 2000);
   }
 
-  function playLetterSound(unit) {
-    return new Promise(resolve => {
-      if (!letterSoundsEnabled) {
-        resolve();
-        return;
-      }
-      const sound = letterSounds[unit.toLowerCase()];
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play().then(resolve).catch(() => resolve());
-      } else {
-        resolve();
-      }
-    });
+  function launchConfetti() {
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = `${Math.random() * 100}vw`;
+      confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      els.confettiContainer.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3000);
+    }
+  }
+
+  async function playSound(sound) {
+    if (!state.soundsEnabled || !letterSounds[sound]) {
+      console.warn(`Sound not found or disabled for: ${sound}`);
+      return;
+    }
+    const audio = letterSounds[sound];
+    audio.currentTime = 0; // Reset to start
+    try {
+      await audio.play();
+    } catch (error) {
+      console.error(`Failed to play sound ${sound}:`, error);
+      alert(`Audio for "${sound}" is not available. Please ensure audio files are in the main folder.`);
+    }
   }
 
   function parseWord(word) {
-    const digraphs = ['sh', 'th', 'ch', 'ng'];
     const units = [];
     let i = 0;
     while (i < word.length) {
-      if (i < word.length - 1) {
-        const twoLetters = word.substring(i, i + 2).toLowerCase();
-        if (digraphs.includes(twoLetters)) {
-          units.push({ text: twoLetters, isVowel: false, isDigraph: true });
-          i += 2;
-          continue;
-        }
+      const nextTwo = word.slice(i, i + 2).toLowerCase();
+      if (i < word.length - 1 && digraphs.includes(nextTwo)) {
+        units.push({ text: nextTwo, isVowel: false, isDigraph: true });
+        i += 2;
+      } else {
+        const letter = word[i].toLowerCase();
+        units.push({ text: letter, isVowel: isVowel(letter), isDigraph: false });
+        i++;
       }
-      const singleLetter = word[i].toLowerCase();
-      units.push({ text: singleLetter, isVowel: isVowel(singleLetter), isDigraph: false });
-      i++;
     }
     return units;
   }
 
-  /* ---------- Core Functions ---------- */
+  function savePreferences() {
+    const prefs = {
+      wordType: els.wordTypeSelector.value,
+      vowel: els.vowelSelector.value,
+      blendingTime: state.blendingTime,
+      soundsEnabled: state.soundsEnabled,
+      fontSize: els.fontSizeSelector.value,
+      font: els.fontSelector.value,
+      theme: els.themeSelector.value
+    };
+    localStorage.setItem('wordSpinnerPrefs', JSON.stringify(prefs));
+  }
+
+  function loadPreferences() {
+    const prefs = JSON.parse(localStorage.getItem('wordSpinnerPrefs')) || {};
+    els.wordTypeSelector.value = prefs.wordType || 'cvc'; // Default to CVC
+    els.vowelSelector.value = prefs.vowel || 'all';
+    state.blendingTime = prefs.blendingTime || 3000; // Default to 3 seconds
+    state.soundsEnabled = prefs.soundsEnabled !== false;
+    els.fontSizeSelector.value = prefs.fontSize || 'medium';
+    els.fontSelector.value = prefs.font || 'fredoka'; // Default to Fredoka
+    els.themeSelector.value = prefs.theme || 'default';
+    document.body.setAttribute('data-theme', els.themeSelector.value);
+    document.body.setAttribute('data-font', els.fontSelector.value);
+    els.blendingTimeDisplay.textContent = state.blendingTime / 1000;
+    els.toggleAudioButton.textContent = state.soundsEnabled ? '🔇 Sounds Off' : '🔊 Sounds On';
+    els.wordBox.className = `word-display ${prefs.fontSize || 'medium'}`;
+  }
+
+  /* === Core Logic === */
   async function revealWord(word, isRepeat = false) {
-    wordBox.innerHTML = '';
+    els.wordBox.innerHTML = '';
     const units = parseWord(word);
-    console.log("Parsed units for", word, ":", units);
-    units.forEach((unit, index) => {
+    const spans = units.map((unit, i) => {
       const span = document.createElement('span');
       span.textContent = unit.text;
       span.classList.add('letter');
-      if (unit.isVowel && !unit.isDigraph) span.classList.add('vowel');
+      if (unit.isVowel) span.classList.add('vowel');
       if (unit.isDigraph) span.classList.add('digraph');
-      span.style.animationDelay = `${(index + 1) * 0.5}s`;
-      wordBox.appendChild(span);
+      span.style.animationDelay = `${i * 0.4}s`;
+      return span;
     });
-    for (let i = 0; i < units.length; i++) {
-      await new Promise(res => setTimeout(res, 500));
-      await playLetterSound(units[i].text);
+    els.wordBox.append(...spans);
+
+    for (const unit of units) {
+      await delay(400);
+      await playSound(unit.text);
     }
-    startBlendingTimer(blendingTime / 1000);
-    await new Promise(res => setTimeout(res, blendingTime));
+
+    announce('Now, blend the letters to say the word');
+    els.blendingTimerContainer.style.display = 'block';
+    els.blendingTimer.style.width = '100%';
+    els.blendingTimer.style.transition = `width ${state.blendingTime / 1000}s linear`;
+    requestAnimationFrame(() => els.blendingTimer.style.width = '0%');
+    await delay(state.blendingTime);
+    els.blendingTimerContainer.style.display = 'none';
+
     await speak(word);
+    announce(`The word is: ${word}`);
     if (!isRepeat) {
-      giveCompliment();
+      showCompliment();
       updateScore();
       updateProgress();
+      state.wordPerformance[word] = state.wordPerformance[word] || { seenCount: 0 };
+      state.wordPerformance[word].seenCount++;
+      localStorage.setItem('wordPerformance', JSON.stringify(state.wordPerformance));
     }
   }
 
-  function getAvailableWords() {
-    const selectedWordType = wordTypeSelector.value;
-    const selectedVowel = vowelSelector.value;
-    let words = [];
-    const group = wordGroups[selectedWordType];
-    if (selectedVowel === 'all') {
-      words = Object.values(group).flat();
-    } else {
-      words = group[selectedVowel] || [];
-    }
-    return words;
+  function getWords() {
+    const type = els.wordTypeSelector.value;
+    const vowel = els.vowelSelector.value;
+    const group = wordGroups[type];
+    return vowel === 'all' ? Object.values(group).flat() : group[vowel] || [];
   }
 
   function getRandomWord() {
-    const availableWords = getAvailableWords();
-    const remainingWords = availableWords.filter(word => !usedWords.includes(word));
-    if (!remainingWords.length) {
-      alert('Great job! You have completed all the words. Let’s start over!');
+    const words = getWords().filter(w => !state.usedWords.includes(w));
+    if (!words.length) {
+      alert('All words completed! Starting over.');
       resetGame(false);
       return getRandomWord();
     }
-    const word = remainingWords[Math.floor(Math.random() * remainingWords.length)];
-    usedWords.push(word);
-    return word;
+    return words[Math.floor(Math.random() * words.length)];
   }
 
-  /* ---------- Event Handlers ---------- */
+  /* === Event Handlers === */
   async function spin() {
-    console.log("Spin triggered.");
-    spinButton.disabled = true;
-    repeatButton.disabled = true;
-    spinButton.innerHTML = '<span class="spin-icon-animate">🎡</span>';
-    clickSound.play();
-    setTimeout(() => {
-      spinButton.innerHTML = '🎡 Spin';
-    }, 1000);
-    complimentBox.style.opacity = '0';
-    const word = getRandomWord();
-    currentWord = word;
-    console.log("Selected word:", word);
-    try {
-      await setVoice();
-      await revealWord(word);
-    } catch (error) {
-      console.error('Error revealing word:', error);
-    } finally {
-      spinButton.disabled = false;
-      repeatButton.disabled = false;
-    }
+    els.spinButton.disabled = true;
+    els.repeatButton.disabled = true;
+    els.spinButton.innerHTML = '<span class="button-icon spin-icon-animate">🎡</span> Spin';
+    uiSounds.click.play();
+    await delay(1000);
+    els.spinButton.innerHTML = '<span class="button-icon">🎡</span> Spin';
+
+    state.currentWord = getRandomWord();
+    state.usedWords.push(state.currentWord);
+    await revealWord(state.currentWord);
+    els.spinButton.disabled = false;
+    els.repeatButton.disabled = false;
   }
 
   async function repeat() {
-    if (currentWord) {
-      repeatButton.disabled = true;
-      try {
-        await setVoice();
-        await revealWord(currentWord, true);
-      } catch (error) {
-        console.error('Error repeating word:', error);
-      } finally {
-        repeatButton.disabled = false;
-      }
-    } else {
-      alert('Please spin to get a word first!');
-    }
+    if (!state.currentWord) return alert('Spin first!');
+    els.repeatButton.disabled = true;
+    await revealWord(state.currentWord, true);
+    els.repeatButton.disabled = false;
   }
 
-  vowelSelector.addEventListener('change', () => {
-    resetGame(true);
-  });
-
-  wordTypeSelector.addEventListener('change', () => {
-    resetGame(true);
-  });
-
-  function resetGame(resetTotalWords = true) {
-    usedWords = [];
-    revealedWords = 0;
-    score = 0;
-    document.getElementById('scoreText').textContent = `Score: ${score}`;
-    currentWord = '';
-    repeatButton.disabled = true;
-    if (resetTotalWords) {
-      totalWords = getAvailableWords().length;
-    }
+  function resetGame(updateTotal = true) {
+    state.usedWords = [];
+    state.revealedWords = 0;
+    state.score = 0;
+    state.currentWord = '';
+    els.scoreText.textContent = '0';
+    els.repeatButton.disabled = true;
+    if (updateTotal) state.totalWords = getWords().length;
     updateProgress();
   }
 
-  function toggleLetterSounds() {
-    letterSoundsEnabled = !letterSoundsEnabled;
-    toggleAudioButton.textContent = letterSoundsEnabled ? '🔇 Disable Letter Sounds' : '🔊 Enable Letter Sounds';
-  }
+  els.vowelSelector.addEventListener('change', () => { resetGame(true); savePreferences(); });
+  els.wordTypeSelector.addEventListener('change', () => { resetGame(true); savePreferences(); });
+  els.fontSizeSelector.addEventListener('change', () => {
+    els.wordBox.className = `word-display ${els.fontSizeSelector.value}`;
+    savePreferences();
+  });
+  els.fontSelector.addEventListener('change', () => {
+    document.body.setAttribute('data-font', els.fontSelector.value);
+    savePreferences();
+  });
+  els.themeSelector.addEventListener('change', () => {
+    document.body.setAttribute('data-theme', els.themeSelector.value);
+    savePreferences();
+  });
 
-  toggleAudioButton.addEventListener('click', toggleLetterSounds);
+  els.toggleAudioButton.addEventListener('click', () => {
+    state.soundsEnabled = !state.soundsEnabled;
+    els.toggleAudioButton.textContent = state.soundsEnabled ? '🔇 Sounds Off' : '🔊 Sounds On';
+    savePreferences();
+  });
 
-  increaseBlendingTimeButton.addEventListener('click', () => {
-    if (blendingTime < 7000) {
-      blendingTime += 1000;
-      updateBlendingTimeDisplay();
+  els.increaseTime.addEventListener('click', () => {
+    if (state.blendingTime < 7000) {
+      state.blendingTime += 1000;
+      els.blendingTimeDisplay.textContent = state.blendingTime / 1000;
+      savePreferences();
     }
   });
 
-  decreaseBlendingTimeButton.addEventListener('click', () => {
-    if (blendingTime > 1000) {
-      blendingTime -= 1000;
-      updateBlendingTimeDisplay();
+  els.decreaseTime.addEventListener('click', () => {
+    if (state.blendingTime > 1000) {
+      state.blendingTime -= 1000;
+      els.blendingTimeDisplay.textContent = state.blendingTime / 1000;
+      savePreferences();
     }
   });
 
-  function updateBlendingTimeDisplay() {
-    blendingTimeDisplay.textContent = blendingTime / 1000;
-  }
-  updateBlendingTimeDisplay();
-
-  function startBlendingTimer(seconds) {
-    console.log("Starting blending timer for", seconds, "seconds");
-    blendingTimerContainer.style.display = 'block';
-    blendingTimer.style.width = '100%';
-    blendingTimer.style.transition = `width ${seconds}s linear`;
-    setTimeout(() => {
-      blendingTimer.style.width = '0%';
-      console.log("Blending timer is transitioning to 0%");
-    }, 50);
-    setTimeout(() => {
-      blendingTimerContainer.style.display = 'none';
-      console.log("Blending timer hidden after", seconds, "seconds");
-    }, seconds * 1000);
-  }
-
-  function toggleFullscreen() {
+  els.fullscreenButton.addEventListener('click', () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => {
-        alert(`Error enabling fullscreen: ${err.message}`);
-      });
-      fullscreenButton.textContent = '⛶ Exit Fullscreen';
+      document.documentElement.requestFullscreen();
+      els.fullscreenButton.textContent = '⛶ Exit';
     } else {
       document.exitFullscreen();
-      fullscreenButton.textContent = '⛶ Fullscreen';
+      els.fullscreenButton.textContent = '⛶ Fullscreen';
     }
-  }
-
-  fullscreenButton.addEventListener('click', toggleFullscreen);
-
-  document.addEventListener('fullscreenchange', () => {
-    fullscreenButton.textContent = document.fullscreenElement ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
   });
 
-  spinButton.addEventListener('click', spin);
-  repeatButton.addEventListener('click', repeat);
+  els.toggleSettingsButton.addEventListener('click', () => {
+    const isVisible = els.advancedSettings.style.display === 'block';
+    els.advancedSettings.style.display = isVisible ? 'none' : 'block';
+    els.toggleSettingsButton.textContent = isVisible ? '⚙️ Customize' : 'Hide Settings';
+    els.toggleSettingsButton.setAttribute('aria-expanded', !isVisible);
+    els.advancedSettings.setAttribute('aria-hidden', isVisible);
+  });
 
-  setVoice().then(() => {
+  /* === Initialization === */
+  (async () => {
+    await initSpeech();
+    loadPreferences();
     resetGame(true);
-  });
 
-  function preloadAudio() {
-    for (const key in letterSounds) {
-      letterSounds[key].load();
-    }
-    clickSound.load();
-    successSound.load();
-  }
-  window.addEventListener('load', preloadAudio);
+    // Ensure audio files are loaded and trigger a user interaction check
+    const checkAudio = () => {
+      Object.values(letterSounds).concat(Object.values(uiSounds)).forEach(audio => {
+        audio.load();
+        audio.onerror = () => console.error(`Error loading audio: ${audio.src}`);
+      });
+    };
 
-  /* ---------- Advanced Settings Toggle ---------- */
-  const toggleSettingsButton = document.getElementById('toggleSettingsButton');
-  const advancedSettingsPanel = document.getElementById('advancedSettings');
-  let advancedSettingsVisible = false;
+    // Trigger audio check on user interaction to bypass autoplay restrictions
+    els.spinButton.addEventListener('click', checkAudio, { once: true });
+    els.toggleSettingsButton.addEventListener('click', checkAudio, { once: true });
 
-  toggleSettingsButton.addEventListener('click', () => {
-    advancedSettingsVisible = !advancedSettingsVisible;
-    if (advancedSettingsVisible) {
-      advancedSettingsPanel.style.display = 'block';
-      toggleSettingsButton.textContent = 'Hide Advanced Settings';
-    } else {
-      advancedSettingsPanel.style.display = 'none';
-      toggleSettingsButton.textContent = 'Show Advanced Settings';
-    }
-  });
+    // Add welcome animation for buttons and progress
+    setTimeout(() => {
+      els.spinButton.classList.add('fadeIn');
+      els.repeatButton.classList.add('fadeIn');
+      els.progressContainer.classList.add('fadeIn');
+    }, 100);
+
+    els.spinButton.addEventListener('click', spin);
+    els.repeatButton.addEventListener('click', repeat);
+  })();
 });
