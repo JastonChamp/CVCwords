@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     extended: 'Word Wizard'
   };
 
-  // Initialize Speech Synthesis with a female voice
+  // Initialize Speech Synthesis with a female voice for words
   let voice = null;
   async function initSpeech() {
     return new Promise(resolve => {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (voices.length > 0) {
           voice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female')) || 
                   voices.find(v => v.lang.startsWith('en')) || voices[0];
-          console.log('Selected voice:', voice ? voice.name : 'Default voice');
+          console.log('Selected voice for words:', voice ? voice.name : 'Default voice');
           resolve();
         } else {
           speechSynthesis.onvoiceschanged = checkVoices;
@@ -131,10 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Function to synthesize speech with a female voice
-  function speak(text) {
+  // Function to synthesize speech with a female voice for full words
+  function speakWord(text) {
     if (!voice || !state.soundsEnabled || speechSynthesis.speaking) {
-      console.warn(`Speech synthesis skipped for "${text}" due to disabled sounds or speaking in progress`);
+      console.warn(`Speech synthesis skipped for word "${text}" due to disabled sounds or speaking in progress`);
       return Promise.resolve();
     }
     return new Promise(resolve => {
@@ -144,21 +144,33 @@ document.addEventListener('DOMContentLoaded', () => {
       utterance.pitch = 1.2; // Higher pitch for a female voice
       utterance.onend = resolve;
       utterance.onerror = () => {
-        console.error(`Speech synthesis failed for "${text}"`);
+        console.error(`Speech synthesis failed for word "${text}"`);
         resolve();
       };
       speechSynthesis.speak(utterance);
     });
   }
 
-  // Phonetic mappings for letter and digraph sounds (customize as needed)
-  const phoneticSounds = {
-    a: '/æ/', b: '/b/', c: '/k/', d: '/d/', e: '/ɛ/', f: '/f/', g: '/ɡ/', h: '/h/',
-    i: '/ɪ/', j: '/dʒ/', k: '/k/', l: '/l/', m: '/m/', n: '/n/', o: '/ɒ/', p: '/p/',
-    q: '/kw/', r: '/r/', s: '/s/', t: '/t/', u: '/ʌ/', v: '/v/', w: '/w/', x: '/ks/',
-    y: '/j/', z: '/z/',
-    sh: '/ʃ/', th: '/θ/', ch: '/tʃ/', ng: '/ŋ/'
-  };
+  // Audio handling for letter and digraph sounds
+  function playSound(sound) {
+    if (!state.soundsEnabled) return Promise.resolve();
+    return new Promise((resolve) => {
+      const audio = new Audio(`${sound}.mp3`); // Files in main folder
+      console.log(`Attempting to play sound: ${sound}.mp3`);
+      audio.onended = () => {
+        console.log(`Successfully played ${sound}.mp3`);
+        resolve();
+      };
+      audio.onerror = () => {
+        console.warn(`Sound file "${sound}.mp3" not found, skipping`);
+        resolve(); // Continue even if a sound fails
+      };
+      audio.play().catch(e => {
+        console.error(`Audio playback failed for ${sound}.mp3:`, e);
+        resolve();
+      });
+    });
+  }
 
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
   const announce = text => {
@@ -172,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     els.scoreIncrement.textContent = `+${points}`;
     els.scoreIncrement.classList.add('show');
     setTimeout(() => els.scoreIncrement.classList.remove('show'), 800);
-    // No sound file needed, using speech synthesis for compliments instead
+    // if (state.soundsEnabled) playSound('point'); // Commented out to avoid 404 errors if file is missing
   }
 
   function updateProgress() {
@@ -192,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
     els.complimentBox.textContent = compliment;
     els.complimentBox.classList.add('show');
-    if (state.soundsEnabled) speak(compliment); // Use speech synthesis for compliments
+    if (state.soundsEnabled) speakWord(compliment); // Use speech synthesis for compliments
     state.celebrationMode ? launchFireworks() : launchConfetti();
     setTimeout(() => els.complimentBox.classList.remove('show'), 2000);
   }
@@ -284,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!state.badges.has(wordType)) {
       state.badges.set(wordType, true);
       updateBadges();
-      if (state.soundsEnabled) speak(`Congratulations! You earned the ${badgeNames[wordType]} badge!`);
+      if (state.soundsEnabled) speakWord(`Congratulations! You earned the ${badgeNames[wordType]} badge!`);
       launchConfetti();
       savePreferences();
     }
@@ -303,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (const unit of units) {
       await delay(400);
-      await speak(phoneticSounds[unit.text] || unit.text); // Use phonetic sound or letter for speech
+      await playSound(unit.text); // Play letter/digraph sounds from MP3 files
     }
 
     els.blendingTimerContainer.style.display = 'block';
@@ -316,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (state.soundsEnabled) {
       console.log(`Attempting to speak full word: ${word}`);
-      await speak(word); // Speak the full word
+      await speakWord(word); // Speak full word using speech synthesis
       console.log(`Full word "${word}" spoken`);
     }
     announce(`The word is: ${word}`);
@@ -376,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function hint() {
     if (!state.currentWord) return;
-    await speak(state.currentWord);
+    await playSound(state.currentWord); // Hint uses MP3 for consistency with letters, or you can use speakWord
   }
 
   els.spinButton.addEventListener('click', spin);
@@ -435,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
   els.startTutorial.addEventListener('click', () => {
     els.tutorialModal.close();
     localStorage.setItem('hasSeenTutorial', 'true');
-    if (state.soundsEnabled) speak('Tutorial started!'); // Use speech synthesis for tutorial
+    if (state.soundsEnabled) playSound('start'); // Use MP3 for tutorial start sound if available
   });
   els.skipTutorial.addEventListener('click', () => {
     els.tutorialModal.close();
@@ -450,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   (async () => {
-    await initSpeech(); // Initialize speech synthesis before loading preferences
+    await initSpeech(); // Initialize speech synthesis for words
     loadPreferences();
     updateBadges();
     resetGame();
