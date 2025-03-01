@@ -112,26 +112,53 @@ document.addEventListener('DOMContentLoaded', () => {
     extended: 'Word Wizard'
   };
 
-  // Audio handling for letter sounds with fallback and enhanced logging
-  function playSound(sound) {
-    if (!state.soundsEnabled) return Promise.resolve();
-    return new Promise((resolve) => {
-      const audio = new Audio(`${sound}.mp3`); // Files in main folder
-      console.log(`Attempting to play sound: ${sound}.mp3`);
-      audio.onended = () => {
-        console.log(`Successfully played ${sound}.mp3`);
-        resolve();
+  // Initialize Speech Synthesis with a female voice
+  let voice = null;
+  async function initSpeech() {
+    return new Promise(resolve => {
+      const checkVoices = () => {
+        const voices = speechSynthesis.getVoices();
+        if (voices.length > 0) {
+          voice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female')) || 
+                  voices.find(v => v.lang.startsWith('en')) || voices[0];
+          console.log('Selected voice:', voice ? voice.name : 'Default voice');
+          resolve();
+        } else {
+          speechSynthesis.onvoiceschanged = checkVoices;
+        }
       };
-      audio.onerror = () => {
-        console.warn(`Sound file "${sound}.mp3" not found, skipping`);
-        resolve(); // Continue even if a sound fails
-      };
-      audio.play().catch(e => {
-        console.error(`Audio playback failed for ${sound}.mp3:`, e);
-        resolve();
-      });
+      checkVoices();
     });
   }
+
+  // Function to synthesize speech with a female voice
+  function speak(text) {
+    if (!voice || !state.soundsEnabled || speechSynthesis.speaking) {
+      console.warn(`Speech synthesis skipped for "${text}" due to disabled sounds or speaking in progress`);
+      return Promise.resolve();
+    }
+    return new Promise(resolve => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = voice;
+      utterance.rate = 0.9; // Slightly slower for clarity
+      utterance.pitch = 1.2; // Higher pitch for a female voice
+      utterance.onend = resolve;
+      utterance.onerror = () => {
+        console.error(`Speech synthesis failed for "${text}"`);
+        resolve();
+      };
+      speechSynthesis.speak(utterance);
+    });
+  }
+
+  // Phonetic mappings for letter and digraph sounds (customize as needed)
+  const phoneticSounds = {
+    a: '/æ/', b: '/b/', c: '/k/', d: '/d/', e: '/ɛ/', f: '/f/', g: '/ɡ/', h: '/h/',
+    i: '/ɪ/', j: '/dʒ/', k: '/k/', l: '/l/', m: '/m/', n: '/n/', o: '/ɒ/', p: '/p/',
+    q: '/kw/', r: '/r/', s: '/s/', t: '/t/', u: '/ʌ/', v: '/v/', w: '/w/', x: '/ks/',
+    y: '/j/', z: '/z/',
+    sh: '/ʃ/', th: '/θ/', ch: '/tʃ/', ng: '/ŋ/'
+  };
 
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
   const announce = text => {
@@ -145,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     els.scoreIncrement.textContent = `+${points}`;
     els.scoreIncrement.classList.add('show');
     setTimeout(() => els.scoreIncrement.classList.remove('show'), 800);
-    // if (state.soundsEnabled) playSound('point'); // Commented out to avoid 404 errors if file is missing
+    // No sound file needed, using speech synthesis for compliments instead
   }
 
   function updateProgress() {
@@ -165,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const compliment = compliments[Math.floor(Math.random() * compliments.length)];
     els.complimentBox.textContent = compliment;
     els.complimentBox.classList.add('show');
-    // if (state.soundsEnabled) playSound('cheer'); // Commented out to avoid 404 errors if file is missing
+    if (state.soundsEnabled) speak(compliment); // Use speech synthesis for compliments
     state.celebrationMode ? launchFireworks() : launchConfetti();
     setTimeout(() => els.complimentBox.classList.remove('show'), 2000);
   }
@@ -257,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!state.badges.has(wordType)) {
       state.badges.set(wordType, true);
       updateBadges();
-      if (state.soundsEnabled) playSound('badge'); // Optional: Add a "badge" sound
+      if (state.soundsEnabled) speak(`Congratulations! You earned the ${badgeNames[wordType]} badge!`);
       launchConfetti();
       savePreferences();
     }
@@ -276,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (const unit of units) {
       await delay(400);
-      await playSound(unit.text);
+      await speak(phoneticSounds[unit.text] || unit.text); // Use phonetic sound or letter for speech
     }
 
     els.blendingTimerContainer.style.display = 'block';
@@ -288,9 +315,9 @@ document.addEventListener('DOMContentLoaded', () => {
     els.blendingTimerContainer.style.display = 'none';
 
     if (state.soundsEnabled) {
-      console.log(`Attempting to play full word sound: ${word}.mp3`);
-      await playSound(word); // Play full word sound if available
-      console.log(`Full word sound for "${word}" completed`);
+      console.log(`Attempting to speak full word: ${word}`);
+      await speak(word); // Speak the full word
+      console.log(`Full word "${word}" spoken`);
     }
     announce(`The word is: ${word}`);
     if (!isRepeat) {
@@ -349,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function hint() {
     if (!state.currentWord) return;
-    await playSound(state.currentWord);
+    await speak(state.currentWord);
   }
 
   els.spinButton.addEventListener('click', spin);
@@ -408,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   els.startTutorial.addEventListener('click', () => {
     els.tutorialModal.close();
     localStorage.setItem('hasSeenTutorial', 'true');
-    if (state.soundsEnabled) playSound('start'); // Optional: Add a "start" sound
+    if (state.soundsEnabled) speak('Tutorial started!'); // Use speech synthesis for tutorial
   });
   els.skipTutorial.addEventListener('click', () => {
     els.tutorialModal.close();
@@ -423,6 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   (async () => {
+    await initSpeech(); // Initialize speech synthesis before loading preferences
     loadPreferences();
     updateBadges();
     resetGame();
