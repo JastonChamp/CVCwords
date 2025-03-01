@@ -112,18 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
     extended: 'Word Wizard'
   };
 
-  // Audio handling for letter sounds with fallback
+  // Audio handling for letter sounds with fallback and enhanced logging
   function playSound(sound) {
     if (!state.soundsEnabled) return Promise.resolve();
     return new Promise((resolve) => {
       const audio = new Audio(`${sound}.mp3`); // Files in main folder
-      audio.onended = resolve;
+      console.log(`Attempting to play sound: ${sound}.mp3`);
+      audio.onended = () => {
+        console.log(`Successfully played ${sound}.mp3`);
+        resolve();
+      };
       audio.onerror = () => {
         console.warn(`Sound file "${sound}.mp3" not found, skipping`);
         resolve(); // Continue even if a sound fails
       };
       audio.play().catch(e => {
-        console.warn('Audio playback failed:', e);
+        console.error(`Audio playback failed for ${sound}.mp3:`, e);
         resolve();
       });
     });
@@ -283,7 +287,11 @@ document.addEventListener('DOMContentLoaded', () => {
     await delay(state.blendingTime);
     els.blendingTimerContainer.style.display = 'none';
 
-    if (state.soundsEnabled) await playSound(word); // Play full word sound if available
+    if (state.soundsEnabled) {
+      console.log(`Attempting to play full word sound: ${word}.mp3`);
+      await playSound(word); // Play full word sound if available
+      console.log(`Full word sound for "${word}" completed`);
+    }
     announce(`The word is: ${word}`);
     if (!isRepeat) {
       state.usedWords.add(word);
