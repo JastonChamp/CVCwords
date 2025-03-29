@@ -120,25 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   /** Speech Synthesis Initialization */
-  let voice = null;
+  // Wait until voices are loaded
   async function initSpeech() {
     return new Promise(resolve => {
       const checkVoices = () => {
-        const voices = speechSynthesis.getVoices();
-        if (voices.length > 0) {
-          // First try: look for a female UK voice (en-GB)
-          let selectedVoice = voices.find(v => v.lang === 'en-GB' && v.name.toLowerCase().includes('female'));
-          // Second try: any female English voice
-          if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female'));
-          }
-          // Third try: any English voice
-          if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang.startsWith('en'));
-          }
-          // Fallback to the first available voice if none of the above
-          voice = selectedVoice || voices[0];
-          console.log('Selected voice:', voice ? voice.name : 'Default');
+        if (speechSynthesis.getVoices().length > 0) {
           resolve();
         } else {
           speechSynthesis.onvoiceschanged = checkVoices;
@@ -148,14 +134,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /** Speak a Word */
+  /**
+   * Helper: Select the preferred female voice.
+   * Checks for an en-GB voice with specific female keywords,
+   * falls back to any female voice, then to any English voice.
+   */
+  function getPreferredFemaleVoice() {
+    const voices = speechSynthesis.getVoices();
+    const femaleIndicators = ['female', 'samantha', 'kate', 'victoria', 'alice', 'moira', 'tessa', 'zira'];
+    let preferredVoice = voices.find(v =>
+      v.lang === 'en-GB' && femaleIndicators.some(indicator => v.name.toLowerCase().includes(indicator))
+    );
+    if (!preferredVoice) {
+      preferredVoice = voices.find(v =>
+        femaleIndicators.some(indicator => v.name.toLowerCase().includes(indicator))
+      );
+    }
+    if (!preferredVoice) {
+      preferredVoice = voices.find(v => v.lang.startsWith('en'));
+    }
+    return preferredVoice;
+  }
+
+  /**
+   * Speak a word using speech synthesis.
+   * For the letter 'a', uses "uh" (schwa sound) as a more casual, unstressed variant.
+   */
   function speakWord(text) {
-    if (!voice || !state.soundsEnabled || speechSynthesis.speaking) return Promise.resolve();
+    if (!state.soundsEnabled || speechSynthesis.speaking) return Promise.resolve();
+    let utteranceText = text.toLowerCase() === 'a' ? 'uh' : text;
+    const utterance = new SpeechSynthesisUtterance(utteranceText);
+    utterance.lang = 'en-GB';
+    const bestVoice = getPreferredFemaleVoice();
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+    }
+    utterance.pitch = 1.3;
+    utterance.rate = 0.7;
     return new Promise(resolve => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = voice;
-      utterance.rate = 0.9;
-      utterance.pitch = 1.2;
       utterance.onend = resolve;
       utterance.onerror = () => resolve();
       speechSynthesis.speak(utterance);
