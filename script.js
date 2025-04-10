@@ -120,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   /** Speech Synthesis Initialization */
-  // Wait until voices are loaded
   async function initSpeech() {
     return new Promise(resolve => {
       const checkVoices = () => {
@@ -159,9 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * Speak a word using speech synthesis.
    * For the letter 'a', uses "uh" (schwa sound) as a more casual, unstressed variant.
+   * The update here cancels any ongoing utterances so that the new word gets spoken.
    */
   function speakWord(text) {
-    if (!state.soundsEnabled || speechSynthesis.speaking) return Promise.resolve();
+    if (!state.soundsEnabled) return Promise.resolve();
+
+    // Cancel any current speech so that a new utterance can play immediately.
+    speechSynthesis.cancel();
+
     let utteranceText = text.toLowerCase() === 'a' ? 'uh' : text;
     const utterance = new SpeechSynthesisUtterance(utteranceText);
     utterance.lang = 'en-GB';
@@ -346,7 +350,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /** Reveal Word with Sounds and Visuals */
+  /**
+   * Reveal Word with Sounds and Visuals.
+   * IMPORTANT UPDATE: Instead of awaiting the full speech synthesis,
+   * we now just call speakWord(word) so that the spin button can be re-enabled sooner.
+   */
   async function revealWord(word, isRepeat = false) {
     els.wordBox.innerHTML = '';
     const units = parseWord(word);
@@ -377,7 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
     await delay(state.blendingTime);
     els.blendingTimerContainer.style.display = 'none';
 
-    if (state.soundsEnabled) await speakWord(word);
+    // Instead of awaiting speakWord, we call it without blocking further progress.
+    if (state.soundsEnabled) speakWord(word);
     announce(`The word is: ${word}`);
     if (!isRepeat) {
       state.usedWords.add(word);
