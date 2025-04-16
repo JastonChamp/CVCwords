@@ -164,12 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * Speak a word using speech synthesis.
    * For the letter 'a', uses "uh" (schwa sound) as a more casual, unstressed variant.
-   * Cancels any ongoing utterances to ensure the new word is spoken.
+   * Adds a slight delay to ensure the synthesis engine is ready.
    */
   function speakWord(text) {
     if (!state.soundsEnabled) return Promise.resolve();
-
-    speechSynthesis.cancel();
 
     let utteranceText = text.toLowerCase() === 'a' ? 'uh' : text;
     const utterance = new SpeechSynthesisUtterance(utteranceText);
@@ -177,9 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const bestVoice = getPreferredFemaleVoice();
     if (bestVoice) {
       utterance.voice = bestVoice;
+    } else {
+      console.warn('No voice selected; falling back to default voice.');
     }
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
+
     return new Promise(resolve => {
       utterance.onend = resolve;
       utterance.onerror = (event) => {
@@ -187,7 +188,9 @@ document.addEventListener('DOMContentLoaded', () => {
         resolve();
       };
       console.log('Attempting to speak:', utteranceText);
-      speechSynthesis.speak(utterance);
+      setTimeout(() => {
+        speechSynthesis.speak(utterance);
+      }, 100);
     });
   }
 
