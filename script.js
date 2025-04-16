@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (unit.isVowel) span.classList.add('vowel');
       if (unit.isDigraph) span.classList.add('digraph');
       if (unit.isLongVowel) span.classList.add('long-vowel');
-      if (unit.isSilent) span.classList.add('silentbeautify();
+      if (unit.isSilent) span.classList.add('silent');
       span.style.animationDelay = `${i * 0.4}s`;
       els.wordBox.appendChild(span);
     });
