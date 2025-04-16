@@ -136,10 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * Helper: Select the preferred female voice.
    * Checks for an en-GB voice with specific female keywords,
-   * falls back to any female voice, then to any English voice.
+   * falls back to any female voice, then to any English voice,
+   * and finally to the first available voice.
    */
   function getPreferredFemaleVoice() {
     const voices = speechSynthesis.getVoices();
+    console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
     const femaleIndicators = ['female', 'samantha', 'kate', 'victoria', 'alice', 'moira', 'tessa', 'zira'];
     let preferredVoice = voices.find(v =>
       v.lang === 'en-GB' && femaleIndicators.some(indicator => v.name.toLowerCase().includes(indicator))
@@ -152,18 +154,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!preferredVoice) {
       preferredVoice = voices.find(v => v.lang.startsWith('en'));
     }
+    if (!preferredVoice && voices.length > 0) {
+      preferredVoice = voices[0]; // Fallback to first available voice
+    }
+    console.log('Selected voice:', preferredVoice ? `${preferredVoice.name} (${preferredVoice.lang})` : 'None');
     return preferredVoice;
   }
 
   /**
    * Speak a word using speech synthesis.
    * For the letter 'a', uses "uh" (schwa sound) as a more casual, unstressed variant.
-   * The update here cancels any ongoing utterances so that the new word gets spoken.
+   * Cancels any ongoing utterances to ensure the new word is spoken.
    */
   function speakWord(text) {
     if (!state.soundsEnabled) return Promise.resolve();
 
-    // Cancel any current speech so that a new utterance can play immediately.
     speechSynthesis.cancel();
 
     let utteranceText = text.toLowerCase() === 'a' ? 'uh' : text;
@@ -177,7 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
     utterance.rate = 0.7;
     return new Promise(resolve => {
       utterance.onend = resolve;
-      utterance.onerror = () => resolve();
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        resolve();
+      };
+      console.log('Attempting to speak:', utteranceText);
       speechSynthesis.speak(utterance);
     });
   }
@@ -352,8 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * Reveal Word with Sounds and Visuals.
-   * IMPORTANT UPDATE: Instead of awaiting the full speech synthesis,
-   * we now just call speakWord(word) so that the spin button can be re-enabled sooner.
+   * Calls speakWord(word) without awaiting it to avoid blocking.
    */
   async function revealWord(word, isRepeat = false) {
     els.wordBox.innerHTML = '';
@@ -365,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (unit.isVowel) span.classList.add('vowel');
       if (unit.isDigraph) span.classList.add('digraph');
       if (unit.isLongVowel) span.classList.add('long-vowel');
-      if (unit.isSilent) span.classList.add('silent');
+      if (unit.isSilent) span.classList.add('silentbeautify();
       span.style.animationDelay = `${i * 0.4}s`;
       els.wordBox.appendChild(span);
     });
@@ -385,8 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
     await delay(state.blendingTime);
     els.blendingTimerContainer.style.display = 'none';
 
-    // Instead of awaiting speakWord, we call it without blocking further progress.
-    if (state.soundsEnabled) speakWord(word);
+    if (state.soundsEnabled) {
+      speakWord(word).catch(e => console.error('Failed to speak word:', e));
+    }
     announce(`The word is: ${word}`);
     if (!isRepeat) {
       state.usedWords.add(word);
@@ -443,6 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!state.currentWord) return;
     els.repeatButton.disabled = true;
     await revealWord(state.currentWord, true);
+    els.repeatButton.disabled = false;
   }
 
   /** Play Hint Sound */
