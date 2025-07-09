@@ -13,7 +13,28 @@ Word Spinner is a small browser-based phonics game. The page spins through a var
 - A modern browser with JavaScript enabled.
 - Speakers or headphones to hear the sound assets.
 
+## Customization
 
+The **Customize** panel lets you tailor the game to your needs. You can:
+
+- Choose a **Word Type** (CVC, CCVC, CVCC, CCVCC, digraphs, extended, or silent E).
+- Limit spins to a particular **Focus Vowel** or use all vowels.
+- Switch between several **Themes** like Space Adventure or High Contrast.
+
+All selections are saved in your browser's `localStorage` so your preferences
+persist the next time you open the page.
+
+## Keyboard Shortcuts
+
+- **S** – Spin for a new word
+- **R** – Repeat the current word
+- **H** – Hear a hint
+
+## Tutorial Modal
+
+The first visit triggers a short tutorial explaining the controls. You can skip
+or complete it, and the choice is remembered via `localStorage`. Clear the
+`wordSpinnerPrefs` and `hasSeenTutorial` keys to view the tutorial again.
 ## Audio Assets
 
 The repository contains numerous .mp3 files used for letter pronunciations and sound effects during gameplay.
