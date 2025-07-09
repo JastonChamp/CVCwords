@@ -1,5 +1,8 @@
+const DEBUG = false;
+const debugLog = (...args) => { if (DEBUG) console.log(...args); };
+
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM fully loaded and parsed');
+  debugLog('DOM fully loaded and parsed');
 
   /** Word Groups with Expanded Lists */
   const wordGroups = {
@@ -141,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function getPreferredFemaleVoice() {
     const voices = speechSynthesis.getVoices();
-    console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
+    debugLog('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
     const femaleIndicators = ['female', 'samantha', 'kate', 'victoria', 'alice', 'moira', 'tessa', 'zira'];
     let preferredVoice = voices.find(v =>
       v.lang === 'en-GB' && femaleIndicators.some(indicator => v.name.toLowerCase().includes(indicator))
@@ -155,11 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
       preferredVoice = voices.find(v => v.lang.startsWith('en'));
     }
     if (!preferredVoice && voices.length > 0) {
-      preferredVoice = voices[0]; // Fallback to first available voice
+      preferredVoice = voices[0]; // Fallback to first available voice␊
     }
-    console.log('Selected voice:', preferredVoice ? `${preferredVoice.name} (${preferredVoice.lang})` : 'None');
+    debugLog('Selected voice:', preferredVoice ? `${preferredVoice.name} (${preferredVoice.lang})` : 'None');
     return preferredVoice;
-  }
+  }␊
 
   /**
    * Speak a word using speech synthesis.
@@ -187,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Speech synthesis error:', event);
         resolve();
       };
-      console.log('Attempting to speak:', utteranceText);
+     debugLog('Attempting to speak:', utteranceText);
       setTimeout(() => {
         speechSynthesis.speak(utterance);
       }, 100);
