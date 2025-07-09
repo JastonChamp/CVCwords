@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     debugLog('Selected voice:', preferredVoice ? `${preferredVoice.name} (${preferredVoice.lang})` : 'None');
     return preferredVoice;
-  }␊
+  }
 
   /**
    * Speak a word using speech synthesis.
